@@ -1,6 +1,7 @@
 import type { Context } from "grammy";
 import { parseKnowledgeWithGemini } from "../../ai/gemini.js";
 import { createKnowledgeItem } from "../../db/firestore.js";
+import { isNotionConfigured, syncKnowledgeItemToNotion } from "../../notion/client.js";
 
 export async function handleWin(ctx: Context) {
   const userId = ctx.from?.id.toString();
@@ -26,6 +27,17 @@ export async function handleWin(ctx: Context) {
     const parsed = await parseKnowledgeWithGemini(userId, "win", text);
     const id = await createKnowledgeItem(parsed);
 
+    // Auto-sync to Notion if configured
+    let notionLink = "";
+    if (isNotionConfigured()) {
+      try {
+        const notionRes = await syncKnowledgeItemToNotion(parsed);
+        notionLink = `\n📓 [Open in Notion](${notionRes.url})`;
+      } catch (err) {
+        console.warn("Async Notion sync notice:", err);
+      }
+    }
+
     await ctx.api.editMessageText(
       ctx.chat!.id,
       statusMsg.message_id,
@@ -33,7 +45,8 @@ export async function handleWin(ctx: Context) {
         `📌 *Title:* ${parsed.title}\n` +
         `📝 *Content:* ${parsed.content}\n` +
         (parsed.actionableTakeaway ? `💡 *Takeaway:* ${parsed.actionableTakeaway}\n` : "") +
-        `🏷️ ${parsed.tags.map((t) => `#${t}`).join(" ")}`,
+        `🏷️ ${parsed.tags.map((t) => `#${t}`).join(" ")}` +
+        notionLink,
       { parse_mode: "Markdown" }
     );
   } catch (error) {
@@ -70,6 +83,17 @@ export async function handleGotcha(ctx: Context) {
     const parsed = await parseKnowledgeWithGemini(userId, "gotcha", text);
     const id = await createKnowledgeItem(parsed);
 
+    // Auto-sync to Notion if configured
+    let notionLink = "";
+    if (isNotionConfigured()) {
+      try {
+        const notionRes = await syncKnowledgeItemToNotion(parsed);
+        notionLink = `\n📓 [Open in Notion](${notionRes.url})`;
+      } catch (err) {
+        console.warn("Async Notion sync notice:", err);
+      }
+    }
+
     await ctx.api.editMessageText(
       ctx.chat!.id,
       statusMsg.message_id,
@@ -77,7 +101,8 @@ export async function handleGotcha(ctx: Context) {
         `📌 *Title:* ${parsed.title}\n` +
         `📝 *Trap:* ${parsed.content}\n` +
         (parsed.actionableTakeaway ? `🛡️ *Heuristic:* ${parsed.actionableTakeaway}\n` : "") +
-        `🏷️ ${parsed.tags.map((t) => `#${t}`).join(" ")}`,
+        `🏷️ ${parsed.tags.map((t) => `#${t}`).join(" ")}` +
+        notionLink,
       { parse_mode: "Markdown" }
     );
   } catch (error) {
@@ -89,4 +114,3 @@ export async function handleGotcha(ctx: Context) {
     );
   }
 }
-
