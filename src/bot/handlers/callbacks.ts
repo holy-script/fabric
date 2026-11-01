@@ -1,11 +1,13 @@
 import type { Context } from "grammy";
+import { InlineKeyboard } from "grammy";
 import { handleBalance } from "../commands/balance.js";
 import { handleSettle } from "../commands/settle.js";
 import { handlePlugins } from "../commands/plugins.js";
 import { handleBriefing } from "../commands/briefing.js";
 import { executeSimulation } from "../commands/simulate.js";
 import { installPlugin, uninstallPlugin } from "../../plugins/manager.js";
-import { unlockGoal } from "../../db/firestore.js";
+import { unlockGoal, getUserState } from "../../db/firestore.js";
+import { exportPortfolioToNotion, isNotionConfigured } from "../../notion/exporter.js";
 
 export async function handleCallbackQuery(ctx: Context) {
   const data = ctx.callbackQuery?.data;
@@ -37,6 +39,50 @@ export async function handleCallbackQuery(ctx: Context) {
       `❓ *Ask the Advisor:*\nSend \`/ask <question>\` or send a voice note asking for advice on trade-offs!`,
       { parse_mode: "Markdown" }
     );
+  } else if (data === "action:portfolio_export") {
+    if (!isNotionConfigured()) {
+      await ctx.reply(
+        `❌ *Notion is not configured.*\nPlease set \`NOTION_API_KEY\` and \`NOTION_DATABASE_ID\` in environment variables.`,
+        { parse_mode: "Markdown" }
+      );
+      return;
+    }
+
+    const waitMsg = await ctx.reply("⏳ *Exporting Compounding Portfolio to Notion...*", {
+      parse_mode: "Markdown",
+    });
+
+    try {
+      let summaryText = ctx.callbackQuery.message?.text || "";
+      if (!summaryText || summaryText.length < 30) {
+        const state = await getUserState(userId);
+        summaryText = `Compounding Portfolio for user ${userId}. Focus: ${state.totalFocusHours}h, Facts: ${state.totalFactsAcquired}.`;
+      }
+
+      const notionRes = await exportPortfolioToNotion(userId, summaryText);
+      const keyboard = new InlineKeyboard().url("📓 Open Live Portfolio in Notion", notionRes.url);
+
+      await ctx.api.editMessageText(
+        ctx.chat!.id,
+        waitMsg.message_id,
+        `🏛️ *Compounding Portfolio Exported to Notion!*\n\n` +
+          `Your 5-dimension compounding capabilities, personal telemetry, and executive synthesis are now published under \`Fabric OS\`.\n\n` +
+          `📓 [Open Live Portfolio in Notion](${notionRes.url})`,
+        {
+          parse_mode: "Markdown",
+          reply_markup: keyboard,
+        }
+      );
+    } catch (error) {
+      console.error("Callback portfolio export error:", error);
+      await ctx.api.editMessageText(
+        ctx.chat!.id,
+        waitMsg.message_id,
+        `❌ Failed to export portfolio to Notion: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`
+      );
+    }
   } else if (data.startsWith("sim:run:")) {
     const framework = data.replace("sim:run:", "");
     await executeSimulation(ctx, framework);

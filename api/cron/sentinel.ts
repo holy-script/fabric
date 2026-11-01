@@ -4,6 +4,7 @@ import { evaluateAristotleMean, renderMeanBar } from "../../src/ai/gemini.js";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { config } from "../../src/config/env.js";
 import { Bot } from "grammy";
+import { exportSentinelReconToNotion, isNotionConfigured } from "../../src/notion/exporter.js";
 
 const genAI = new GoogleGenerativeAI(config.geminiApiKey);
 const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
@@ -80,10 +81,24 @@ Overall Diagnosis: ${meanEval.overallDiagnosis}`;
         scales: meanEval.scales,
       });
 
+      // Export to Notion if configured
+      let notionUrl: string | undefined;
+      if (isNotionConfigured()) {
+        try {
+          const exportRes = await exportSentinelReconToNotion(userId, fullReport, new Date());
+          notionUrl = exportRes.url;
+        } catch (notionErr) {
+          console.error(`Failed to export Sentinel audit to Notion for ${userId}:`, notionErr);
+        }
+      }
+
       // Send directly to user on Telegram
       try {
-        await bot.api.sendMessage(userId, fullReport, { parse_mode: "Markdown" });
-        results.push({ userId, status: "sent" });
+        const messageToSend = notionUrl
+          ? `${fullReport}\n\n📓 [Open Weekly Audit in Notion](${notionUrl})`
+          : fullReport;
+        await bot.api.sendMessage(userId, messageToSend, { parse_mode: "Markdown" });
+        results.push({ userId, status: "sent", notionUrl });
       } catch (err) {
         console.error(`Could not send Telegram message to ${userId}:`, err);
         results.push({ userId, status: "failed_telegram", error: String(err) });
@@ -105,4 +120,3 @@ Overall Diagnosis: ${meanEval.overallDiagnosis}`;
     );
   }
 }
-

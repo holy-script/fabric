@@ -1,6 +1,8 @@
 import type { Context } from "grammy";
 import { getActiveSession, createTrade } from "../../db/firestore.js";
 import { parseTradeWithGemini } from "../../ai/gemini.js";
+import { findMediaUrl } from "../../media/extractor.js";
+import { handleMediaUrl } from "./media.js";
 
 export async function handleNaturalMessage(ctx: Context) {
   const userId = ctx.from?.id.toString();
@@ -9,6 +11,12 @@ export async function handleNaturalMessage(ctx: Context) {
 
   // Ignore commands
   if (text.startsWith("/")) return;
+
+  // Check if message contains an Instagram Reel/Post or YouTube link
+  const mediaDetection = findMediaUrl(text);
+  if (mediaDetection) {
+    return handleMediaUrl(ctx, mediaDetection.url);
+  }
 
   // Check if there is an active session
   const session = await getActiveSession(userId);

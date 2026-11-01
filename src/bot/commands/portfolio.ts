@@ -1,7 +1,10 @@
 import type { Context } from "grammy";
+import { InlineKeyboard } from "grammy";
 import { getUserState, getRecentTrades, getKnowledgeItems } from "../../db/firestore.js";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { config } from "../../config/env.js";
+import { exportPortfolioToNotion } from "../../notion/exporter.js";
+import { isNotionConfigured } from "../../notion/client.js";
 
 const genAI = new GoogleGenerativeAI(config.geminiApiKey);
 const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
@@ -65,11 +68,34 @@ Personal Telemetry Archive:
 ${JSON.stringify(dataPayload, null, 2)}`;
 
     const response = await model.generateContent(prompt);
+    const portfolioReport = response.response.text();
+    let displayText = portfolioReport;
+
+    // Check if user sent `/portfolio export`
+    const isExportCommand = Boolean(ctx.message?.text?.toLowerCase().includes("export"));
+    if (isExportCommand && isNotionConfigured()) {
+      try {
+        const notionRes = await exportPortfolioToNotion(userId, portfolioReport);
+        displayText += `\n\n📓 [Open Live Portfolio in Notion](${notionRes.url})`;
+      } catch (exportError) {
+        console.error("Auto-export to Notion error:", exportError);
+        displayText += `\n\n⚠️ Failed to export to Notion: ${
+          exportError instanceof Error ? exportError.message : "Unknown error"
+        }`;
+      }
+    }
+
+    // Interactive inline button to export/re-export to Notion with one click
+    const keyboard = new InlineKeyboard().text("📓 Export to Notion", "action:portfolio_export");
+
     await ctx.api.editMessageText(
       ctx.chat!.id,
       statusMsg.message_id,
-      response.response.text(),
-      { parse_mode: "Markdown" }
+      displayText,
+      {
+        parse_mode: "Markdown",
+        reply_markup: keyboard,
+      }
     );
   } catch (error) {
     console.error("Portfolio error:", error);
@@ -82,4 +108,3 @@ ${JSON.stringify(dataPayload, null, 2)}`;
     );
   }
 }
-

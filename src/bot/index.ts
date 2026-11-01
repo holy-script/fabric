@@ -20,6 +20,7 @@ import { handleBriefing } from "./commands/briefing.js";
 import { handleDashboard } from "./commands/dashboard.js";
 import { handleSimulate } from "./commands/simulate.js";
 import { handleNotion } from "./commands/notion.js";
+import { handleGithub } from "./commands/github.js";
 import { handleNaturalMessage } from "./handlers/message.js";
 import { handleVoiceMessage } from "./handlers/voice.js";
 import { handleCallbackQuery } from "./handlers/callbacks.js";
@@ -36,6 +37,7 @@ export function createBot() {
       { command: "settle", description: "Finish active session & log trade" },
       { command: "balance", description: "View currency balances & telemetry" },
       { command: "portfolio", description: "Synthesizer proof of growth" },
+      { command: "github", description: "Passive Git commit telemetry setup" },
       { command: "simulate", description: "Test a new workflow before adopting" },
       { command: "notion", description: "Sync knowledge garden to Notion" },
       { command: "wins", description: "View the Hopecore vault of wins" },
@@ -61,6 +63,7 @@ export function createBot() {
   bot.command("gotcha", handleGotcha);
   bot.command("balance", handleBalance);
   bot.command("portfolio", handlePortfolio);
+  bot.command("github", handleGithub);
   bot.command("simulate", handleSimulate);
   bot.command("notion", handleNotion);
   bot.command("wins", handleWins);
@@ -82,7 +85,7 @@ export function createBot() {
   // Interactive inline keyboard callbacks
   bot.on("callback_query:data", handleCallbackQuery);
 
-  // Natural language message fallback
+  // Natural language message fallback (including Instagram/YouTube auto-digestion)
   bot.on("message:text", handleNaturalMessage);
 
   // Error handling
