@@ -12,3 +12,4 @@ service-account.json
 saved_posts.json
 .reels_import_checkpoint.json
 *.checkpoint.json
+reels_tracker.json

@@ -6,6 +6,60 @@ import { config } from "../../config/env.js";
 const genAI = new GoogleGenerativeAI(config.geminiApiKey);
 const model = genAI.getGenerativeModel({ model: "gemini-3.5-flash-lite" });
 
+export async function handleGarden(ctx: Context) {
+  const userId = ctx.from?.id.toString();
+  if (!userId) return;
+
+  const items = await getKnowledgeItems(userId, undefined, 8);
+
+  let reelsText = "";
+  try {
+    const fs = await import("fs");
+    const path = await import("path");
+    const trackerPath = path.resolve(process.cwd(), "reels_tracker.json");
+    if (fs.existsSync(trackerPath)) {
+      const data = JSON.parse(fs.readFileSync(trackerPath, "utf-8"));
+      reelsText = `\n📱 *Reels Ingestion:* \`${data.processed || 0} / ${data.total || 3843}\` (${data.percent || "0%"}) | Notion: \`${data.notionSynced || 0}\`\n`;
+    }
+  } catch {}
+
+  if (items.length === 0) {
+    await ctx.reply(
+      `🪴 *The Knowledge Garden is Empty*\n\n` +
+        `Send a link to an Instagram Reel, YouTube video, or use \`/win\` and \`/gotcha\` to seed your garden!`,
+      { parse_mode: "Markdown" }
+    );
+    return;
+  }
+
+  const list = items
+    .slice(0, 5)
+    .map((it, idx) => {
+      const icon =
+        it.category === "win"
+          ? "🏆"
+          : it.category === "gotcha"
+          ? "⚠️"
+          : it.category === "tool"
+          ? "🛠️"
+          : "💡";
+      return (
+        `*${idx + 1}. ${icon} ${it.title}*\n` +
+        (it.author ? `👤 _@${it.author}_\n` : "") +
+        (it.actionableTakeaway ? `💡 _Takeaway:_ ${it.actionableTakeaway}\n` : "") +
+        `🏷️ ${it.tags.map((t) => `#${t}`).join(" ")}`
+      );
+    })
+    .join("\n\n");
+
+  await ctx.reply(
+    `🪴 *The Fabric OS: Knowledge Garden*${reelsText}\n` +
+      `*Recent Additions:*\n\n${list}\n\n` +
+      `_Use \`/search <keyword>\` to search vault or \`/muse\` for random wisdom._`,
+    { parse_mode: "Markdown" }
+  );
+}
+
 export async function handleWins(ctx: Context) {
   const userId = ctx.from?.id.toString();
   if (!userId) return;

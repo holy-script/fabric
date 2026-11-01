@@ -14,7 +14,7 @@ import {
 } from "./commands/plugins.js";
 import { handleMuse } from "./commands/muse.js";
 import { handlePortfolio } from "./commands/portfolio.js";
-import { handleWins, handleGotchas, handleSearch } from "./commands/garden.js";
+import { handleWins, handleGotchas, handleSearch, handleGarden } from "./commands/garden.js";
 import { handleGoal, handleGoals, handleClaim } from "./commands/goals.js";
 import { handleBriefing } from "./commands/briefing.js";
 import { handleDashboard } from "./commands/dashboard.js";
@@ -66,6 +66,7 @@ export function createBot() {
   bot.command("github", handleGithub);
   bot.command("simulate", handleSimulate);
   bot.command("notion", handleNotion);
+  bot.command("garden", handleGarden);
   bot.command("wins", handleWins);
   bot.command("gotchas", handleGotchas);
   bot.command("search", handleSearch);

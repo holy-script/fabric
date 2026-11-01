@@ -9,6 +9,7 @@ import type { KnowledgeCategory, KnowledgeItem } from "../src/db/types.js";
 
 const genAI = new GoogleGenerativeAI(config.geminiApiKey);
 const CHECKPOINT_FILE = path.resolve(process.cwd(), ".reels_import_checkpoint.json");
+const TRACKER_FILE = path.resolve(process.cwd(), "reels_tracker.json");
 
 export interface ParsedReelItem {
   url: string;
@@ -33,16 +34,53 @@ export interface DigestedReelResult {
   notionUrl?: string;
 }
 
+interface CheckpointEntry {
+  title: string;
+  category: string;
+  quadrant?: string;
+  author?: string;
+  takeaway?: string;
+  firestoreId?: string;
+  notionUrl?: string;
+  processedAt: string;
+}
+
 interface CheckpointData {
-  processedUrls: Record<string, {
-    title: string;
-    category: string;
-    firestoreId?: string;
-    notionUrl?: string;
-    processedAt: string;
-  }>;
+  processedUrls: Record<string, CheckpointEntry>;
   totalProcessed: number;
   lastUpdated: string;
+}
+
+export interface TrackerData {
+  total: number;
+  processed: number;
+  remaining: number;
+  percent: string;
+  status: "IDLE" | "IN_PROGRESS" | "COMPLETED" | "PAUSED";
+  quadrants: {
+    Focus: number;
+    Facts: number;
+    Funds: number;
+    Feedback: number;
+  };
+  categories: {
+    insight: number;
+    strategy: number;
+    tool: number;
+    win: number;
+  };
+  notionSynced: number;
+  firestoreSaved: number;
+  startedAt?: string;
+  lastUpdated: string;
+  recentAdditions: Array<{
+    title: string;
+    category: string;
+    quadrant: string;
+    author?: string;
+    notionUrl?: string;
+    takeaway: string;
+  }>;
 }
 
 function loadCheckpoint(): CheckpointData {
@@ -60,13 +98,29 @@ function loadCheckpoint(): CheckpointData {
   };
 }
 
-function saveCheckpoint(data: CheckpointData) {
+function saveCheckpoint(data: CheckpointData, tracker?: TrackerData) {
   try {
     data.lastUpdated = new Date().toISOString();
     fs.writeFileSync(CHECKPOINT_FILE, JSON.stringify(data, null, 2), "utf-8");
+
+    if (tracker) {
+      tracker.lastUpdated = data.lastUpdated;
+      fs.writeFileSync(TRACKER_FILE, JSON.stringify(tracker, null, 2), "utf-8");
+    }
   } catch (err) {
-    console.warn("⚠️ Failed to write checkpoint file:", err);
+    console.warn("⚠️ Failed to write checkpoint/tracker file:", err);
   }
+}
+
+export function loadTracker(): TrackerData | null {
+  if (fs.existsSync(TRACKER_FILE)) {
+    try {
+      return JSON.parse(fs.readFileSync(TRACKER_FILE, "utf-8"));
+    } catch {
+      return null;
+    }
+  }
+  return null;
 }
 
 /**
@@ -186,7 +240,7 @@ export function parseInstagramExport(rawJson: any): ParsedReelItem[] {
 }
 
 /**
- * Calls Gemini 3.8 Flash to analyze and synthesize a batch of reels into 4F Knowledge Cards.
+ * Calls Gemini Flash to synthesize a batch of reels into 4F Knowledge Cards with rate-limit resiliency.
  */
 async function digestReelsBatch(
   batch: ParsedReelItem[],
@@ -257,11 +311,24 @@ Rules:
           return parsed;
         }
       } catch (err: any) {
+        const isRateLimit =
+          err?.status === 429 ||
+          err?.message?.includes("429") ||
+          err?.message?.includes("RESOURCE_EXHAUSTED") ||
+          err?.message?.includes("quota");
+
+        if (isRateLimit) {
+          const backoff = 10000 * attempt;
+          console.warn(`\n⏳ Gemini rate limit reached. Backing off for ${backoff / 1000}s...`);
+          await sleep(backoff);
+          continue;
+        }
+
         if (attempt === maxRetries) {
           // Fall through to next model
           break;
         }
-        await sleep(1000 * attempt);
+        await sleep(1500 * attempt);
       }
     }
   }
@@ -297,33 +364,99 @@ function renderProgressBar(
   );
 }
 
+function displayTrackerStatus() {
+  const tracker = loadTracker();
+  const checkpoint = loadCheckpoint();
+
+  console.log(`\n📊 ================== THE FABRIC OS: REELS INGESTION TRACKER ==================`);
+  if (!tracker && Object.keys(checkpoint.processedUrls).length === 0) {
+    console.log("No ingestion has been recorded yet. Run `bun run scripts/import-reels.ts saved_posts.json` to begin.");
+    return;
+  }
+
+  const processedCount = Object.keys(checkpoint.processedUrls).length;
+  const totalCount = tracker?.total || 3843;
+  const percent = ((processedCount / totalCount) * 100).toFixed(1);
+
+  // Compute quadrant & category counts from checkpoint
+  const quadrants = { Focus: 0, Facts: 0, Funds: 0, Feedback: 0 };
+  const categories = { insight: 0, strategy: 0, tool: 0, win: 0 };
+  let notionCount = 0;
+
+  for (const entry of Object.values(checkpoint.processedUrls)) {
+    if (entry.quadrant && entry.quadrant in quadrants) {
+      quadrants[entry.quadrant as keyof typeof quadrants]++;
+    }
+    const cat = entry.category?.toLowerCase();
+    if (cat && cat in categories) {
+      categories[cat as keyof typeof categories]++;
+    }
+    if (entry.notionUrl) notionCount++;
+  }
+
+  console.log(`Status:              ${tracker?.status || "IDLE"}`);
+  console.log(`Overall Progress:    ${processedCount} / ${totalCount} (${percent}%)`);
+  console.log(`Remaining:           ${totalCount - processedCount} reels`);
+  console.log(`Firestore Stored:    ${processedCount}`);
+  console.log(`Notion Synced:       ${notionCount}`);
+  console.log(`Last Active:         ${checkpoint.lastUpdated || "N/A"}`);
+
+  console.log(`\n🧭 4F Quadrants Distribution:`);
+  console.log(`   Focus (Attention/Flow):     ${quadrants.Focus}`);
+  console.log(`   Facts (Code/Tools/Eng):     ${quadrants.Facts}`);
+  console.log(`   Funds (Vitality/Health):    ${quadrants.Funds}`);
+  console.log(`   Feedback (Mind/Dynamics):   ${quadrants.Feedback}`);
+
+  console.log(`\n🏷️ Categories:`);
+  console.log(`   Insights:  ${categories.insight} | Strategies: ${categories.strategy} | Tools: ${categories.tool} | Wins: ${categories.win}`);
+
+  const recent = Object.entries(checkpoint.processedUrls).slice(-5).reverse();
+  if (recent.length > 0) {
+    console.log(`\n🌟 Recent Ingestions:`);
+    recent.forEach(([url, item], idx) => {
+      console.log(`   ${idx + 1}. [${(item.quadrant || "INSIGHT").toUpperCase()}] ${item.title} (@${item.author || "creator"})`);
+      if (item.takeaway) console.log(`      💡 ${item.takeaway}`);
+      if (item.notionUrl) console.log(`      📓 ${item.notionUrl}`);
+    });
+  }
+  console.log(`===============================================================================\n`);
+}
+
 async function main() {
   const args = process.argv.slice(2);
+
+  if (args.includes("--status")) {
+    displayTrackerStatus();
+    process.exit(0);
+  }
 
   if (args.length === 0 || args.includes("--help") || args.includes("-h")) {
     console.log(`
 📱 The Fabric OS: Instagram Knowledge Garden Importer
 =====================================================
 Digests Instagram Saved Reels/Posts into high-signal 4F Knowledge Cards
-using Gemini 3.8 Flash, storing in Firestore and syncing to Notion.
+using Gemini Flash, storing in Firestore and syncing to Notion.
 
 Usage:
   bun run scripts/import-reels.ts <path-to-saved_posts.json> [options]
 
 Options:
-  --limit <n>            Process only the first N items (e.g. --limit 25)
-  --batch-size <n>       Number of reels per Gemini batch call (default: 12)
-  --no-notion            Disable Notion synchronization (Firestore only)
+  --status               Show live progress tracker and metrics without running
+  --limit <n>            Process only the first N items (e.g. --limit 100)
+  --chunk <n>            Same as --limit
+  --batch-size <n>       Number of reels per Gemini batch call (default: 15)
+  --delay <ms>           Pause between batches in ms (default: 3000)
+  --no-notion            Disable Notion synchronization (Firestore only, faster)
   --no-firestore         Disable Firestore synchronization (Notion only)
   --stats-only           Display comprehensive analytics of saved posts without importing
   --dry-run              Simulate parsing and batch generation without saving
   --reset-checkpoint     Clear previous import progress to start fresh
-  --user <id>            Target Fabric User ID (default: "fabric_user")
+  --user <id>            Target Fabric User ID (default: TELEGRAM_USER_ID or "1131646846")
 
 Examples:
-  bun run scripts/import-reels.ts saved_posts.json --stats-only
-  bun run scripts/import-reels.ts saved_posts.json --limit 10 --dry-run
-  bun run scripts/import-reels.ts saved_posts.json --limit 50
+  bun run scripts/import-reels.ts --status
+  bun run scripts/import-reels.ts saved_posts.json --limit 100
+  bun run scripts/import-reels.ts saved_posts.json --batch-size 15
     `);
     process.exit(0);
   }
@@ -336,20 +469,24 @@ Examples:
 
   // Parse arguments
   let limit: number | undefined;
-  let batchSize = 12;
+  let batchSize = 15;
+  let batchDelayMs = 3000;
   let syncNotion = true;
   let syncFirestore = true;
   let statsOnly = false;
   let dryRun = false;
   let resetCheckpoint = false;
-  let userId = process.env.TELEGRAM_USER_ID || process.env.FABRIC_USER_ID || "fabric_user";
+  let userId = process.env.TELEGRAM_USER_ID || process.env.FABRIC_USER_ID || "1131646846";
 
   for (let i = 1; i < args.length; i++) {
-    if (args[i] === "--limit" && args[i + 1]) {
+    if ((args[i] === "--limit" || args[i] === "--chunk") && args[i + 1]) {
       limit = parseInt(args[i + 1], 10);
       i++;
     } else if (args[i] === "--batch-size" && args[i + 1]) {
-      batchSize = Math.max(1, Math.min(25, parseInt(args[i + 1], 10) || 12));
+      batchSize = Math.max(1, Math.min(25, parseInt(args[i + 1], 10) || 15));
+      i++;
+    } else if (args[i] === "--delay" && args[i + 1]) {
+      batchDelayMs = Math.max(500, parseInt(args[i + 1], 10) || 3000);
       i++;
     } else if (args[i] === "--no-notion") {
       syncNotion = false;
@@ -367,9 +504,10 @@ Examples:
     }
   }
 
-  if (resetCheckpoint && fs.existsSync(CHECKPOINT_FILE)) {
-    fs.unlinkSync(CHECKPOINT_FILE);
-    console.log("🔄 Reset import checkpoint file.");
+  if (resetCheckpoint) {
+    if (fs.existsSync(CHECKPOINT_FILE)) fs.unlinkSync(CHECKPOINT_FILE);
+    if (fs.existsSync(TRACKER_FILE)) fs.unlinkSync(TRACKER_FILE);
+    console.log("🔄 Reset import checkpoint and tracker files.");
   }
 
   console.log(`\n📂 Reading Instagram export: ${filePath}`);
@@ -443,6 +581,7 @@ Examples:
 
   if (pendingPosts.length === 0) {
     console.log("🎉 All items have already been processed according to checkpoint!");
+    displayTrackerStatus();
     process.exit(0);
   }
 
@@ -451,9 +590,10 @@ Examples:
   console.log(`  - Mode: ${dryRun ? "🧪 DRY RUN (No writes)" : "🚀 LIVE INGESTION"}`);
   console.log(`  - Items to Process: ${pendingPosts.length}`);
   console.log(`  - Batch Size: ${batchSize} reels / Gemini call`);
+  console.log(`  - Batch Delay: ${batchDelayMs}ms`);
   console.log(`  - Firestore Storage: ${syncFirestore ? "Active ✅" : "Disabled"}`);
   console.log(`  - Notion Auto-Sync: ${notionReady ? "Active ✅" : "Disabled"}`);
-  console.log(`  - Target User: ${userId}\n`);
+  console.log(`  - Target User ID: ${userId}\n`);
 
   const stats = {
     total: pendingPosts.length,
@@ -464,6 +604,22 @@ Examples:
   };
 
   const results: DigestedReelResult[] = [];
+  const tracker: TrackerData = loadTracker() || {
+    total: allPosts.length,
+    processed: previouslySkipped,
+    remaining: allPosts.length - previouslySkipped,
+    percent: ((previouslySkipped / allPosts.length) * 100).toFixed(1) + "%",
+    status: "IN_PROGRESS",
+    quadrants: { Focus: 0, Facts: 0, Funds: 0, Feedback: 0 },
+    categories: { insight: 0, strategy: 0, tool: 0, win: 0 },
+    notionSynced: 0,
+    firestoreSaved: previouslySkipped,
+    startedAt: new Date().toISOString(),
+    lastUpdated: new Date().toISOString(),
+    recentAdditions: [],
+  };
+
+  tracker.status = "IN_PROGRESS";
 
   // Process in batches
   for (let i = 0; i < pendingPosts.length; i += batchSize) {
@@ -522,26 +678,33 @@ Examples:
           stats.success++;
         }
 
-        // 2. Sync to Notion (with safe rate limit delay: 350ms)
+        // 2. Sync to Notion (with safe rate limit delay: 350ms & 429 retry)
         if (notionReady) {
-          try {
-            await sleep(350);
-            const notionRes = await syncKnowledgeItemToNotion({
-              userId,
-              timestamp: original.savedAt || new Date(),
-              category: item.category,
-              title: item.title,
-              content: item.summary,
-              tags: Array.from(new Set([...item.tags, item.quadrant.toLowerCase()])),
-              actionableTakeaway: item.actionableTakeaway,
-              sourceUrl: original.url,
-              author: original.author,
-              quadrant: item.quadrant,
-            });
-            notionUrl = notionRes.url;
-            stats.notion++;
-          } catch (notionErr: any) {
-            // Notion error shouldn't crash the script
+          for (let nRetry = 1; nRetry <= 3; nRetry++) {
+            try {
+              await sleep(350);
+              const notionRes = await syncKnowledgeItemToNotion({
+                userId,
+                timestamp: original.savedAt || new Date(),
+                category: item.category,
+                title: item.title,
+                content: item.summary,
+                tags: Array.from(new Set([...item.tags, item.quadrant.toLowerCase()])),
+                actionableTakeaway: item.actionableTakeaway,
+                sourceUrl: original.url,
+                author: original.author,
+                quadrant: item.quadrant,
+              });
+              notionUrl = notionRes.url;
+              stats.notion++;
+              break;
+            } catch (notionErr: any) {
+              if (notionErr?.message?.includes("429") || notionErr?.status === 429) {
+                await sleep(1500 * nRetry);
+              } else {
+                break;
+              }
+            }
           }
         }
 
@@ -549,11 +712,40 @@ Examples:
         checkpoint.processedUrls[original.url] = {
           title: item.title,
           category: item.category,
+          quadrant: item.quadrant,
+          author: original.author,
+          takeaway: item.actionableTakeaway,
           firestoreId,
           notionUrl,
           processedAt: new Date().toISOString(),
         };
         checkpoint.totalProcessed++;
+
+        // Update live tracker metrics
+        if (item.quadrant in tracker.quadrants) {
+          tracker.quadrants[item.quadrant as keyof typeof tracker.quadrants]++;
+        }
+        const cat = item.category?.toLowerCase();
+        if (cat in tracker.categories) {
+          tracker.categories[cat as keyof typeof tracker.categories]++;
+        }
+        if (notionUrl) tracker.notionSynced++;
+        tracker.firestoreSaved++;
+        tracker.processed = Object.keys(checkpoint.processedUrls).length;
+        tracker.remaining = tracker.total - tracker.processed;
+        tracker.percent = ((tracker.processed / tracker.total) * 100).toFixed(1) + "%";
+
+        tracker.recentAdditions.unshift({
+          title: item.title,
+          category: item.category,
+          quadrant: item.quadrant,
+          author: original.author,
+          notionUrl,
+          takeaway: item.actionableTakeaway,
+        });
+        if (tracker.recentAdditions.length > 10) {
+          tracker.recentAdditions = tracker.recentAdditions.slice(0, 10);
+        }
 
         results.push({
           url: original.url,
@@ -573,38 +765,32 @@ Examples:
       }
     }
 
-    // Save checkpoint after every batch
-    saveCheckpoint(checkpoint);
+    // Save checkpoint and tracker after every batch
+    saveCheckpoint(checkpoint, tracker);
     renderProgressBar(Math.min(i + batchSize, stats.total), stats.total, stats);
 
-    // Courtesy pause between Gemini batch requests
+    // Polite pause between Gemini batch requests
     if (i + batchSize < pendingPosts.length) {
-      await sleep(1000);
+      await sleep(batchDelayMs);
     }
   }
 
+  tracker.status = tracker.remaining === 0 ? "COMPLETED" : "PAUSED";
+  saveCheckpoint(checkpoint, tracker);
+
   renderProgressBar(stats.total, stats.total, stats);
   console.log("\n\n" + "=".repeat(60));
-  console.log(dryRun ? "🧪 Dry Run Complete!" : "🎉 Instagram Ingestion Complete!");
+  console.log(dryRun ? "🧪 Dry Run Complete!" : "🎉 Instagram Ingestion Batch Complete!");
   console.log(`📦 Processed this run: ${results.length}`);
   console.log(`✅ Saved to Knowledge Garden (Firestore): ${stats.success}`);
   console.log(`📓 Synced to Notion Database: ${stats.notion}`);
-  console.log(`⏩ Previously Processed: ${stats.skipped}`);
+  console.log(`⏩ Total Processed to Date: ${Object.keys(checkpoint.processedUrls).length} / ${allPosts.length}`);
   if (stats.errors > 0) {
     console.log(`⚠️ Errors: ${stats.errors}`);
   }
   console.log("=".repeat(60));
 
-  if (results.length > 0) {
-    console.log("\n🌟 Sample Digested Cards:");
-    results.slice(0, 5).forEach((r, idx) => {
-      console.log(`\n[${idx + 1}] [${r.quadrant.toUpperCase()} / ${r.category.toUpperCase()}] ${r.title}`);
-      console.log(`    👤 Creator: @${r.author || "unknown"}`);
-      console.log(`    💡 Takeaway: ${r.actionableTakeaway}`);
-      console.log(`    🏷️ Tags: ${r.tags.join(", ")}`);
-      if (r.notionUrl) console.log(`    📓 Notion: ${r.notionUrl}`);
-    });
-  }
+  displayTrackerStatus();
 }
 
 main().catch((err) => {
