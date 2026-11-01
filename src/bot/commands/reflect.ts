@@ -5,6 +5,13 @@ import { appendReflectionToNotionPage } from "../../notion/client.js";
 // In-memory active reflection state per user
 const activeReflectionSessions = new Map<string, { itemId: string; title: string; notionUrl?: string }>();
 
+export function setActiveReflectionSession(
+  userId: string,
+  session: { itemId: string; title: string; notionUrl?: string }
+) {
+  activeReflectionSessions.set(userId, session);
+}
+
 export function getActiveReflectionSession(userId: string) {
   return activeReflectionSessions.get(userId) || null;
 }

@@ -96,5 +96,25 @@ export const BUILTIN_PLUGINS: Record<string, PluginDefinition> = {
     promptGuidance:
       "Encourage zero-commercialization artistic play. Value quirkiness, non-linear thinking, and aesthetic experimentation.",
   },
+  "creative-play-v1": {
+    id: "creative-play-v1",
+    name: "Creative Play (v1)",
+    category: "creative",
+    description:
+      "Anti-mechanization creative sandbox. Uninhibited music, visual hacking, and artistic exploration to restore radical authenticity.",
+    expectedTrade: "Cognitive Play -> Radical Authenticity & Soul Reset.",
+    promptGuidance:
+      "User is in Creative Play mode. Prioritize wild experiments, aesthetics, and artistic indulgence over rigid deliverables.",
+  },
+  "monotropic-flow-v1": {
+    id: "monotropic-flow-v1",
+    name: "Monotropic Flow (v1)",
+    category: "focus_strategy",
+    description:
+      "Single-task hyperfocus driver. Enforces strategic decisiveness and eradicates meta-planning paralysis.",
+    expectedTrade: "Ruthless Prioritization + Deep Flow -> High-leverage execution.",
+    promptGuidance:
+      "User is operating under Monotropic Flow v1. Protect deep flow states, enforce strategic decisiveness, and eliminate context-switching.",
+  },
 };
 

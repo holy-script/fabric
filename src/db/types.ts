@@ -64,6 +64,34 @@ export interface ActiveSession {
   tags: string[];
 }
 
+export interface GoalItem {
+  id?: string;
+  userId: string;
+  title: string;
+  targetMetric: string;
+  targetFocusHours?: number;
+  reward: string;
+  isUnlocked: boolean;
+  unlockedAt?: Date;
+  createdAt: Date;
+}
+
+export interface AristotelianScores {
+  prioritization: number;
+  documentation: number;
+  waysToWork: number;
+  timeManagement: number;
+  variety: number;
+  goalsAndRewards?: number;
+  portfolioGrowth?: number;
+  skillHorizon?: number;
+  rapidPrototyping?: number;
+  expressionism: number;
+  vitality?: number;
+  logic?: number;
+  [key: string]: number | undefined;
+}
+
 export interface UserState {
   userId: string;
   totalFocusHours: number;
@@ -74,17 +102,10 @@ export interface UserState {
   
   // Aristotle Mean Scale scores (-5 to +5)
   // 0 = Golden Mean, negative = deficiency, positive = excess
-  goldenMeans: {
-    prioritization: number;
-    documentation: number;
-    waysToWork: number;
-    timeManagement: number;
-    variety: number;
-    vitality: number;
-    expressionism: number;
-  };
+  goldenMeans: AristotelianScores;
   
   activePlugins: string[];
+  lastAudit?: Date;
   updatedAt: Date;
 }
 

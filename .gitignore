@@ -20,3 +20,7 @@ r2_pools*.json
 !r2_pools.example.json
 .r2_pool_usage.json
 
+# Local Knowledge Graph Cache
+data/knowledge_graph.json
+.telegram_vault_tracker.json
+

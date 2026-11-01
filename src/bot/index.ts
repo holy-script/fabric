@@ -14,12 +14,14 @@ import {
 } from "./commands/plugins.js";
 import { handleMuse } from "./commands/muse.js";
 import { handleReflect } from "./commands/reflect.js";
+import { handleCluster, handlePath } from "./commands/cluster.js";
 import { handleSetChannel } from "./commands/channel.js";
 import { handlePortfolio } from "./commands/portfolio.js";
 import { handleWins, handleGotchas, handleSearch, handleGarden } from "./commands/garden.js";
 import { handleGoal, handleGoals, handleClaim } from "./commands/goals.js";
 import { handleBriefing } from "./commands/briefing.js";
 import { handleDashboard } from "./commands/dashboard.js";
+import { handleSentinel } from "./commands/sentinel.js";
 import { handleSimulate } from "./commands/simulate.js";
 import { handleNotion } from "./commands/notion.js";
 import { handleGithub } from "./commands/github.js";
@@ -35,6 +37,7 @@ export function createBot() {
   bot.api
     .setMyCommands([
       { command: "dashboard", description: "Open real-time in-chat Visual HUD" },
+      { command: "sentinel", description: "Autonomous Cognitive Audit & Mean Calibrator" },
       { command: "briefing", description: "Daily Flight Plan & Focus Budget" },
       { command: "spark", description: "Start a focused execution session" },
       { command: "settle", description: "Finish active session & log trade" },
@@ -46,6 +49,8 @@ export function createBot() {
       { command: "wins", description: "View the Hopecore vault of wins" },
       { command: "gotchas", description: "View documented traps & pitfalls" },
       { command: "search", description: "Search knowledge garden & trades" },
+      { command: "cluster", description: "Semantic Knowledge Clusters & Master Syntheses" },
+      { command: "path", description: "Multi-hop concept reasoning pathfinder" },
       { command: "goal", description: "Set a gated milestone -> reward" },
       { command: "goals", description: "View Reward Bank progress" },
       { command: "plugins", description: "Manage Ways of Working plugins" },
@@ -58,6 +63,7 @@ export function createBot() {
   // Command handlers
   bot.command("start", handleStart);
   bot.command("dashboard", handleDashboard);
+  bot.command("sentinel", handleSentinel);
   bot.command("briefing", handleBriefing);
   bot.command("spark", handleSpark);
   bot.command("settle", handleSettle);
@@ -82,6 +88,9 @@ export function createBot() {
   bot.command("swap", handleSwap);
   bot.command("muse", handleMuse);
   bot.command("reflect", handleReflect);
+  bot.command("cluster", handleCluster);
+  bot.command("synthesize", handleCluster);
+  bot.command("path", handlePath);
   bot.command("setchannel", handleSetChannel);
   bot.command("ask", handleAsk);
 

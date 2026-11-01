@@ -5,8 +5,10 @@ import { handleSettle } from "../commands/settle.js";
 import { handlePlugins } from "../commands/plugins.js";
 import { handleBriefing } from "../commands/briefing.js";
 import { executeSimulation } from "../commands/simulate.js";
-import { installPlugin, uninstallPlugin } from "../../plugins/manager.js";
-import { unlockGoal, getUserState } from "../../db/firestore.js";
+import { handleSentinel } from "../commands/sentinel.js";
+import { installPlugin, uninstallPlugin, swapPlugin } from "../../plugins/manager.js";
+import { unlockGoal, getUserState, findKnowledgeItem } from "../../db/firestore.js";
+import { setActiveReflectionSession } from "../commands/reflect.js";
 import { exportPortfolioToNotion, isNotionConfigured } from "../../notion/exporter.js";
 
 export async function handleCallbackQuery(ctx: Context) {
@@ -16,8 +18,35 @@ export async function handleCallbackQuery(ctx: Context) {
 
   await ctx.answerCallbackQuery();
 
+  if (data.startsWith("reflect:")) {
+    const itemId = data.replace("reflect:", "");
+    try {
+      const item = await findKnowledgeItem(userId, itemId);
+      if (item && item.id) {
+        setActiveReflectionSession(userId, {
+          itemId: item.id,
+          title: item.title,
+        });
+        await ctx.reply(
+          `🎙️ *Active Reflection Locked:*\n` +
+            `*${item.title}*\n\n` +
+            `💡 _Takeaway:_ ${item.actionableTakeaway || item.content}\n\n` +
+            `Send a **voice memo** or **text message** now to attach your personal conclusion!`,
+          { parse_mode: "Markdown" }
+        );
+      } else {
+        await ctx.reply("⚠️ Could not find card for reflection.");
+      }
+    } catch (err: any) {
+      await ctx.reply(`⚠️ Error locking reflection: ${err.message}`);
+    }
+    return;
+  }
+
   if (data === "action:balance") {
     await handleBalance(ctx);
+  } else if (data === "action:sentinel") {
+    await handleSentinel(ctx);
   } else if (data === "action:briefing") {
     await handleBriefing(ctx);
   } else if (data === "action:settle") {
@@ -119,6 +148,25 @@ export async function handleCallbackQuery(ctx: Context) {
     await ctx.reply(
       `🎉 *VALIDATION GATE CLEARED!*\nReward unlocked in your Reward Bank! Enjoy your guilt-free payoff.`,
       { parse_mode: "Markdown" }
+    );
+  } else if (data.startsWith("swap_plugin:")) {
+    const targetPluginId = data.replace("swap_plugin:", "");
+    const state = await getUserState(userId);
+    const oldId = state.activePlugins?.[0] || "monotropic-flow";
+    const res = await swapPlugin(userId, oldId, targetPluginId);
+
+    const keyboard = new InlineKeyboard()
+      .text("🛡️ Re-Run Sentinel Recon", "action:sentinel")
+      .text("🧩 View Plugins", "action:plugins");
+
+    await ctx.reply(
+      `⚡ *WAY OF WORKING CALIBRATION COMPLETE*\n\n` +
+        `${res.message}\n\n` +
+        `_The Sentinel Agent has updated your operational driver._`,
+      {
+        parse_mode: "Markdown",
+        reply_markup: keyboard,
+      }
     );
   }
 }

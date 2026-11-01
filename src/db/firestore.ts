@@ -1,7 +1,8 @@
 import admin from "firebase-admin";
 import fs from "fs";
 import { config } from "../config/env.js";
-import type { Trade, KnowledgeItem, ActiveSession, UserState } from "./types.js";
+import type { Trade, KnowledgeItem, ActiveSession, UserState, GoalItem } from "./types.js";
+export type { GoalItem };
 
 // Initialize Firebase Admin App
 if (!admin.apps.length) {
@@ -45,6 +46,7 @@ export const sessionsCollection = db.collection("sessions");
 export const userStatesCollection = db.collection("userState");
 export const goalsCollection = db.collection("goals");
 export const settingsCollection = db.collection("settings");
+export const graphsCollection = db.collection("graphs");
 
 export async function setVaultChannelId(channelId: string, userId: string = "1131646846"): Promise<void> {
   try {
@@ -326,16 +328,22 @@ export async function getUserState(userId: string): Promise<UserState> {
       totalFundsSpent: data.totalFundsSpent || 0,
       totalFundsYield: data.totalFundsYield || 0,
       averageEnergyDelta: data.averageEnergyDelta || 0,
-      goldenMeans: data.goldenMeans || {
+      goldenMeans: {
         prioritization: 0,
         documentation: 0,
         waysToWork: 0,
         timeManagement: 0,
         variety: 0,
-        vitality: 0,
+        goalsAndRewards: 0,
+        portfolioGrowth: 0,
+        skillHorizon: 0,
+        rapidPrototyping: 0,
         expressionism: 0,
+        vitality: 0,
+        ...(data.goldenMeans || {}),
       },
       activePlugins: data.activePlugins || ["monotropic-flow"],
+      lastAudit: data.lastAudit?.toDate() || undefined,
       updatedAt: data.updatedAt?.toDate() || new Date(),
     };
   }
@@ -353,8 +361,12 @@ export async function getUserState(userId: string): Promise<UserState> {
       waysToWork: 0,
       timeManagement: 0,
       variety: 0,
-      vitality: 0,
+      goalsAndRewards: 0,
+      portfolioGrowth: 0,
+      skillHorizon: 0,
+      rapidPrototyping: 0,
       expressionism: 0,
+      vitality: 0,
     },
     activePlugins: ["monotropic-flow"],
     updatedAt: new Date(),
@@ -447,18 +459,6 @@ export async function getRecentTrades(
 }
 
 // Helper: Goal model
-export interface GoalItem {
-  id?: string;
-  userId: string;
-  title: string;
-  targetMetric: string;
-  targetFocusHours?: number;
-  reward: string;
-  isUnlocked: boolean;
-  unlockedAt?: Date;
-  createdAt: Date;
-}
-
 export async function createGoal(goal: Omit<GoalItem, "id" | "createdAt" | "isUnlocked">): Promise<string> {
   const docRef = await goalsCollection.add({
     ...goal,

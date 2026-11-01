@@ -6,6 +6,7 @@ import {
   getUserState,
   getUserGoals,
   getRecentTrades,
+  knowledgeCollection,
 } from "../../db/firestore.js";
 import { getUserActivePlugins } from "../../plugins/manager.js";
 
@@ -106,7 +107,24 @@ ${recentTradesText}
 `;
 
   const response = await model.generateContent(prompt);
-  const briefing = response.response.text().trim();
+  let briefing = response.response.text().trim();
+
+  // Daily Vault Resurfacing (Spaced Retrieval from 3,843 reels)
+  try {
+    const snap = await knowledgeCollection
+      .where("userId", "==", userId)
+      .limit(40)
+      .get();
+    if (!snap.empty) {
+      const randomDoc = snap.docs[Math.floor(Math.random() * snap.docs.length)];
+      const k = randomDoc.data();
+      const streamLink = k.streamUrl ? `\n🎬 [Watch Video in Vault](${k.streamUrl})` : "";
+      const takeaway = k.actionableTakeaway || k.content || "Reflect on how this principle applies to your craft.";
+      briefing += `\n\n🪴 *Daily Vault Resurfacing (Spaced Retrieval):*\n*${k.title}*${streamLink}\n💡 _Heuristic:_ ${takeaway}\n_Send a voice memo or reply to layer your synthesis onto this card today._`;
+    }
+  } catch (err) {
+    console.warn("Could not query daily vault spark:", err);
+  }
 
   // Save to agentOutputs in Firestore
   try {

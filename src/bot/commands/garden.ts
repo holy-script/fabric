@@ -1,5 +1,6 @@
 import type { Context } from "grammy";
-import { getKnowledgeItems, getRecentTrades } from "../../db/firestore.js";
+import { InlineKeyboard } from "grammy";
+import { getKnowledgeItems, getRecentTrades, knowledgeCollection } from "../../db/firestore.js";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { config } from "../../config/env.js";
 
@@ -127,55 +128,103 @@ export async function handleSearch(ctx: Context) {
   const query = ctx.message?.text?.replace(/^\/search\s*/i, "").trim();
   if (!query) {
     await ctx.reply(
-      `🔍 *Search Knowledge Garden*\nUsage: \`/search <topic or keyword>\`\n\n_Example: \`/search firestore batch\` or \`/search plyometrics\`_`,
+      `🔍 *Search Knowledge Garden*\nUsage: \`/search <topic or keyword>\`\n\n_Example: \`/search dopamine\` or \`/search plyometrics\`_`,
       { parse_mode: "Markdown" }
     );
     return;
   }
 
-  const statusMsg = await ctx.reply(`🔍 *Searching vault for "${query}"...*`, {
+  const statusMsg = await ctx.reply(`🔍 *Searching 3,843-card vault for "${query}"...*`, {
     parse_mode: "Markdown",
   });
 
   try {
-    const allKnowledge = await getKnowledgeItems(userId, undefined, 30);
-    const recentTrades = await getRecentTrades(userId, 20);
+    const cleanQ = query.toLowerCase();
+    const matchedDocs: Array<{ id: string; data: any }> = [];
 
+    // 1. Tag-based query (direct O(1) indexed lookup)
+    try {
+      const tagSnap = await knowledgeCollection
+        .where("userId", "==", userId)
+        .where("tags", "array-contains", cleanQ)
+        .limit(8)
+        .get();
+      for (const d of tagSnap.docs) {
+        matchedDocs.push({ id: d.id, data: d.data() });
+      }
+    } catch {}
+
+    // 2. Keyword scan across recent items if tag lookup yielded few results
+    if (matchedDocs.length < 5) {
+      const broadSnap = await knowledgeCollection
+        .where("userId", "==", userId)
+        .limit(100)
+        .get();
+
+      for (const d of broadSnap.docs) {
+        if (matchedDocs.some((m) => m.id === d.id)) continue;
+        const data = d.data();
+        const titleMatch = data.title?.toLowerCase().includes(cleanQ);
+        const takeawayMatch = data.actionableTakeaway?.toLowerCase().includes(cleanQ);
+        const authorMatch = data.author?.toLowerCase().includes(cleanQ);
+        if (titleMatch || takeawayMatch || authorMatch) {
+          matchedDocs.push({ id: d.id, data });
+          if (matchedDocs.length >= 6) break;
+        }
+      }
+    }
+
+    if (matchedDocs.length > 0) {
+      const keyboard = new InlineKeyboard();
+      let text = `🔍 *Vault Matches for "${query}":*\n\n`;
+
+      matchedDocs.slice(0, 5).forEach((item, idx) => {
+        const d = item.data;
+        const icon = d.category === "win" ? "🏆" : d.category === "gotcha" ? "⚠️" : "🎬";
+        const streamLink = d.streamUrl ? `\n   📱 [Play in Telegram Vault](${d.streamUrl})` : "";
+        const author = d.author ? ` _(@${d.author})_` : "";
+        const verdict = d.userConclusions ? `\n   🧠 *Your Verdict:* _${d.userConclusions}_` : "";
+
+        text += `*${idx + 1}. ${icon} ${d.title}*${author}${streamLink}\n`;
+        text += `   💡 _Takeaway:_ ${d.actionableTakeaway || d.content}\n${verdict}\n\n`;
+
+        keyboard.text(`🎙️ Reflect on #${idx + 1}`, `reflect:${item.id}`);
+        if ((idx + 1) % 2 === 0) keyboard.row();
+      });
+
+      text += `_Tap a button below to attach your personal verdict/synthesis to any reel._`;
+
+      await ctx.api.editMessageText(ctx.chat!.id, statusMsg.message_id, text, {
+        parse_mode: "Markdown",
+        reply_markup: keyboard,
+      });
+      return;
+    }
+
+    // 3. Fallback AI synthesis if no direct substring match
+    const allKnowledge = await getKnowledgeItems(userId, undefined, 20);
     const vaultData = {
       knowledge: allKnowledge.map((k) => ({
-        category: k.category,
         title: k.title,
-        content: k.content,
         takeaway: k.actionableTakeaway,
         tags: k.tags,
-      })),
-      trades: recentTrades.map((t) => ({
-        module: t.moduleName,
-        yield: t.factsYield,
-        tags: t.tags,
       })),
     };
 
     const prompt = `
 You are the Knowledge Garden Search Engine for "The Fabric".
-The user is searching for: "${query}"
-
-Here is their personal knowledge vault and trade history:
+The user searched for: "${query}"
+Vault sample:
 ${JSON.stringify(vaultData, null, 2)}
 
-Synthesize the most relevant matches. Format as:
-🔍 *Search Results for "${query}"*
-- Found items with category [Win/Gotcha/Trade]
-- Key actionable takeaways and patterns
-
-If nothing is relevant, say so directly and offer a heuristic. Keep it concise.
+Provide a concise heuristic answer synthesizing relevant principles. Keep it under 150 words.
 `;
 
     const response = await model.generateContent(prompt);
     await ctx.api.editMessageText(
       ctx.chat!.id,
       statusMsg.message_id,
-      response.response.text(),
+      `🔍 *No exact reel title matches "${query}".*\n\n💡 *Synthesized Heuristic:*\n${response.response.text()}`,
       { parse_mode: "Markdown" }
     );
   } catch (error) {
