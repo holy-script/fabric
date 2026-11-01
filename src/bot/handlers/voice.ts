@@ -2,6 +2,7 @@ import type { Context } from "grammy";
 import { InlineKeyboard } from "grammy";
 import { config } from "../../config/env.js";
 import { parseVoiceWithGemini, askAdvisor } from "../../ai/gemini.js";
+import { generateSocraticChallenge } from "../../ai/challenger.js";
 import {
   createTrade,
   createKnowledgeItem,
@@ -42,17 +43,44 @@ export async function handleVoiceMessage(ctx: Context) {
 
     // Check if user is actively reflecting on a knowledge card
     const reflectionText = result.transcript || result.trade?.notes || "";
-    const reflectionCardTitle = await processUserReflectionNote(userId, reflectionText);
-    if (reflectionCardTitle) {
-      await ctx.api.editMessageText(
-        ctx.chat!.id,
-        statusMsg.message_id,
-        `🧠 *Personal Synthesis Attached!*\n\n` +
-          `*Card:* ${reflectionCardTitle}\n\n` +
-          `*Your Conclusion (Transcribed):*\n"${reflectionText}"\n\n` +
-          `_Saved to Firestore and synced to Notion Knowledge Garden!_`,
-        { parse_mode: "Markdown" }
+    const reflectionResult = await processUserReflectionNote(userId, reflectionText);
+    if (reflectionResult) {
+      const challenge = await generateSocraticChallenge(
+        reflectionResult.title,
+        reflectionText,
+        reflectionResult.takeaway
       );
+
+      const keyboard = new InlineKeyboard().text(
+        "🎙️ Defend / Deepen Verdict",
+        `defend:${reflectionResult.itemId}`
+      );
+
+      const replyContent =
+        `🧠 *Personal Synthesis Attached!*\n\n` +
+        `*Card:* ${reflectionResult.title}\n` +
+        `*Your Conclusion:* "${reflectionText}"\n\n` +
+        `━━━━━━━━━━━━━━━━━━━━━━\n` +
+        `⚔️ *Socratic Challenger:*\n` +
+        `"${challenge.challenge}"\n\n` +
+        `❓ *Stress-Test:*\n` +
+        `"${challenge.provocativeQuestion}"`;
+
+      try {
+        await ctx.api.editMessageText(
+          ctx.chat!.id,
+          statusMsg.message_id,
+          replyContent,
+          { parse_mode: "Markdown", reply_markup: keyboard }
+        );
+      } catch {
+        await ctx.api.editMessageText(
+          ctx.chat!.id,
+          statusMsg.message_id,
+          replyContent.replace(/[*_`]/g, ""),
+          { reply_markup: keyboard }
+        );
+      }
       return;
     }
 

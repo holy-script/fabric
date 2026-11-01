@@ -1,6 +1,6 @@
 import type { Context } from "grammy";
 import { parseKnowledgeWithGemini } from "../../ai/gemini.js";
-import { createKnowledgeItem } from "../../db/firestore.js";
+import { createKnowledgeItem, updateKnowledgeItemNotion } from "../../db/firestore.js";
 import { isNotionConfigured, syncKnowledgeItemToNotion } from "../../notion/client.js";
 
 export async function handleWin(ctx: Context) {
@@ -33,6 +33,7 @@ export async function handleWin(ctx: Context) {
       try {
         const notionRes = await syncKnowledgeItemToNotion(parsed);
         notionLink = `\n📓 [Open in Notion](${notionRes.url})`;
+        await updateKnowledgeItemNotion(id, notionRes.url, notionRes.id);
       } catch (err) {
         console.warn("Async Notion sync notice:", err);
       }
@@ -89,6 +90,7 @@ export async function handleGotcha(ctx: Context) {
       try {
         const notionRes = await syncKnowledgeItemToNotion(parsed);
         notionLink = `\n📓 [Open in Notion](${notionRes.url})`;
+        await updateKnowledgeItemNotion(id, notionRes.url, notionRes.id);
       } catch (err) {
         console.warn("Async Notion sync notice:", err);
       }

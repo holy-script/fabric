@@ -2,17 +2,31 @@ import type { Context } from "grammy";
 import { findKnowledgeItem, addReflectionToKnowledgeItem } from "../../db/firestore.js";
 import { appendReflectionToNotionPage } from "../../notion/client.js";
 
+export interface ReflectionSession {
+  itemId: string;
+  title: string;
+  notionUrl?: string;
+  takeaway?: string;
+}
+
+export interface ProcessedReflectionNote {
+  title: string;
+  itemId: string;
+  takeaway?: string;
+  notionUrl?: string;
+}
+
 // In-memory active reflection state per user
-const activeReflectionSessions = new Map<string, { itemId: string; title: string; notionUrl?: string }>();
+const activeReflectionSessions = new Map<string, ReflectionSession>();
 
 export function setActiveReflectionSession(
   userId: string,
-  session: { itemId: string; title: string; notionUrl?: string }
+  session: ReflectionSession
 ) {
   activeReflectionSessions.set(userId, session);
 }
 
-export function getActiveReflectionSession(userId: string) {
+export function getActiveReflectionSession(userId: string): ReflectionSession | null {
   return activeReflectionSessions.get(userId) || null;
 }
 
@@ -52,7 +66,8 @@ export async function handleReflect(ctx: Context) {
   activeReflectionSessions.set(userId, {
     itemId: item.id,
     title: item.title,
-    notionUrl: undefined, // Will be updated if present in checkpoint
+    notionUrl: item.notionUrl,
+    takeaway: item.actionableTakeaway || item.content,
   });
 
   const mediaLink = item.streamUrl
@@ -83,20 +98,43 @@ export async function processUserReflectionNote(
   userId: string,
   noteText: string,
   audioUrl?: string
-): Promise<string | null> {
+): Promise<ProcessedReflectionNote | null> {
   const session = activeReflectionSessions.get(userId);
   if (!session) return null;
 
   try {
+    // 1. Log reflection to Firestore
     await addReflectionToKnowledgeItem(session.itemId, {
       text: noteText,
       audioUrl,
     });
 
+    // 2. Log reflection to Notion if configured & target exists
+    let notionTarget = session.notionUrl;
+    if (!notionTarget) {
+      const item = await findKnowledgeItem(userId, session.itemId);
+      if (item) {
+        notionTarget = item.notionUrl || item.notionPageId;
+      }
+    }
+
+    if (notionTarget) {
+      try {
+        await appendReflectionToNotionPage(notionTarget, noteText);
+      } catch (notionErr) {
+        console.warn("Could not append reflection to Notion page:", notionErr);
+      }
+    }
+
     // Clean up session
     activeReflectionSessions.delete(userId);
 
-    return session.title;
+    return {
+      title: session.title,
+      itemId: session.itemId,
+      takeaway: session.takeaway,
+      notionUrl: notionTarget,
+    };
   } catch (err) {
     console.error("Failed to save reflection:", err);
     activeReflectionSessions.delete(userId);

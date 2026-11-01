@@ -1,5 +1,5 @@
 import type { Context } from "grammy";
-import { createKnowledgeItem } from "../../db/firestore.js";
+import { createKnowledgeItem, updateKnowledgeItemNotion } from "../../db/firestore.js";
 import { isNotionConfigured, syncKnowledgeItemToNotion } from "../../notion/client.js";
 import { extractMediaInsight } from "../../media/extractor.js";
 
@@ -32,6 +32,7 @@ export async function handleMediaUrl(ctx: Context, url: string) {
           id: itemId,
         });
         notionLink = `\n📓 [Open in Notion](${notionRes.url})`;
+        await updateKnowledgeItemNotion(itemId, notionRes.url, notionRes.id);
       } catch (err) {
         console.warn("Async Notion sync notice:", err);
       }

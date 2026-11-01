@@ -46,21 +46,23 @@ export async function handleGithub(ctx: Context) {
     }
 
     const message =
-      `🐙 *GitHub Passive Telemetry Ingress*\n\n` +
+      `🐙 *Fabric Git Passive Telemetry*\n\n` +
       `Documentation is treated as a passive byproduct of execution rather than an administrative chore. ` +
-      `Your git commits and PRs are automatically parsed with Gemini Flash to capture technical breakthroughs and architectural patterns directly into your 4F ledger.\n\n` +
-      `⚙️ *Webhook Setup Guide (2 Steps):*\n\n` +
-      `1️⃣ *Open GitHub Webhook Settings*\n` +
-      `• In your GitHub repository, navigate to *Settings* ➔ *Webhooks* ➔ *Add webhook*.\n\n` +
-      `2️⃣ *Configure Webhook Details*\n` +
-      `• *Payload URL:*\n` +
-      `  \`https://fabric-one-sage.vercel.app/api/webhooks/github\`\n` +
-      `• *Content type:* \`application/json\`\n` +
-      `• *Events to trigger:*\n` +
-      `  Choose *Let me select individual events*, then check:\n` +
-      `  ☑️ *Pushes*\n` +
-      `  ☑️ *Pull requests*\n` +
-      `• Click *Add webhook* to activate.\n\n` +
+      `Your git commits and PRs are automatically parsed with Gemini 3.5 Flash to capture technical breakthroughs and estimated focus time directly into your 4F ledger.\n\n` +
+      `⚡ *1-Command Universal Local Setup (Recommended):*\n` +
+      `Activate passive tracking for *all* local repos on this machine:\n` +
+      `\`bun run scripts/install-git-telemetry.ts --global\`\n` +
+      `_(or via bash: \`./scripts/install-git-hook.sh --global\`)_\n\n` +
+      `• *Non-blocking:* Runs in background with sub-second detached curl; zero git delays.\n` +
+      `• *Diff & Focus:* Computes files changed and delta time since previous commit.\n` +
+      `• *Single Repo:* \`bun run scripts/install-git-telemetry.ts --current\`\n` +
+      `• *Verify Connection:* \`bun run scripts/install-git-telemetry.ts --test\`\n\n` +
+      `🌐 *GitHub Cloud Webhook Setup (For Remote Pushes/PRs):*\n` +
+      `1️⃣ In GitHub repo: *Settings* ➔ *Webhooks* ➔ *Add webhook*\n` +
+      `2️⃣ *Payload URL:*\n` +
+      `   \`https://fabric-one-sage.vercel.app/api/webhooks/github\`\n` +
+      `3️⃣ *Content type:* \`application/json\`\n` +
+      `4️⃣ *Events:* Select *Pushes* and *Pull requests*\n\n` +
       `━━━━━━━━━━━━━━━━━━━━\n` +
       `📦 *Recent Git-Derived Trades:*\n\n` +
       `${tradesSection}`;

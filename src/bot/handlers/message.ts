@@ -1,8 +1,10 @@
 import type { Context } from "grammy";
+import { InlineKeyboard } from "grammy";
 import fs from "fs";
 import path from "path";
 import { getActiveSession, createTrade, setVaultChannelId } from "../../db/firestore.js";
 import { parseTradeWithGemini } from "../../ai/gemini.js";
+import { generateSocraticChallenge } from "../../ai/challenger.js";
 import { findMediaUrl } from "../../media/extractor.js";
 import { handleMediaUrl } from "./media.js";
 import { processUserReflectionNote } from "../commands/reflect.js";
@@ -49,15 +51,39 @@ export async function handleNaturalMessage(ctx: Context) {
   }
 
   // 2. Check if user is actively reflecting on a knowledge card
-  const reflectionCardTitle = await processUserReflectionNote(userId, text);
-  if (reflectionCardTitle) {
-    await ctx.reply(
-      `🧠 *Personal Synthesis Attached!*\n\n` +
-        `*Card:* ${reflectionCardTitle}\n\n` +
-        `*Your Conclusion:*\n"${text}"\n\n` +
-        `_Saved to Firestore and synced to Notion Knowledge Garden!_`,
-      { parse_mode: "Markdown" }
+  const reflectionResult = await processUserReflectionNote(userId, text);
+  if (reflectionResult) {
+    const challenge = await generateSocraticChallenge(
+      reflectionResult.title,
+      text,
+      reflectionResult.takeaway
     );
+
+    const keyboard = new InlineKeyboard().text(
+      "🎙️ Defend / Deepen Verdict",
+      `defend:${reflectionResult.itemId}`
+    );
+
+    const replyContent =
+      `🧠 *Personal Synthesis Attached!*\n\n` +
+      `*Card:* ${reflectionResult.title}\n` +
+      `*Your Conclusion:* "${text}"\n\n` +
+      `━━━━━━━━━━━━━━━━━━━━━━\n` +
+      `⚔️ *Socratic Challenger:*\n` +
+      `"${challenge.challenge}"\n\n` +
+      `❓ *Stress-Test:*\n` +
+      `"${challenge.provocativeQuestion}"`;
+
+    try {
+      await ctx.reply(replyContent, {
+        parse_mode: "Markdown",
+        reply_markup: keyboard,
+      });
+    } catch {
+      await ctx.reply(replyContent.replace(/[*_`]/g, ""), {
+        reply_markup: keyboard,
+      });
+    }
     return;
   }
 

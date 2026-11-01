@@ -6,7 +6,7 @@ import { db, createTrade } from "../../src/db/firestore.js";
 import type { Trade } from "../../src/db/types.js";
 
 const genAI = new GoogleGenerativeAI(config.geminiApiKey);
-const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+const model = genAI.getGenerativeModel({ model: "gemini-3.5-flash-lite" });
 const bot = new Bot(config.telegramToken);
 
 /**
@@ -137,7 +137,114 @@ export default async function handler(
     }
 
     const primaryUserId = await getPrimaryUserId();
-    const tradeUserId = primaryUserId || "default";
+    const tradeUserId = payload.userId || primaryUserId || "default";
+
+    // Handle Local Git Hook Telemetry
+    const isLocalHook =
+      payload?.source === "local-git-hook" ||
+      req.headers["x-fabric-source"] === "local-git-hook" ||
+      Boolean(payload?.commit && !payload?.commits && !payload?.pull_request && !req.headers["x-github-event"]);
+
+    if (isLocalHook) {
+      const repoName =
+        payload.repository?.name ||
+        payload.repository?.full_name ||
+        payload.repo ||
+        payload.repoName ||
+        "Codebase";
+      const branch =
+        payload.branch ||
+        (payload.ref ? payload.ref.replace(/^refs\/heads\//, "") : "main");
+
+      const commit = payload.commit || {};
+      const commitHash = commit.id || commit.hash || payload.commitHash || "";
+      const commitAuthor =
+        commit.author?.name ||
+        commit.author?.username ||
+        payload.author ||
+        "developer";
+      const commitMessage =
+        commit.message ||
+        payload.commitMessage ||
+        payload.message ||
+        "Commit update";
+
+      const diffStat =
+        payload.diff?.stat ||
+        payload.diffStat ||
+        payload.diff?.shortstat ||
+        "Diff stats unavailable";
+
+      let focusHours = 0.5;
+      if (typeof payload.focusHours === "number" && !isNaN(payload.focusHours) && payload.focusHours > 0) {
+        focusHours = Math.round(payload.focusHours * 10) / 10;
+      }
+
+      const prompt = `Analyze this local git commit for repository ${repoName}:
+Branch: ${branch}
+Author: ${commitAuthor}
+Commit: ${commitHash ? commitHash.substring(0, 7) + " - " : ""}${commitMessage}
+Diff Summary:
+${diffStat}
+
+Summarize: What architectural capability or technical artifact was built? What was learned or solved?
+Provide a concise, 1-2 sentence engineering-focused synthesis. No fluff or conversational intro.`;
+
+      let factsYield = "Code implementation and features shipped.";
+      try {
+        const aiResponse = await model.generateContent(prompt);
+        factsYield = aiResponse.response.text().trim().replace(/^["']|["']$/g, "");
+      } catch (aiErr) {
+        console.error("Gemini local git telemetry analysis error:", aiErr);
+        const firstLine = commitMessage.split("\n")[0] || "Updates";
+        factsYield = `Shipped commit to ${repoName}: ${firstLine}`;
+      }
+
+      const trade: Omit<Trade, "id"> = {
+        userId: tradeUserId,
+        timestamp: new Date(),
+        moduleName: repoName,
+        tradeType: "builder",
+        focusActualHours: focusHours,
+        factsYield,
+        fundsCost: 0,
+        fundsYield: 0,
+        energyDelta: 1,
+        tags: ["github", "coding", repoName.toLowerCase()],
+        notes: `Local commit ${commitHash ? `(${commitHash.substring(0, 7)})` : ""}: ${(commitMessage.split("\n")[0] || "").slice(0, 100)}`,
+      };
+
+      const tradeId = await createTrade(trade);
+
+      // Notify Telegram
+      const targetChatId = payload.userId || primaryUserId;
+      if (targetChatId) {
+        const cleanMsg = (commitMessage.split("\n")[0] || "").trim();
+        const notification = `🐙 Git Telemetry Logged: ${repoName} (${cleanMsg}) (+${focusHours}h Focus | 💡 ${factsYield})`;
+
+        try {
+          await bot.api.sendMessage(targetChatId, notification);
+        } catch (tgErr) {
+          console.error("Failed to deliver Telegram local git telemetry notification:", tgErr);
+        }
+      }
+
+      res.setHeader("Content-Type", "application/json");
+      res.statusCode = 200;
+      res.end(
+        JSON.stringify({
+          status: "ok",
+          source: "local-git-hook",
+          tradeId,
+          repo: repoName,
+          branch,
+          commitHash,
+          focusHours,
+          factsYield,
+        })
+      );
+      return;
+    }
 
     // 2. Handle 'push' event
     if (event === "push") {
@@ -192,7 +299,7 @@ Provide a concise, 1-2 sentence engineering-focused synthesis. No fluff or conve
       const trade: Omit<Trade, "id"> = {
         userId: tradeUserId,
         timestamp: new Date(),
-        moduleName: `${repoName} Code Execution`,
+        moduleName: repoName,
         tradeType: "builder",
         focusActualHours: estimatedHours,
         factsYield,
@@ -207,21 +314,13 @@ Provide a concise, 1-2 sentence engineering-focused synthesis. No fluff or conve
 
       // Telegram notification
       if (primaryUserId) {
-        const notification =
-          `📦 *GitHub Passive Telemetry*\n` +
-          `• Repo: \`${repoName}\` (${branch})\n` +
-          `• Commits: ${commits.length}\n` +
-          `⏳ Focus: ${estimatedHours}h\n` +
-          `💡 Yield: ${factsYield}`;
+        const firstMsg = (commits[0]?.message?.split("\n")[0] || "Updates").trim();
+        const notification = `🐙 Git Telemetry Logged: ${repoName} (${firstMsg}) (+${estimatedHours}h Focus | 💡 ${factsYield})`;
 
         try {
-          await bot.api.sendMessage(primaryUserId, notification, { parse_mode: "Markdown" });
-        } catch {
-          try {
-            await bot.api.sendMessage(primaryUserId, notification);
-          } catch (tgErr) {
-            console.error("Failed to deliver Telegram notification:", tgErr);
-          }
+          await bot.api.sendMessage(primaryUserId, notification);
+        } catch (tgErr) {
+          console.error("Failed to deliver Telegram notification:", tgErr);
         }
       }
 
@@ -289,14 +388,14 @@ Provide a concise, 1-2 sentence engineering-focused synthesis. No fluff.`;
       const trade: Omit<Trade, "id"> = {
         userId: tradeUserId,
         timestamp: new Date(),
-        moduleName: `${repoName} PR #${pr.number}`,
+        moduleName: repoName,
         tradeType: "builder",
         focusActualHours: estimatedHours,
         factsYield,
         fundsCost: 0,
         fundsYield: 0,
         energyDelta: 1,
-        tags: ["github", "pull-request", repoName.toLowerCase()],
+        tags: ["github", "coding", repoName.toLowerCase(), "pull-request"],
         notes: `PR #${pr.number} (${action}) by ${pr.user?.login || "user"}`,
       };
 
@@ -304,21 +403,12 @@ Provide a concise, 1-2 sentence engineering-focused synthesis. No fluff.`;
 
       if (primaryUserId) {
         const actionLabel = isMerged ? "Merged" : action;
-        const notification =
-          `📦 *GitHub Passive Telemetry*\n` +
-          `• Repo: \`${repoName}\` (${branch})\n` +
-          `• PR #${pr.number} [${actionLabel}]: ${pr.title}\n` +
-          `⏳ Focus: ${estimatedHours}h\n` +
-          `💡 Yield: ${factsYield}`;
+        const notification = `🐙 Git Telemetry Logged: ${repoName} (PR #${pr.number} [${actionLabel}]: ${pr.title}) (+${estimatedHours}h Focus | 💡 ${factsYield})`;
 
         try {
-          await bot.api.sendMessage(primaryUserId, notification, { parse_mode: "Markdown" });
-        } catch {
-          try {
-            await bot.api.sendMessage(primaryUserId, notification);
-          } catch (tgErr) {
-            console.error("Failed to deliver Telegram PR notification:", tgErr);
-          }
+          await bot.api.sendMessage(primaryUserId, notification);
+        } catch (tgErr) {
+          console.error("Failed to deliver Telegram PR notification:", tgErr);
         }
       }
 

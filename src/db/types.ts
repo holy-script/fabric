@@ -54,6 +54,8 @@ export interface KnowledgeItem {
   mediaType?: "video" | "audio" | "instagram" | "youtube" | string;
   userConclusions?: string;
   userReflections?: UserReflection[];
+  notionUrl?: string;
+  notionPageId?: string;
 }
 
 export interface ActiveSession {

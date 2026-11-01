@@ -223,6 +223,19 @@ export async function updateKnowledgeItemStreamUrl(
   await knowledgeCollection.doc(itemId).update(updatePayload);
 }
 
+// Helper: Update a knowledge item with Notion sync info
+export async function updateKnowledgeItemNotion(
+  itemId: string,
+  notionUrl: string,
+  notionPageId?: string
+): Promise<void> {
+  await knowledgeCollection.doc(itemId).update({
+    notionUrl,
+    ...(notionPageId ? { notionPageId } : {}),
+    updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+  });
+}
+
 // Helper: Find a knowledge item by direct ID or search query
 export async function findKnowledgeItem(
   userId: string,
@@ -250,6 +263,8 @@ export async function findKnowledgeItem(
       mediaType: data.mediaType,
       userConclusions: data.userConclusions,
       userReflections: data.userReflections,
+      notionUrl: data.notionUrl || undefined,
+      notionPageId: data.notionPageId || undefined,
     };
   }
 
@@ -280,6 +295,8 @@ export async function findKnowledgeItem(
         mediaType: data.mediaType,
         userConclusions: data.userConclusions,
         userReflections: data.userReflections,
+        notionUrl: data.notionUrl || undefined,
+        notionPageId: data.notionPageId || undefined,
       };
     }
   }

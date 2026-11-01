@@ -18,22 +18,36 @@ export async function handleCallbackQuery(ctx: Context) {
 
   await ctx.answerCallbackQuery();
 
-  if (data.startsWith("reflect:")) {
-    const itemId = data.replace("reflect:", "");
+  if (data.startsWith("reflect:") || data.startsWith("defend:")) {
+    const isDefend = data.startsWith("defend:");
+    const itemId = data.replace(/^(reflect|defend):/, "");
     try {
       const item = await findKnowledgeItem(userId, itemId);
       if (item && item.id) {
         setActiveReflectionSession(userId, {
           itemId: item.id,
           title: item.title,
+          notionUrl: item.notionUrl,
+          takeaway: item.actionableTakeaway || item.content,
         });
-        await ctx.reply(
-          `🎙️ *Active Reflection Locked:*\n` +
-            `*${item.title}*\n\n` +
-            `💡 _Takeaway:_ ${item.actionableTakeaway || item.content}\n\n` +
-            `Send a **voice memo** or **text message** now to attach your personal conclusion!`,
-          { parse_mode: "Markdown" }
-        );
+
+        if (isDefend) {
+          await ctx.reply(
+            `⚔️ *Socratic Defense Session Locked:*\n` +
+              `*${item.title}*\n\n` +
+              (item.userConclusions ? `🧠 *Previous Verdict:*\n_"${item.userConclusions}"_\n\n` : "") +
+              `Send a **voice memo** or **text message** now to defend your verdict, identify boundary conditions, or counter the challenger!`,
+            { parse_mode: "Markdown" }
+          );
+        } else {
+          await ctx.reply(
+            `🎙️ *Active Reflection Locked:*\n` +
+              `*${item.title}*\n\n` +
+              `💡 _Takeaway:_ ${item.actionableTakeaway || item.content}\n\n` +
+              `Send a **voice memo** or **text message** now to attach your personal conclusion!`,
+            { parse_mode: "Markdown" }
+          );
+        }
       } else {
         await ctx.reply("⚠️ Could not find card for reflection.");
       }
