@@ -14,6 +14,7 @@ import {
 } from "./commands/plugins.js";
 import { handleMuse } from "./commands/muse.js";
 import { handleReflect } from "./commands/reflect.js";
+import { handleSetChannel } from "./commands/channel.js";
 import { handlePortfolio } from "./commands/portfolio.js";
 import { handleWins, handleGotchas, handleSearch, handleGarden } from "./commands/garden.js";
 import { handleGoal, handleGoals, handleClaim } from "./commands/goals.js";
@@ -80,6 +81,7 @@ export function createBot() {
   bot.command("swap", handleSwap);
   bot.command("muse", handleMuse);
   bot.command("reflect", handleReflect);
+  bot.command("setchannel", handleSetChannel);
   bot.command("ask", handleAsk);
 
   // Voice memo ingestion (multimodal)

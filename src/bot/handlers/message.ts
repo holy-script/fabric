@@ -1,9 +1,13 @@
 import type { Context } from "grammy";
+import fs from "fs";
+import path from "path";
 import { getActiveSession, createTrade } from "../../db/firestore.js";
 import { parseTradeWithGemini } from "../../ai/gemini.js";
 import { findMediaUrl } from "../../media/extractor.js";
 import { handleMediaUrl } from "./media.js";
 import { processUserReflectionNote } from "../commands/reflect.js";
+
+const ENV_PATH = path.resolve(process.cwd(), ".env");
 
 export async function handleNaturalMessage(ctx: Context) {
   const userId = ctx.from?.id.toString();
@@ -13,7 +17,36 @@ export async function handleNaturalMessage(ctx: Context) {
   // Ignore commands
   if (text.startsWith("/")) return;
 
-  // Check if user is actively reflecting on a knowledge card
+  // 1. Check if message was forwarded from a channel (Auto Vault Channel Connect)
+  const forwardOrigin = (ctx.message as any)?.forward_origin;
+  const forwardFromChat = (ctx.message as any)?.forward_from_chat;
+  const channelChat = forwardFromChat || (forwardOrigin?.type === "channel" ? forwardOrigin.chat : null);
+
+  if (channelChat && (channelChat.type === "channel" || channelChat.id < 0)) {
+    const channelId = channelChat.id.toString();
+    process.env.TELEGRAM_VAULT_CHANNEL_ID = channelId;
+
+    if (fs.existsSync(ENV_PATH)) {
+      let content = fs.readFileSync(ENV_PATH, "utf-8");
+      if (content.includes("TELEGRAM_VAULT_CHANNEL_ID=")) {
+        content = content.replace(/TELEGRAM_VAULT_CHANNEL_ID=.*/, `TELEGRAM_VAULT_CHANNEL_ID=${channelId}`);
+      } else {
+        content += `\nTELEGRAM_VAULT_CHANNEL_ID=${channelId}\n`;
+      }
+      fs.writeFileSync(ENV_PATH, content, "utf-8");
+    }
+
+    await ctx.reply(
+      `🎬 *Private Channel Vault Connected!*\n\n` +
+        `Channel: *${channelChat.title || "Private Vault"}*\n` +
+        `Channel ID: \`${channelId}\`\n\n` +
+        `✅ Your video archive will now stream full \`.mp4\` videos directly into this channel!`,
+      { parse_mode: "Markdown" }
+    );
+    return;
+  }
+
+  // 2. Check if user is actively reflecting on a knowledge card
   const reflectionCardTitle = await processUserReflectionNote(userId, text);
   if (reflectionCardTitle) {
     await ctx.reply(
