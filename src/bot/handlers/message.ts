@@ -3,6 +3,7 @@ import { getActiveSession, createTrade } from "../../db/firestore.js";
 import { parseTradeWithGemini } from "../../ai/gemini.js";
 import { findMediaUrl } from "../../media/extractor.js";
 import { handleMediaUrl } from "./media.js";
+import { processUserReflectionNote } from "../commands/reflect.js";
 
 export async function handleNaturalMessage(ctx: Context) {
   const userId = ctx.from?.id.toString();
@@ -11,6 +12,19 @@ export async function handleNaturalMessage(ctx: Context) {
 
   // Ignore commands
   if (text.startsWith("/")) return;
+
+  // Check if user is actively reflecting on a knowledge card
+  const reflectionCardTitle = await processUserReflectionNote(userId, text);
+  if (reflectionCardTitle) {
+    await ctx.reply(
+      `🧠 *Personal Synthesis Attached!*\n\n` +
+        `*Card:* ${reflectionCardTitle}\n\n` +
+        `*Your Conclusion:*\n"${text}"\n\n` +
+        `_Saved to Firestore and synced to Notion Knowledge Garden!_`,
+      { parse_mode: "Markdown" }
+    );
+    return;
+  }
 
   // Check if message contains an Instagram Reel/Post or YouTube link
   const mediaDetection = findMediaUrl(text);

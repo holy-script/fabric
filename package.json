@@ -18,6 +18,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1161.0",
     "@google/generative-ai": "^0.24.0",
     "dotenv": "^16.4.7",
     "firebase-admin": "^13.1.0",

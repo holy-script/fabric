@@ -343,6 +343,49 @@ export async function syncKnowledgeItemToNotion(
     });
   }
 
+  if (item.streamUrl) {
+    children.push({
+      object: "block",
+      type: "callout",
+      callout: {
+        icon: {
+          type: "emoji",
+          emoji: "🎬",
+        },
+        rich_text: [
+          {
+            type: "text",
+            text: {
+              content: "Direct Stream Playback: " + item.streamUrl,
+              link: { url: item.streamUrl },
+            },
+          },
+        ],
+      },
+    });
+  }
+
+  if (item.userConclusions) {
+    children.push({
+      object: "block",
+      type: "callout",
+      callout: {
+        icon: {
+          type: "emoji",
+          emoji: "🧠",
+        },
+        rich_text: [
+          {
+            type: "text",
+            text: {
+              content: `My Personal Synthesis: ${item.userConclusions.slice(0, 1980)}`,
+            },
+          },
+        ],
+      },
+    });
+  }
+
   const response = await fetch("https://api.notion.com/v1/pages", {
     method: "POST",
     headers: getNotionHeaders(),
@@ -369,4 +412,131 @@ export async function syncKnowledgeItemToNotion(
     id: data.id,
     url: data.url || `https://www.notion.so/${data.id.replace(/-/g, "")}`,
   };
+}
+
+/**
+ * Appends a personal user reflection block to an existing Notion Knowledge Garden page.
+ */
+export async function appendReflectionToNotionPage(
+  pageIdOrUrl: string,
+  reflectionText: string
+): Promise<void> {
+  if (!isNotionConfigured()) return;
+
+  // Extract page ID from URL or raw UUID
+  let cleanId = pageIdOrUrl;
+  if (pageIdOrUrl.includes("notion.so/") || pageIdOrUrl.includes("notion.com/")) {
+    const parts = pageIdOrUrl.split("?")[0].split("-");
+    cleanId = parts[parts.length - 1] || pageIdOrUrl;
+  }
+  cleanId = cleanId.replace(/-/g, "");
+
+  try {
+    const res = await fetch(`https://api.notion.com/v1/blocks/${cleanId}/children`, {
+      method: "PATCH",
+      headers: getNotionHeaders(),
+      body: JSON.stringify({
+        children: [
+          {
+            object: "block",
+            type: "callout",
+            callout: {
+              icon: { type: "emoji", emoji: "🧠" },
+              rich_text: [
+                {
+                  type: "text",
+                  text: {
+                    content: `My Personal Synthesis: ${reflectionText.slice(0, 1980)}`,
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      }),
+    });
+
+    if (!res.ok) {
+      console.warn("Could not append reflection to Notion page:", await res.text());
+    }
+  } catch (err) {
+    console.warn("Failed to append reflection block to Notion:", err);
+  }
+}
+
+/**
+ * Appends a media stream playback link/embed to an existing Notion Knowledge Garden page.
+ */
+export async function appendMediaStreamToNotionPage(
+  pageIdOrUrl: string,
+  streamUrl: string,
+  mediaType: "video" | "audio" = "video"
+): Promise<void> {
+  if (!isNotionConfigured()) return;
+
+  let cleanId = pageIdOrUrl;
+  if (pageIdOrUrl.includes("notion.so/") || pageIdOrUrl.includes("notion.com/")) {
+    const parts = pageIdOrUrl.split("?")[0].split("-");
+    cleanId = parts[parts.length - 1] || pageIdOrUrl;
+  }
+  cleanId = cleanId.replace(/-/g, "");
+
+  const children: any[] = [];
+
+  if (mediaType === "video") {
+    children.push({
+      object: "block",
+      type: "video",
+      video: {
+        type: "external",
+        external: {
+          url: streamUrl,
+        },
+      },
+    });
+  }
+
+  children.push({
+    object: "block",
+    type: "callout",
+    callout: {
+      icon: { type: "emoji", emoji: mediaType === "audio" ? "🎵" : "🎬" },
+      rich_text: [
+        {
+          type: "text",
+          text: {
+            content: `Archived ${mediaType === "audio" ? "Audio" : "Video"} Stream: `,
+          },
+        },
+        {
+          type: "text",
+          text: {
+            content: streamUrl,
+            link: { url: streamUrl },
+          },
+        },
+      ],
+    },
+  });
+
+  try {
+    const res = await fetch(`https://api.notion.com/v1/blocks/${cleanId}/children`, {
+      method: "PATCH",
+      headers: getNotionHeaders(),
+      body: JSON.stringify({ children }),
+    });
+
+    if (!res.ok) {
+      // In case video block format wasn't accepted, retry with callout block only
+      if (mediaType === "video") {
+        await fetch(`https://api.notion.com/v1/blocks/${cleanId}/children`, {
+          method: "PATCH",
+          headers: getNotionHeaders(),
+          body: JSON.stringify({ children: [children[1]] }),
+        });
+      }
+    }
+  } catch (err) {
+    console.warn("Failed to append media stream block to Notion:", err);
+  }
 }

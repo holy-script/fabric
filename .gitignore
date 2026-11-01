@@ -13,3 +13,10 @@ saved_posts.json
 .reels_import_checkpoint.json
 *.checkpoint.json
 reels_tracker.json
+
+# Cloudflare R2 Storage Pools
+r2_pools.json
+r2_pools*.json
+!r2_pools.example.json
+.r2_pool_usage.json
+

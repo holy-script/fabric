@@ -29,6 +29,12 @@ export interface Trade {
 
 export type KnowledgeCategory = "win" | "gotcha" | "tool" | "strategy" | "insight";
 
+export interface UserReflection {
+  text: string;
+  audioUrl?: string;
+  timestamp: Date;
+}
+
 export interface KnowledgeItem {
   id?: string;
   userId: string;
@@ -42,6 +48,12 @@ export interface KnowledgeItem {
   sourceType?: string;
   author?: string;
   quadrant?: string;
+  streamUrl?: string;
+  r2NodeId?: string;
+  r2Key?: string;
+  mediaType?: "video" | "audio" | "instagram" | "youtube" | string;
+  userConclusions?: string;
+  userReflections?: UserReflection[];
 }
 
 export interface ActiveSession {

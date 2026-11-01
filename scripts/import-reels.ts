@@ -793,7 +793,9 @@ Examples:
   displayTrackerStatus();
 }
 
-main().catch((err) => {
-  console.error("\n❌ Fatal execution error:", err);
-  process.exit(1);
-});
+if (import.meta.main || (process.argv[1] && process.argv[1].endsWith("import-reels.ts"))) {
+  main().catch((err) => {
+    console.error("\n❌ Fatal execution error:", err);
+    process.exit(1);
+  });
+}

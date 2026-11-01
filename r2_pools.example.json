@@ -1,0 +1,20 @@
+[
+  {
+    "id": "node-alpha",
+    "accountId": "your-cloudflare-account-id-1",
+    "accessKeyId": "your-r2-access-key-id-1",
+    "secretAccessKey": "your-r2-secret-access-key-1",
+    "bucketName": "fabric-reels-alpha",
+    "publicUrl": "https://pub-alpha-id.r2.dev",
+    "active": true
+  },
+  {
+    "id": "node-beta",
+    "accountId": "your-cloudflare-account-id-2",
+    "accessKeyId": "your-r2-access-key-id-2",
+    "secretAccessKey": "your-r2-secret-access-key-2",
+    "bucketName": "fabric-reels-beta",
+    "publicUrl": "https://pub-beta-id.r2.dev",
+    "active": true
+  }
+]

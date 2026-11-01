@@ -8,6 +8,7 @@ import {
   getUserState,
   getRecentTrades,
 } from "../../db/firestore.js";
+import { processUserReflectionNote } from "../commands/reflect.js";
 
 export async function handleVoiceMessage(ctx: Context) {
   const userId = ctx.from?.id.toString();
@@ -38,6 +39,22 @@ export async function handleVoiceMessage(ctx: Context) {
     // 3. Multimodal ingestion via Gemini Flash
     const mimeType = voice.mime_type || "audio/ogg";
     const result = await parseVoiceWithGemini(userId, base64Audio, mimeType);
+
+    // Check if user is actively reflecting on a knowledge card
+    const reflectionText = result.transcript || result.trade?.notes || "";
+    const reflectionCardTitle = await processUserReflectionNote(userId, reflectionText);
+    if (reflectionCardTitle) {
+      await ctx.api.editMessageText(
+        ctx.chat!.id,
+        statusMsg.message_id,
+        `🧠 *Personal Synthesis Attached!*\n\n` +
+          `*Card:* ${reflectionCardTitle}\n\n` +
+          `*Your Conclusion (Transcribed):*\n"${reflectionText}"\n\n` +
+          `_Saved to Firestore and synced to Notion Knowledge Garden!_`,
+        { parse_mode: "Markdown" }
+      );
+      return;
+    }
 
     // 4. Act according to extracted intent
     if (result.intent === "trade" && result.trade) {
