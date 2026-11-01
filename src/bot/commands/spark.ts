@@ -1,4 +1,5 @@
 import type { Context } from "grammy";
+import { InlineKeyboard } from "grammy";
 import { startSession, getActiveSession } from "../../db/firestore.js";
 
 export async function handleSpark(ctx: Context) {
@@ -13,12 +14,14 @@ export async function handleSpark(ctx: Context) {
       const elapsedMin = Math.round(
         (Date.now() - existing.startedAt.getTime()) / (1000 * 60)
       );
+      const keyboard = new InlineKeyboard().text("🏁 Settle Now", "action:settle");
+
       await ctx.reply(
         `⚡ *Active Session In Flight*\n` +
           `• Task: ${existing.taskDescription}\n` +
           `• Started: ${elapsedMin} minutes ago\n\n` +
-          `Send \`/settle <outcome>\` when finished.`,
-        { parse_mode: "Markdown" }
+          `Click below or send \`/settle <outcome>\` when finished.`,
+        { parse_mode: "Markdown", reply_markup: keyboard }
       );
     } else {
       await ctx.reply(
@@ -47,12 +50,13 @@ export async function handleSpark(ctx: Context) {
     tags: ["spark"],
   });
 
+  const keyboard = new InlineKeyboard().text("🏁 Settle Session", "action:settle");
+
   await ctx.reply(
     `⚡ *Flow Block Sparked*\n` +
       `🎯 *Task:* ${text}\n` +
       `⏳ *Planned Focus:* ${expectedHours ? `${expectedHours}h` : "Open-ended"}\n\n` +
-      `_Enter monotropic flow. When done, send \`/settle <outcome & energy>\`._`,
-    { parse_mode: "Markdown" }
+      `_Enter monotropic flow. When done, tap button below or send \`/settle <outcome & energy>\`._`,
+    { parse_mode: "Markdown", reply_markup: keyboard }
   );
 }
-

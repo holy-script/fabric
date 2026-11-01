@@ -1,39 +1,64 @@
 import type { Context } from "grammy";
+import { InlineKeyboard } from "grammy";
 import { getUserState, getRecentTrades } from "../../db/firestore.js";
-import { askAdvisor } from "../../ai/gemini.js";
+import { evaluateAristotleMean, renderMeanBar, askAdvisor } from "../../ai/gemini.js";
 
 export async function handleBalance(ctx: Context) {
   const userId = ctx.from?.id.toString();
   if (!userId) return;
 
-  const state = await getUserState(userId);
-  const recent = await getRecentTrades(userId, 3);
+  const statusMsg = await ctx.reply("⚖️ *Calculating Aristotelian equilibrium...*", {
+    parse_mode: "Markdown",
+  });
 
-  const avgEnergyStr =
-    state.averageEnergyDelta > 0
-      ? `+${state.averageEnergyDelta}`
-      : `${state.averageEnergyDelta}`;
+  try {
+    const state = await getUserState(userId);
+    const recent = await getRecentTrades(userId, 7);
 
-  const tradesList =
-    recent.length > 0
-      ? recent
-          .map(
-            (t) =>
-              `• *${t.moduleName}* — ${t.focusActualHours}h (${
-                t.energyDelta > 0 ? "+" : ""
-              }${t.energyDelta} energy)`
-          )
-          .join("\n")
-      : "_No trades recorded yet_";
+    // Calculate Aristotelian Mean dynamic equilibrium
+    const meanEval = await evaluateAristotleMean(recent, state);
 
-  const message = `
+    const avgEnergyStr =
+      state.averageEnergyDelta > 0
+        ? `+${state.averageEnergyDelta}`
+        : `${state.averageEnergyDelta}`;
+
+    const tradesList =
+      recent.length > 0
+        ? recent
+            .slice(0, 3)
+            .map(
+              (t) =>
+                `• *${t.moduleName}* — ${t.focusActualHours}h (${
+                  t.energyDelta > 0 ? "+" : ""
+                }${t.energyDelta} energy)`
+            )
+            .join("\n")
+        : "_No trades recorded yet_";
+
+    const keyboard = new InlineKeyboard()
+      .text("⚡ Spark Session", "action:spark_prompt")
+      .text("🏆 Bank Win", "action:win_prompt")
+      .row()
+      .text("❓ Ask Advisor", "action:ask_prompt");
+
+    const message = `
 📊 *The Fabric: System Telemetry*
 
 ⏳ *Focus Deployed:* ${state.totalFocusHours}h
 💡 *Facts Acquired:* ${state.totalFactsAcquired} artifacts
-💰 *Funds Spent:* $${state.totalFundsSpent}
-💵 *Funds Yield:* $${state.totalFundsYield}
+💰 *Funds Balance:* -$${state.totalFundsSpent} / +$${state.totalFundsYield}
 ⚡ *Energy Baseline:* ${avgEnergyStr} / 5.0
+
+⚖️ *Aristotelian Mean Equilibrium*
+${renderMeanBar(meanEval.scales.logic, "Logic & Engineering")}
+${renderMeanBar(meanEval.scales.vitality, "Physical Vitality")}
+${renderMeanBar(meanEval.scales.expressionism, "Art & Expression")}
+${renderMeanBar(meanEval.scales.variety, "Variety & Polymathy")}
+${renderMeanBar(meanEval.scales.prioritization, "Prioritization")}
+
+🛡️ *Agent Recon:*
+_${meanEval.overallDiagnosis}_
 
 *Active Way of Working:*
 🧩 \`${state.activePlugins.join("`, `")}\`
@@ -42,7 +67,20 @@ export async function handleBalance(ctx: Context) {
 ${tradesList}
 `;
 
-  await ctx.reply(message, { parse_mode: "Markdown" });
+    await ctx.api.editMessageText(ctx.chat!.id, statusMsg.message_id, message, {
+      parse_mode: "Markdown",
+      reply_markup: keyboard,
+    });
+  } catch (error) {
+    console.error("Error in balance calculation:", error);
+    await ctx.api.editMessageText(
+      ctx.chat!.id,
+      statusMsg.message_id,
+      `❌ Failed to calculate balance: ${
+        error instanceof Error ? error.message : "Unknown error"
+      }`
+    );
+  }
 }
 
 export async function handleAsk(ctx: Context) {
@@ -84,4 +122,3 @@ export async function handleAsk(ctx: Context) {
     );
   }
 }
-

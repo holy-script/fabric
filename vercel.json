@@ -2,6 +2,11 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "buildCommand": "tsc",
   "outputDirectory": "dist",
-  "cleanUrls": true
+  "cleanUrls": true,
+  "crons": [
+    {
+      "path": "/api/cron/sentinel",
+      "schedule": "0 14 * * 0"
+    }
+  ]
 }
-

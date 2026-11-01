@@ -3,18 +3,18 @@ import { config } from "../config/env.js";
 import {
   SYSTEM_TRADE_PARSER,
   SYSTEM_KNOWLEDGE_PARSER,
+  SYSTEM_VOICE_PARSER,
+  SYSTEM_ARISTOTLE_EVALUATOR,
   SYSTEM_QUERY_ADVISOR,
 } from "./prompts.js";
 import type { Trade, KnowledgeItem, UserState } from "../db/types.js";
 
 const genAI = new GoogleGenerativeAI(config.geminiApiKey);
 
-// Gemini 2.5 Flash is fast, stable, and has multimodal capabilities
 const model = genAI.getGenerativeModel({
   model: "gemini-2.5-flash",
 });
 
-// Helper to strip ```json code blocks if the model outputs them
 function cleanJsonOutput(text: string): string {
   let cleaned = text.trim();
   if (cleaned.startsWith("```json")) {
@@ -26,7 +26,7 @@ function cleanJsonOutput(text: string): string {
 }
 
 /**
- * Parses raw text or voice transcript into a structured 4F Trade
+ * Parses raw text into a structured 4F Trade
  */
 export async function parseTradeWithGemini(
   userId: string,
@@ -103,6 +103,142 @@ User Input: "${rawText}"`;
   };
 }
 
+export interface VoiceParseResult {
+  transcript: string;
+  intent: "trade" | "win" | "gotcha" | "question";
+  trade?: Omit<Trade, "id">;
+  knowledge?: Omit<KnowledgeItem, "id">;
+  question?: string;
+}
+
+/**
+ * Ingests audio bytes (Telegram voice message Ogg Opus), transcribes & parses
+ */
+export async function parseVoiceWithGemini(
+  userId: string,
+  audioBase64: string,
+  mimeType = "audio/ogg"
+): Promise<VoiceParseResult> {
+  const result = await model.generateContent([
+    SYSTEM_VOICE_PARSER,
+    {
+      inlineData: {
+        mimeType,
+        data: audioBase64,
+      },
+    },
+  ]);
+
+  const text = result.response.text();
+  const cleaned = cleanJsonOutput(text);
+  const parsed = JSON.parse(cleaned);
+
+  const res: VoiceParseResult = {
+    transcript: parsed.transcript || "(No speech detected)",
+    intent: parsed.intent || "trade",
+  };
+
+  if (parsed.intent === "trade" && parsed.trade) {
+    res.trade = {
+      userId,
+      timestamp: new Date(),
+      moduleName: parsed.trade.moduleName || "Voice Log",
+      tradeType: parsed.trade.tradeType || "builder",
+      focusExpectedHours: parsed.trade.focusExpectedHours ?? undefined,
+      focusActualHours: Number(parsed.trade.focusActualHours) || 1.0,
+      factsInput: parsed.trade.factsInput || undefined,
+      factsYield: parsed.trade.factsYield || "Logged via voice",
+      fundsCost: Number(parsed.trade.fundsCost) || 0,
+      fundsYield: Number(parsed.trade.fundsYield) || 0,
+      energyDelta: Math.max(-5, Math.min(5, Number(parsed.trade.energyDelta) || 0)),
+      tags: Array.isArray(parsed.trade.tags) ? parsed.trade.tags : ["voice-memo"],
+      notes: parsed.trade.notes || parsed.transcript,
+    };
+  } else if (
+    (parsed.intent === "win" || parsed.intent === "gotcha") &&
+    parsed.knowledge
+  ) {
+    res.knowledge = {
+      userId,
+      timestamp: new Date(),
+      category: parsed.knowledge.category || parsed.intent,
+      title: parsed.knowledge.title || "Voice Note",
+      content: parsed.knowledge.content || parsed.transcript,
+      tags: Array.isArray(parsed.knowledge.tags)
+        ? parsed.knowledge.tags
+        : ["voice"],
+      actionableTakeaway: parsed.knowledge.actionableTakeaway || undefined,
+    };
+  } else if (parsed.intent === "question") {
+    res.question = parsed.question || parsed.transcript;
+  }
+
+  return res;
+}
+
+export interface AristotleEvaluation {
+  scales: {
+    logic: number;
+    vitality: number;
+    expressionism: number;
+    variety: number;
+    prioritization: number;
+  };
+  overallDiagnosis: string;
+}
+
+/**
+ * Calculates current Aristotelian Mean scores from recent telemetry
+ */
+export async function evaluateAristotleMean(
+  recentTrades: Trade[],
+  userState: UserState
+): Promise<AristotleEvaluation> {
+  const tradeSummaries = recentTrades.map((t) => ({
+    module: t.moduleName,
+    type: t.tradeType,
+    hours: t.focusActualHours,
+    energy: t.energyDelta,
+    tags: t.tags,
+    yield: t.factsYield,
+  }));
+
+  const prompt = `${SYSTEM_ARISTOTLE_EVALUATOR}
+
+Cumulative Telemetry:
+- Total Focus Hours: ${userState.totalFocusHours}
+- Average Energy Delta: ${userState.averageEnergyDelta}
+- Recent Trades (Last ${recentTrades.length}):
+${JSON.stringify(tradeSummaries, null, 2)}`;
+
+  const response = await model.generateContent(prompt);
+  const cleaned = cleanJsonOutput(response.response.text());
+  return JSON.parse(cleaned);
+}
+
+/**
+ * Helper to render an ASCII Aristotelian Mean bar
+ * Scale: -5 (Deficiency) to 0 (Virtue/Mean) to +5 (Excess)
+ */
+export function renderMeanBar(value: number, label: string): string {
+  const clamped = Math.max(-5, Math.min(5, Math.round(value)));
+  let left = "     ";
+  let right = "     ";
+
+  if (clamped < 0) {
+    const filled = Math.abs(clamped);
+    left = "■".repeat(filled).padStart(5, " ");
+  } else if (clamped > 0) {
+    right = "■".repeat(clamped).padEnd(5, " ");
+  }
+
+  let tag = "🎯 Mean";
+  if (clamped < 0) tag = `Deficiency (${clamped})`;
+  if (clamped > 0) tag = `Excess (+${clamped})`;
+
+  return `\`[${left}|${right}]\` *${label}*: ${tag}`;
+}
+
 /**
  * Answers questions about the 4F balance and decisions
  */
@@ -134,4 +270,3 @@ User Question: "${question}"`;
   const response = await model.generateContent(prompt);
   return response.response.text();
 }
-

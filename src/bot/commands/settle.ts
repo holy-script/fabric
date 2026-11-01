@@ -1,4 +1,5 @@
 import type { Context } from "grammy";
+import { InlineKeyboard } from "grammy";
 import { getActiveSession, clearSession, createTrade } from "../../db/firestore.js";
 import { parseTradeWithGemini } from "../../ai/gemini.js";
 
@@ -48,6 +49,12 @@ export async function handleSettle(ctx: Context) {
     const energyEmoji =
       parsed.energyDelta > 2 ? "🔋 High" : parsed.energyDelta < -1 ? "🪫 Drained" : "⚖️ Stable";
 
+    const keyboard = new InlineKeyboard()
+      .text("📊 Balance", "action:balance")
+      .text("🏆 Bank Win", "action:win_prompt")
+      .row()
+      .text("⚡ New Spark", "action:spark_prompt");
+
     await ctx.api.editMessageText(
       ctx.chat!.id,
       statusMsg.message_id,
@@ -60,7 +67,7 @@ export async function handleSettle(ctx: Context) {
         `💰 *Funds:* -$${parsed.fundsCost} / +$${parsed.fundsYield}\n` +
         `⚡ *Energy Delta:* ${energySign} (${energyEmoji})\n` +
         `🏷️ *Tags:* ${parsed.tags.map((t) => `#${t}`).join(" ")}`,
-      { parse_mode: "Markdown" }
+      { parse_mode: "Markdown", reply_markup: keyboard }
     );
   } catch (error) {
     console.error("Error settling session:", error);
@@ -71,4 +78,3 @@ export async function handleSettle(ctx: Context) {
     );
   }
 }
-

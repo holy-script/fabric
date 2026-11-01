@@ -7,6 +7,8 @@ import { handleLog } from "./commands/log.js";
 import { handleWin, handleGotcha } from "./commands/win.js";
 import { handleBalance, handleAsk } from "./commands/balance.js";
 import { handleNaturalMessage } from "./handlers/message.js";
+import { handleVoiceMessage } from "./handlers/voice.js";
+import { handleCallbackQuery } from "./handlers/callbacks.js";
 
 export function createBot() {
   const bot = new Bot(config.telegramToken);
@@ -35,6 +37,12 @@ export function createBot() {
   bot.command("balance", handleBalance);
   bot.command("ask", handleAsk);
 
+  // Voice memo ingestion (multimodal)
+  bot.on("message:voice", handleVoiceMessage);
+
+  // Interactive inline keyboard callbacks
+  bot.on("callback_query:data", handleCallbackQuery);
+
   // Natural language message fallback
   bot.on("message:text", handleNaturalMessage);
 
@@ -45,4 +53,3 @@ export function createBot() {
 
   return bot;
 }
-
