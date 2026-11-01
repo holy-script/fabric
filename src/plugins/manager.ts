@@ -116,3 +116,4 @@ export async function getActivePluginPromptGuidance(userId: string): Promise<str
   const lines = plugins.map((p) => `- [${p.name}]: ${p.promptGuidance}`);
   return `\nActive Ways of Working (WoW) Plugins:\n${lines.join("\n")}\n`;
 }
+

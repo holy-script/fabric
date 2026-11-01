@@ -97,3 +97,4 @@ export const BUILTIN_PLUGINS: Record<string, PluginDefinition> = {
       "Encourage zero-commercialization artistic play. Value quirkiness, non-linear thinking, and aesthetic experimentation.",
   },
 };
+

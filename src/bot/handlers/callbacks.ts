@@ -3,6 +3,7 @@ import { handleBalance } from "../commands/balance.js";
 import { handleSettle } from "../commands/settle.js";
 import { handlePlugins } from "../commands/plugins.js";
 import { installPlugin, uninstallPlugin } from "../../plugins/manager.js";
+import { unlockGoal } from "../../db/firestore.js";
 
 export async function handleCallbackQuery(ctx: Context) {
   const data = ctx.callbackQuery?.data;
@@ -34,13 +35,18 @@ export async function handleCallbackQuery(ctx: Context) {
     const pluginId = data.replace("plugin:install:", "");
     const res = await installPlugin(userId, pluginId);
     await ctx.reply(res.message, { parse_mode: "Markdown" });
-    // Refresh the plugins list view
     await handlePlugins(ctx);
   } else if (data.startsWith("plugin:uninstall:")) {
     const pluginId = data.replace("plugin:uninstall:", "");
     const res = await uninstallPlugin(userId, pluginId);
     await ctx.reply(res.message, { parse_mode: "Markdown" });
-    // Refresh the plugins list view
     await handlePlugins(ctx);
+  } else if (data.startsWith("goal:claim:")) {
+    const goalId = data.replace("goal:claim:", "");
+    await unlockGoal(goalId);
+    await ctx.reply(
+      `🎉 *VALIDATION GATE CLEARED!*\nReward unlocked in your Reward Bank! Enjoy your guilt-free payoff.`,
+      { parse_mode: "Markdown" }
+    );
   }
 }

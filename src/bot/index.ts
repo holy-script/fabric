@@ -13,6 +13,9 @@ import {
   handleSwap,
 } from "./commands/plugins.js";
 import { handleMuse } from "./commands/muse.js";
+import { handlePortfolio } from "./commands/portfolio.js";
+import { handleWins, handleGotchas, handleSearch } from "./commands/garden.js";
+import { handleGoal, handleGoals, handleClaim } from "./commands/goals.js";
 import { handleNaturalMessage } from "./handlers/message.js";
 import { handleVoiceMessage } from "./handlers/voice.js";
 import { handleCallbackQuery } from "./handlers/callbacks.js";
@@ -26,9 +29,13 @@ export function createBot() {
       { command: "spark", description: "Start a focused execution session" },
       { command: "settle", description: "Finish active session & log trade" },
       { command: "log", description: "Quick-log a 4F currency trade" },
-      { command: "win", description: "Bank a win or breakthrough" },
-      { command: "gotcha", description: "Record a bug, trap, or pitfall" },
       { command: "balance", description: "View currency balances & telemetry" },
+      { command: "portfolio", description: "Synthesizer proof of growth" },
+      { command: "wins", description: "View the Hopecore vault of wins" },
+      { command: "gotchas", description: "View documented traps & pitfalls" },
+      { command: "search", description: "Search knowledge garden & trades" },
+      { command: "goal", description: "Set a gated milestone -> reward" },
+      { command: "goals", description: "View Reward Bank progress" },
       { command: "plugins", description: "Manage Ways of Working plugins" },
       { command: "muse", description: "Summon the Muse for creative sparks" },
       { command: "ask", description: "Consult the 4F Advisor engine" },
@@ -44,6 +51,13 @@ export function createBot() {
   bot.command("win", handleWin);
   bot.command("gotcha", handleGotcha);
   bot.command("balance", handleBalance);
+  bot.command("portfolio", handlePortfolio);
+  bot.command("wins", handleWins);
+  bot.command("gotchas", handleGotchas);
+  bot.command("search", handleSearch);
+  bot.command("goal", handleGoal);
+  bot.command("goals", handleGoals);
+  bot.command("claim", handleClaim);
   bot.command("plugins", handlePlugins);
   bot.command("install", handleInstall);
   bot.command("uninstall", handleUninstall);

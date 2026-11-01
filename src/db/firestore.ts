@@ -43,6 +43,7 @@ export const tradesCollection = db.collection("trades");
 export const knowledgeCollection = db.collection("knowledge");
 export const sessionsCollection = db.collection("sessions");
 export const userStatesCollection = db.collection("userState");
+export const goalsCollection = db.collection("goals");
 
 // Helper: Log a completed trade
 export async function createTrade(trade: Omit<Trade, "id">): Promise<string> {
@@ -66,6 +67,39 @@ export async function createKnowledgeItem(
     timestamp: admin.firestore.FieldValue.serverTimestamp(),
   });
   return docRef.id;
+}
+
+// Helper: Query knowledge items by category (win, gotcha, etc.)
+export async function getKnowledgeItems(
+  userId: string,
+  category?: string,
+  limitCount = 10
+): Promise<KnowledgeItem[]> {
+  let query = knowledgeCollection
+    .where("userId", "==", userId);
+
+  if (category) {
+    query = query.where("category", "==", category);
+  }
+
+  const snapshot = await query
+    .orderBy("timestamp", "desc")
+    .limit(limitCount)
+    .get();
+
+  return snapshot.docs.map((doc) => {
+    const data = doc.data();
+    return {
+      id: doc.id,
+      userId: data.userId,
+      timestamp: data.timestamp?.toDate() || new Date(),
+      category: data.category,
+      title: data.title,
+      content: data.content,
+      tags: data.tags || [],
+      actionableTakeaway: data.actionableTakeaway,
+    };
+  });
 }
 
 // Helper: Start a /spark session
@@ -118,7 +152,7 @@ export async function getUserState(userId: string): Promise<UserState> {
         vitality: 0,
         expressionism: 0,
       },
-      activePlugins: data.activePlugins || ["monotropic-flow-v1"],
+      activePlugins: data.activePlugins || ["monotropic-flow"],
       updatedAt: data.updatedAt?.toDate() || new Date(),
     };
   }
@@ -139,7 +173,7 @@ export async function getUserState(userId: string): Promise<UserState> {
       vitality: 0,
       expressionism: 0,
     },
-    activePlugins: ["monotropic-flow-v1"],
+    activePlugins: ["monotropic-flow"],
     updatedAt: new Date(),
   };
 
@@ -210,5 +244,56 @@ export async function getRecentTrades(
       tags: data.tags || [],
       notes: data.notes,
     };
+  });
+}
+
+// Helper: Goal model
+export interface GoalItem {
+  id?: string;
+  userId: string;
+  title: string;
+  targetMetric: string;
+  targetFocusHours?: number;
+  reward: string;
+  isUnlocked: boolean;
+  unlockedAt?: Date;
+  createdAt: Date;
+}
+
+export async function createGoal(goal: Omit<GoalItem, "id" | "createdAt" | "isUnlocked">): Promise<string> {
+  const docRef = await goalsCollection.add({
+    ...goal,
+    isUnlocked: false,
+    createdAt: admin.firestore.FieldValue.serverTimestamp(),
+  });
+  return docRef.id;
+}
+
+export async function getUserGoals(userId: string): Promise<GoalItem[]> {
+  const snapshot = await goalsCollection
+    .where("userId", "==", userId)
+    .orderBy("createdAt", "desc")
+    .get();
+
+  return snapshot.docs.map((doc) => {
+    const data = doc.data();
+    return {
+      id: doc.id,
+      userId: data.userId,
+      title: data.title,
+      targetMetric: data.targetMetric,
+      targetFocusHours: data.targetFocusHours,
+      reward: data.reward,
+      isUnlocked: data.isUnlocked || false,
+      unlockedAt: data.unlockedAt?.toDate(),
+      createdAt: data.createdAt?.toDate() || new Date(),
+    };
+  });
+}
+
+export async function unlockGoal(goalId: string): Promise<void> {
+  await goalsCollection.doc(goalId).update({
+    isUnlocked: true,
+    unlockedAt: admin.firestore.FieldValue.serverTimestamp(),
   });
 }
