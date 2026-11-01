@@ -220,13 +220,29 @@ export async function getRecentTrades(
   userId: string,
   limitCount = 5
 ): Promise<Trade[]> {
-  const snapshot = await tradesCollection
-    .where("userId", "==", userId)
-    .orderBy("timestamp", "desc")
-    .limit(limitCount)
-    .get();
+  let docs: admin.firestore.QueryDocumentSnapshot[];
+  try {
+    const snapshot = await tradesCollection
+      .where("userId", "==", userId)
+      .orderBy("timestamp", "desc")
+      .limit(limitCount)
+      .get();
+    docs = snapshot.docs;
+  } catch (err: unknown) {
+    // If composite index is pending, fallback to filtering by userId and sorting in-memory
+    const snapshot = await tradesCollection
+      .where("userId", "==", userId)
+      .get();
+    docs = snapshot.docs;
+    docs.sort((a, b) => {
+      const timeA = a.data().timestamp?.toMillis() || 0;
+      const timeB = b.data().timestamp?.toMillis() || 0;
+      return timeB - timeA;
+    });
+    docs = docs.slice(0, limitCount);
+  }
 
-  return snapshot.docs.map((doc) => {
+  return docs.map((doc) => {
     const data = doc.data();
     return {
       id: doc.id,
@@ -270,12 +286,26 @@ export async function createGoal(goal: Omit<GoalItem, "id" | "createdAt" | "isUn
 }
 
 export async function getUserGoals(userId: string): Promise<GoalItem[]> {
-  const snapshot = await goalsCollection
-    .where("userId", "==", userId)
-    .orderBy("createdAt", "desc")
-    .get();
+  let docs: admin.firestore.QueryDocumentSnapshot[];
+  try {
+    const snapshot = await goalsCollection
+      .where("userId", "==", userId)
+      .orderBy("createdAt", "desc")
+      .get();
+    docs = snapshot.docs;
+  } catch (err: unknown) {
+    const snapshot = await goalsCollection
+      .where("userId", "==", userId)
+      .get();
+    docs = snapshot.docs;
+    docs.sort((a, b) => {
+      const timeA = a.data().createdAt?.toMillis() || 0;
+      const timeB = b.data().createdAt?.toMillis() || 0;
+      return timeB - timeA;
+    });
+  }
 
-  return snapshot.docs.map((doc) => {
+  return docs.map((doc) => {
     const data = doc.data();
     return {
       id: doc.id,

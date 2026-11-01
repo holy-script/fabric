@@ -16,6 +16,10 @@ import { handleMuse } from "./commands/muse.js";
 import { handlePortfolio } from "./commands/portfolio.js";
 import { handleWins, handleGotchas, handleSearch } from "./commands/garden.js";
 import { handleGoal, handleGoals, handleClaim } from "./commands/goals.js";
+import { handleBriefing } from "./commands/briefing.js";
+import { handleDashboard } from "./commands/dashboard.js";
+import { handleSimulate } from "./commands/simulate.js";
+import { handleNotion } from "./commands/notion.js";
 import { handleNaturalMessage } from "./handlers/message.js";
 import { handleVoiceMessage } from "./handlers/voice.js";
 import { handleCallbackQuery } from "./handlers/callbacks.js";
@@ -26,11 +30,14 @@ export function createBot() {
   // Register bot commands menu in Telegram
   bot.api
     .setMyCommands([
+      { command: "dashboard", description: "Open real-time in-chat Visual HUD" },
+      { command: "briefing", description: "Daily Flight Plan & Focus Budget" },
       { command: "spark", description: "Start a focused execution session" },
       { command: "settle", description: "Finish active session & log trade" },
-      { command: "log", description: "Quick-log a 4F currency trade" },
       { command: "balance", description: "View currency balances & telemetry" },
       { command: "portfolio", description: "Synthesizer proof of growth" },
+      { command: "simulate", description: "Test a new workflow before adopting" },
+      { command: "notion", description: "Sync knowledge garden to Notion" },
       { command: "wins", description: "View the Hopecore vault of wins" },
       { command: "gotchas", description: "View documented traps & pitfalls" },
       { command: "search", description: "Search knowledge garden & trades" },
@@ -45,6 +52,8 @@ export function createBot() {
 
   // Command handlers
   bot.command("start", handleStart);
+  bot.command("dashboard", handleDashboard);
+  bot.command("briefing", handleBriefing);
   bot.command("spark", handleSpark);
   bot.command("settle", handleSettle);
   bot.command("log", handleLog);
@@ -52,6 +61,8 @@ export function createBot() {
   bot.command("gotcha", handleGotcha);
   bot.command("balance", handleBalance);
   bot.command("portfolio", handlePortfolio);
+  bot.command("simulate", handleSimulate);
+  bot.command("notion", handleNotion);
   bot.command("wins", handleWins);
   bot.command("gotchas", handleGotchas);
   bot.command("search", handleSearch);

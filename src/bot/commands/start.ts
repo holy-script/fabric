@@ -7,10 +7,13 @@ export async function handleStart(ctx: Context) {
   await getUserState(userId);
 
   const keyboard = new InlineKeyboard()
-    .text("⚡ Spark Session", "action:spark_prompt")
-    .text("📊 Telemetry", "action:balance")
+    .webApp("📊 Open Visual HUD", `https://fabric-one-sage.vercel.app/api/dashboard?userId=${userId}`)
+    .text("🌅 Morning Flight Plan", "action:briefing")
     .row()
-    .text("🏆 Bank Win", "action:win_prompt")
+    .text("⚡ Spark Session", "action:spark_prompt")
+    .text("⚖️ Telemetry", "action:balance")
+    .row()
+    .text("🧩 Plugins (WoW)", "action:plugins")
     .text("❓ Ask Advisor", "action:ask_prompt");
 
   const welcomeMessage = `
@@ -22,17 +25,19 @@ export async function handleStart(ctx: Context) {
 💰 *Funds* (Capital & Vitality)
 🔄 *Feedback* (AI Refinement Loop)
 
-*Operational Commands:*
-⚡ \`/spark <task> [duration]\` — Start a focused execution block
-🏁 \`/settle <outcome & energy>\` — Close out active session & log trade
-📝 \`/log <text>\` — Quick-log a trade (Gemini auto-extracts metrics)
-🏆 \`/win <breakthrough>\` — Bank a triumph or milestone (Hopecore)
-⚠️ \`/gotcha <pitfall>\` — Record a bug, trap, or hard-learned lesson
-📊 \`/balance\` — View currency telemetry & Aristotelian equilibrium
-❓ \`/ask <question>\` — Consult the 4F Advisor on trade-offs
+*Key Operations:*
+📊 \`/dashboard\` — Open live in-chat Visual HUD
+🌅 \`/briefing\` — Daily Flight Plan & Focus Budget
+⚡ \`/spark <task>\` — Start an uninterrupted flow block
+🏁 \`/settle <outcome>\` — Finish block & log trade
+🧪 \`/simulate <idea>\` — Systems simulation before adopting
+🧩 \`/plugins\` — Hot-swap Ways of Working (WoW)
+🎨 \`/muse\` — Creative Chaos & monotony interrupter
+🏛️ \`/portfolio\` — Compounding capability synthesis
+📓 \`/notion\` — Sync Knowledge Garden to Notion
 
 🎙️ *Voice-First Ingestion:*
-_You can send raw voice memos anytime! The bot transcribes, detects intent, and logs trades or gotchas hands-free._
+_Hold the mic button and speak anytime! Send a voice memo to log trades, bank wins, or ask questions hands-free._
 `;
 
   await ctx.reply(welcomeMessage, {
