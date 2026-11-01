@@ -1,205 +1,300 @@
 #!/usr/bin/env bun
 import fs from "fs";
 import path from "path";
-import os from "os";
-import { execFile } from "child_process";
-import { promisify } from "util";
-import { extractMediaInsight, findMediaUrl } from "../src/media/extractor.js";
+import { GoogleGenerativeAI } from "@google/generative-ai";
+import { config } from "../src/config/env.js";
 import { createKnowledgeItem } from "../src/db/firestore.js";
 import { isNotionConfigured, syncKnowledgeItemToNotion } from "../src/notion/client.js";
+import type { KnowledgeCategory, KnowledgeItem } from "../src/db/types.js";
 
-const execFileAsync = promisify(execFile);
+const genAI = new GoogleGenerativeAI(config.geminiApiKey);
+const CHECKPOINT_FILE = path.resolve(process.cwd(), ".reels_import_checkpoint.json");
 
-interface ParsedPostItem {
+export interface ParsedReelItem {
   url: string;
+  caption: string;
   title?: string;
   author?: string;
+  timestamp?: number;
   savedAt?: Date;
 }
 
+export interface DigestedReelResult {
+  url: string;
+  title: string;
+  category: KnowledgeCategory;
+  quadrant: "Focus" | "Facts" | "Funds" | "Feedback";
+  tags: string[];
+  summary: string;
+  actionableTakeaway: string;
+  author?: string;
+  savedAt?: Date;
+  firestoreId?: string;
+  notionUrl?: string;
+}
+
+interface CheckpointData {
+  processedUrls: Record<string, {
+    title: string;
+    category: string;
+    firestoreId?: string;
+    notionUrl?: string;
+    processedAt: string;
+  }>;
+  totalProcessed: number;
+  lastUpdated: string;
+}
+
+function loadCheckpoint(): CheckpointData {
+  if (fs.existsSync(CHECKPOINT_FILE)) {
+    try {
+      return JSON.parse(fs.readFileSync(CHECKPOINT_FILE, "utf-8"));
+    } catch {
+      // Ignore corrupted checkpoint
+    }
+  }
+  return {
+    processedUrls: {},
+    totalProcessed: 0,
+    lastUpdated: new Date().toISOString(),
+  };
+}
+
+function saveCheckpoint(data: CheckpointData) {
+  try {
+    data.lastUpdated = new Date().toISOString();
+    fs.writeFileSync(CHECKPOINT_FILE, JSON.stringify(data, null, 2), "utf-8");
+  } catch (err) {
+    console.warn("⚠️ Failed to write checkpoint file:", err);
+  }
+}
+
 /**
- * Robust parser for various Instagram saved_posts.json structures
+ * Universal Instagram export parser supporting:
+ * 1. Modern Meta export with `label_values` (2024-2026 schema)
+ * 2. Legacy `saved_saved_media` with `string_map_data`
+ * 3. Flat array of strings / URLs
  */
-export function parseInstagramExport(rawJson: any): ParsedPostItem[] {
-  const items: ParsedPostItem[] = [];
+export function parseInstagramExport(rawJson: any): ParsedReelItem[] {
+  const items: ParsedReelItem[] = [];
   const seenUrls = new Set<string>();
 
-  function addIfValid(url: string, title?: string, author?: string, timestamp?: number | string) {
+  function registerItem(
+    url: string,
+    caption?: string,
+    title?: string,
+    author?: string,
+    timestamp?: number | string
+  ) {
     if (!url || typeof url !== "string") return;
-    const detected = findMediaUrl(url);
-    if (!detected || detected.type !== "instagram") return;
+    if (!url.includes("instagram.com/")) return;
 
-    // Normalize URL
-    const cleanUrl = detected.url.split("?")[0].replace(/\/+$/, "") + "/";
+    // Normalize URL to https://www.instagram.com/reel/CODE/ or /p/CODE/
+    const cleanUrl = url.split("?")[0].replace(/\/+$/, "") + "/";
     if (seenUrls.has(cleanUrl)) return;
     seenUrls.add(cleanUrl);
 
     let savedAt: Date | undefined;
+    let tsNum: number | undefined;
     if (typeof timestamp === "number") {
+      tsNum = timestamp;
       savedAt = new Date(timestamp * 1000);
     } else if (typeof timestamp === "string") {
-      savedAt = new Date(timestamp);
+      const parsed = Date.parse(timestamp);
+      if (!isNaN(parsed)) {
+        savedAt = new Date(parsed);
+        tsNum = Math.floor(parsed / 1000);
+      }
     }
 
     items.push({
       url: cleanUrl,
+      caption: caption?.trim() || "",
       title: title?.trim() || undefined,
-      author: author?.trim() || title?.trim() || undefined,
+      author: author?.trim() || undefined,
+      timestamp: tsNum,
       savedAt: savedAt && !isNaN(savedAt.getTime()) ? savedAt : undefined,
     });
   }
 
-  // Handle { saved_saved_media: [ ... ] }
-  if (rawJson && typeof rawJson === "object" && Array.isArray(rawJson.saved_saved_media)) {
-    for (const entry of rawJson.saved_saved_media) {
-      const stringMap = entry.string_map_data || {};
-      const url =
-        stringMap.URL?.value ||
-        stringMap.URL?.href ||
-        stringMap.Link?.value ||
-        entry.url ||
-        entry.href;
-
-      const title = entry.title || undefined;
-      const author = entry.title || stringMap["Account name"]?.value;
-      const savedOn = stringMap["Saved on"]?.timestamp || stringMap["Saved on"]?.value;
-
-      addIfValid(url, title, author, savedOn);
-    }
-    return items;
-  }
-
-  // Handle direct array of objects or strings
+  // 1. Direct array of objects (modern 2024-2026 export with `label_values`)
   if (Array.isArray(rawJson)) {
     for (const entry of rawJson) {
       if (typeof entry === "string") {
-        addIfValid(entry);
-      } else if (entry && typeof entry === "object") {
-        const stringMap = entry.string_map_data || {};
-        const url =
-          stringMap.URL?.value ||
-          stringMap.URL?.href ||
-          stringMap.Link?.value ||
-          entry.url ||
-          entry.href ||
-          entry.value;
-
-        const title = entry.title || undefined;
-        const author = entry.title || stringMap["Account name"]?.value;
-        const savedOn = stringMap["Saved on"]?.timestamp || stringMap["Saved on"]?.value;
-
-        addIfValid(url, title, author, savedOn);
+        registerItem(entry);
+        continue;
       }
+      if (!entry || typeof entry !== "object") continue;
+
+      let url = "";
+      let caption = "";
+      let title = "";
+      let author = "";
+      const timestamp = entry.timestamp;
+
+      // Modern format: label_values
+      if (Array.isArray(entry.label_values)) {
+        for (const lv of entry.label_values) {
+          if (lv.label === "URL") {
+            url = lv.value || lv.href || "";
+          } else if (lv.label === "Caption" && lv.value) {
+            caption = lv.value;
+          } else if (lv.label === "Title" && lv.value) {
+            title = lv.value;
+          } else if (lv.title === "Owner" && Array.isArray(lv.dict)) {
+            for (const d of lv.dict) {
+              if (Array.isArray(d.dict)) {
+                for (const sub of d.dict) {
+                  if (sub.label === "Username" && sub.value) author = sub.value;
+                  else if (sub.label === "Name" && sub.value && !author) author = sub.value;
+                }
+              }
+            }
+          }
+        }
+      }
+
+      // Legacy format fallback: string_map_data
+      if (!url && entry.string_map_data) {
+        const sm = entry.string_map_data;
+        url = sm.URL?.value || sm.URL?.href || sm.Link?.value || entry.url || entry.href || "";
+        title = entry.title || "";
+        author = entry.title || sm["Account name"]?.value || "";
+        const savedOn = sm["Saved on"]?.timestamp || sm["Saved on"]?.value;
+        registerItem(url, caption, title, author, savedOn || timestamp);
+        continue;
+      }
+
+      registerItem(url, caption, title, author, timestamp);
     }
     return items;
   }
 
-  // Fallback: Deep recursive scan for any Instagram URLs in object
-  function deepScan(node: any) {
-    if (!node) return;
-    if (typeof node === "string") {
-      const detected = findMediaUrl(node);
-      if (detected && detected.type === "instagram") {
-        addIfValid(detected.url);
-      }
-    } else if (Array.isArray(node)) {
-      for (const val of node) deepScan(val);
-    } else if (typeof node === "object") {
-      for (const key of Object.keys(node)) {
-        deepScan(node[key]);
-      }
+  // 2. Legacy { saved_saved_media: [ ... ] }
+  if (rawJson && typeof rawJson === "object" && Array.isArray(rawJson.saved_saved_media)) {
+    for (const entry of rawJson.saved_saved_media) {
+      const sm = entry.string_map_data || {};
+      const url = sm.URL?.value || sm.URL?.href || sm.Link?.value || entry.url || entry.href;
+      const title = entry.title || undefined;
+      const author = entry.title || sm["Account name"]?.value;
+      const savedOn = sm["Saved on"]?.timestamp || sm["Saved on"]?.value;
+      registerItem(url, "", title, author, savedOn);
     }
   }
 
-  deepScan(rawJson);
   return items;
 }
 
 /**
- * Checks if yt-dlp is available on system PATH
+ * Calls Gemini 3.8 Flash to analyze and synthesize a batch of reels into 4F Knowledge Cards.
  */
-async function isYtDlpAvailable(): Promise<boolean> {
-  try {
-    await execFileAsync("yt-dlp", ["--version"]);
-    return true;
-  } catch {
-    return false;
-  }
+async function digestReelsBatch(
+  batch: ParsedReelItem[],
+  maxRetries = 3
+): Promise<Array<{
+  index: number;
+  title: string;
+  category: KnowledgeCategory;
+  quadrant: "Focus" | "Facts" | "Funds" | "Feedback";
+  tags: string[];
+  summary: string;
+  actionableTakeaway: string;
+}>> {
+  const models = ["gemini-3.5-flash-lite", "gemini-3.8-flash", "gemini-flash-latest"];
+
+  const promptItems = batch.map((item, idx) => ({
+    batchIndex: idx,
+    url: item.url,
+    creator: item.author || "Unknown Creator",
+    caption: item.caption.slice(0, 1500) || "(No caption provided. Infer topic from creator handle & URL context.)",
+  }));
+
+  const systemInstruction = `You are the Master Knowledge Curator for "The Fabric OS", a personal executive cognitive operating system built around the 4F Framework:
+- Focus: Time, deliberate attention, flow, distraction reduction, deep work.
+- Facts: Concrete knowledge, tools, GitHub repos, technical patterns, code, design, frameworks.
+- Funds: Capital, financial wisdom, vitality, biomechanics, nutrition, physical health/longevity.
+- Feedback: Self-reflection, relationships, communication, psychological models, emotional balance (-5 to +5 Doctrine of the Mean).
+
+Task:
+Analyze each Instagram post/reel in the provided batch. Extract dense, high-signal knowledge and return a JSON array of objects.
+
+JSON Object Schema per item:
+{
+  "batchIndex": number (matching the input batchIndex),
+  "title": string (punchy, high-signal, professional title summarizing the core principle or tool, max 80 chars),
+  "category": "strategy" | "tool" | "insight" | "win",
+  "quadrant": "Focus" | "Facts" | "Funds" | "Feedback",
+  "tags": string[] (3-5 lower-case tags, e.g. ["biomechanics", "squat", "mobility", "fitness"]),
+  "summary": string (2 crisp sentences capturing the core insight, method, or revelation),
+  "actionableTakeaway": string (1 concrete, practical action the user can immediately implement or remember)
 }
 
-/**
- * Attempts to download audio using yt-dlp if possible.
- */
-async function tryDownloadAudio(
-  url: string,
-  tempDir: string
-): Promise<{ base64?: string; mimeType?: string } | null> {
-  const randomId = Math.random().toString(36).substring(2, 9);
-  const outPath = path.join(tempDir, `audio_${randomId}.mp3`);
+Rules:
+1. Filter out pure hype, clickbait, and shallow fluff. Dig for the underlying lesson or system.
+2. Return strictly a JSON array inside \`\`\`json ... \`\`\` code block.
+3. Every input item must have a corresponding entry in the output array.`;
 
-  try {
-    await execFileAsync(
-      "yt-dlp",
-      [
-        "-x",
-        "--audio-format",
-        "mp3",
-        "--audio-quality",
-        "5",
-        "--no-playlist",
-        "--no-warnings",
-        "-o",
-        outPath,
-        url,
-      ],
-      { timeout: 15000 }
-    );
+  for (const modelName of models) {
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+      try {
+        const model = genAI.getGenerativeModel({ model: modelName });
+        const response = await model.generateContent([
+          systemInstruction,
+          `\n\nBatch of ${batch.length} Instagram Posts to Digest:\n` +
+            JSON.stringify(promptItems, null, 2),
+        ]);
 
-    if (fs.existsSync(outPath)) {
-      const buffer = fs.readFileSync(outPath);
-      const base64 = buffer.toString("base64");
-      try {
-        fs.unlinkSync(outPath);
-      } catch {}
-      return { base64, mimeType: "audio/mp3" };
-    }
-  } catch {
-    // If audio extraction fails (e.g. login required), fallback silently
-    if (fs.existsSync(outPath)) {
-      try {
-        fs.unlinkSync(outPath);
-      } catch {}
+        const text = response.response.text();
+        let cleaned = text.trim();
+        if (cleaned.startsWith("```json")) {
+          cleaned = cleaned.replace(/^```json/, "").replace(/```$/, "");
+        } else if (cleaned.startsWith("```")) {
+          cleaned = cleaned.replace(/^```/, "").replace(/```$/, "");
+        }
+
+        const parsed = JSON.parse(cleaned.trim());
+        if (Array.isArray(parsed)) {
+          return parsed;
+        }
+      } catch (err: any) {
+        if (attempt === maxRetries) {
+          // Fall through to next model
+          break;
+        }
+        await sleep(1000 * attempt);
+      }
     }
   }
 
-  return null;
+  return [];
 }
 
-/**
- * Renders a CLI progress bar
- */
+function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 function renderProgressBar(
   current: number,
   total: number,
-  stats: { success: number; errors: number; notion: number },
-  currentUrl?: string
+  stats: { success: number; skipped: number; errors: number; notion: number },
+  extraInfo?: string
 ) {
-  const width = 30;
+  const width = 25;
   const ratio = total > 0 ? current / total : 0;
   const filled = Math.min(width, Math.floor(ratio * width));
   const empty = width - filled;
   const bar = "█".repeat(filled) + "░".repeat(empty);
   const percent = (ratio * 100).toFixed(1);
 
-  const displayUrl = currentUrl ? (currentUrl.length > 40 ? currentUrl.slice(0, 37) + "..." : currentUrl) : "";
+  const displayExtra = extraInfo
+    ? extraInfo.length > 35
+      ? extraInfo.slice(0, 32) + "..."
+      : extraInfo
+    : "";
 
   process.stdout.write(
-    `\r[${bar}] ${current}/${total} (${percent}%) | ✅ ${stats.success} | ⚠️ ${stats.errors} | 📓 ${stats.notion} | ${displayUrl}          `
+    `\r[${bar}] ${current}/${total} (${percent}%) | ✅ ${stats.success} | ⏩ ${stats.skipped} | 📓 ${stats.notion} | ⚠️ ${stats.errors} | ${displayExtra}   `
   );
-}
-
-function sleep(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 async function main() {
@@ -207,54 +302,74 @@ async function main() {
 
   if (args.length === 0 || args.includes("--help") || args.includes("-h")) {
     console.log(`
-📱 The Fabric: Instagram Reels Bulk Import Tool
-==============================================
+📱 The Fabric OS: Instagram Knowledge Garden Importer
+=====================================================
+Digests Instagram Saved Reels/Posts into high-signal 4F Knowledge Cards
+using Gemini 3.8 Flash, storing in Firestore and syncing to Notion.
+
 Usage:
   bun run scripts/import-reels.ts <path-to-saved_posts.json> [options]
 
 Options:
-  --user <id>         User ID for telemetry and knowledge garden (default: env.TELEGRAM_USER_ID or "default")
-  --concurrency <n>   Max parallel digestion jobs (default: 2)
-  --delay <ms>        Delay between batches in ms (default: 1500)
-  --limit <n>         Max number of reels to import
-  --dry-run           Parse and list URLs without saving
+  --limit <n>            Process only the first N items (e.g. --limit 25)
+  --batch-size <n>       Number of reels per Gemini batch call (default: 12)
+  --no-notion            Disable Notion synchronization (Firestore only)
+  --no-firestore         Disable Firestore synchronization (Notion only)
+  --stats-only           Display comprehensive analytics of saved posts without importing
+  --dry-run              Simulate parsing and batch generation without saving
+  --reset-checkpoint     Clear previous import progress to start fresh
+  --user <id>            Target Fabric User ID (default: "fabric_user")
 
-Example:
-  bun run scripts/import-reels.ts ~/Downloads/saved_posts.json --concurrency 2
+Examples:
+  bun run scripts/import-reels.ts saved_posts.json --stats-only
+  bun run scripts/import-reels.ts saved_posts.json --limit 10 --dry-run
+  bun run scripts/import-reels.ts saved_posts.json --limit 50
     `);
     process.exit(0);
   }
 
   const filePath = path.resolve(process.cwd(), args[0]);
-
   if (!fs.existsSync(filePath)) {
     console.error(`❌ File not found: ${filePath}`);
     process.exit(1);
   }
 
-  // Parse options
-  let userId = process.env.TELEGRAM_USER_ID || process.env.FABRIC_USER_ID || "default";
-  let concurrency = 2;
-  let delayMs = 1500;
+  // Parse arguments
   let limit: number | undefined;
+  let batchSize = 12;
+  let syncNotion = true;
+  let syncFirestore = true;
+  let statsOnly = false;
   let dryRun = false;
+  let resetCheckpoint = false;
+  let userId = process.env.TELEGRAM_USER_ID || process.env.FABRIC_USER_ID || "fabric_user";
 
   for (let i = 1; i < args.length; i++) {
-    if (args[i] === "--user" && args[i + 1]) {
-      userId = args[i + 1];
-      i++;
-    } else if (args[i] === "--concurrency" && args[i + 1]) {
-      concurrency = parseInt(args[i + 1], 10) || 2;
-      i++;
-    } else if (args[i] === "--delay" && args[i + 1]) {
-      delayMs = parseInt(args[i + 1], 10) || 1500;
-      i++;
-    } else if (args[i] === "--limit" && args[i + 1]) {
+    if (args[i] === "--limit" && args[i + 1]) {
       limit = parseInt(args[i + 1], 10);
       i++;
+    } else if (args[i] === "--batch-size" && args[i + 1]) {
+      batchSize = Math.max(1, Math.min(25, parseInt(args[i + 1], 10) || 12));
+      i++;
+    } else if (args[i] === "--no-notion") {
+      syncNotion = false;
+    } else if (args[i] === "--no-firestore") {
+      syncFirestore = false;
+    } else if (args[i] === "--stats-only") {
+      statsOnly = true;
     } else if (args[i] === "--dry-run") {
       dryRun = true;
+    } else if (args[i] === "--reset-checkpoint") {
+      resetCheckpoint = true;
+    } else if (args[i] === "--user" && args[i + 1]) {
+      userId = args[i + 1];
+      i++;
     }
+  }
+
+  if (resetCheckpoint && fs.existsSync(CHECKPOINT_FILE)) {
+    fs.unlinkSync(CHECKPOINT_FILE);
+    console.log("🔄 Reset import checkpoint file.");
   }
 
   console.log(`\n📂 Reading Instagram export: ${filePath}`);
@@ -268,147 +383,227 @@ Example:
     process.exit(1);
   }
 
-  let posts = parseInstagramExport(rawJson);
-  console.log(`🔍 Extracted ${posts.length} unique Instagram Reel(s) / Post(s).`);
+  const allPosts = parseInstagramExport(rawJson);
+  console.log(`🔍 Total parsed Instagram items: ${allPosts.length}`);
 
-  if (limit && limit > 0 && limit < posts.length) {
-    posts = posts.slice(0, limit);
-    console.log(`⚡ Limiting import to first ${limit} item(s).`);
-  }
+  // Comprehensive stats mode
+  if (statsOnly) {
+    console.log("\n📊 --- INSTAGRAM SAVED ARCHIVE ANALYTICS ---");
+    const reels = allPosts.filter((p) => p.url.includes("/reel/"));
+    const posts = allPosts.filter((p) => !p.url.includes("/reel/"));
+    const withCaptions = allPosts.filter((p) => p.caption.length > 0);
 
-  if (posts.length === 0) {
-    console.log("No valid Instagram links found in the provided JSON file.");
-    process.exit(0);
-  }
+    const authorCounts: Record<string, number> = {};
+    for (const p of allPosts) {
+      const a = p.author || "unknown";
+      authorCounts[a] = (authorCounts[a] || 0) + 1;
+    }
 
-  if (dryRun) {
-    console.log("\n🧪 [DRY RUN] Found the following reels to import:");
-    posts.forEach((p, idx) => {
-      console.log(`  ${idx + 1}. ${p.url} ${p.author ? `(@${p.author})` : ""}`);
+    const timestamps = allPosts
+      .map((p) => p.timestamp)
+      .filter((t): t is number => typeof t === "number")
+      .sort((a, b) => a - b);
+
+    console.log(`Total Saves: ${allPosts.length}`);
+    console.log(`  - Reels: ${reels.length} (${((reels.length / allPosts.length) * 100).toFixed(1)}%)`);
+    console.log(`  - Standard Posts: ${posts.length}`);
+    console.log(`  - With Full Captions: ${withCaptions.length} (${((withCaptions.length / allPosts.length) * 100).toFixed(1)}%)`);
+    if (timestamps.length > 0) {
+      console.log(`Date Range: ${new Date(timestamps[0] * 1000).toLocaleDateString()} -> ${new Date(timestamps[timestamps.length - 1] * 1000).toLocaleDateString()}`);
+    }
+    console.log(`Unique Creators Saved: ${Object.keys(authorCounts).length}`);
+
+    const topAuthors = Object.entries(authorCounts)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 15);
+    console.log("\nTop 15 Most Saved Creators:");
+    topAuthors.forEach(([auth, count], idx) => {
+      console.log(`  ${idx + 1}. @${auth}: ${count} saves`);
     });
-    console.log(`\nDry run finished. Total: ${posts.length}`);
+    console.log("-------------------------------------------\n");
     process.exit(0);
   }
 
-  const ytDlpReady = await isYtDlpAvailable();
-  console.log(`🛠️ yt-dlp audio extractor: ${ytDlpReady ? "Available ✅" : "Not on PATH (using oEmbed metadata fallback)"}`);
-  console.log(`📓 Notion auto-sync: ${isNotionConfigured() ? "Configured & Active ✅" : "Disabled"}`);
-  console.log(`👤 Target User ID: ${userId}`);
-  console.log(`⚙️ Concurrency: ${concurrency} | Batch delay: ${delayMs}ms\n`);
+  // Checkpoint loading
+  const checkpoint = loadCheckpoint();
+  const alreadyProcessed = checkpoint.processedUrls;
 
-  const tempDir = path.join(os.tmpdir(), "fabric-reels-import");
-  if (!fs.existsSync(tempDir)) {
-    fs.mkdirSync(tempDir, { recursive: true });
+  // Filter out already processed items
+  let pendingPosts = allPosts.filter((p) => !alreadyProcessed[p.url]);
+  const previouslySkipped = allPosts.length - pendingPosts.length;
+
+  if (previouslySkipped > 0) {
+    console.log(`⏩ Checkpoint: Found ${previouslySkipped} already processed post(s).`);
   }
+
+  if (limit && limit > 0 && limit < pendingPosts.length) {
+    pendingPosts = pendingPosts.slice(0, limit);
+    console.log(`⚡ Processing limit: ${limit} pending item(s).`);
+  }
+
+  if (pendingPosts.length === 0) {
+    console.log("🎉 All items have already been processed according to checkpoint!");
+    process.exit(0);
+  }
+
+  const notionReady = syncNotion && isNotionConfigured();
+  console.log(`\n⚙️ Configuration:`);
+  console.log(`  - Mode: ${dryRun ? "🧪 DRY RUN (No writes)" : "🚀 LIVE INGESTION"}`);
+  console.log(`  - Items to Process: ${pendingPosts.length}`);
+  console.log(`  - Batch Size: ${batchSize} reels / Gemini call`);
+  console.log(`  - Firestore Storage: ${syncFirestore ? "Active ✅" : "Disabled"}`);
+  console.log(`  - Notion Auto-Sync: ${notionReady ? "Active ✅" : "Disabled"}`);
+  console.log(`  - Target User: ${userId}\n`);
 
   const stats = {
-    total: posts.length,
+    total: pendingPosts.length,
     success: 0,
+    skipped: previouslySkipped,
     errors: 0,
     notion: 0,
   };
 
-  const results: Array<{
-    url: string;
-    title: string;
-    category: string;
-    notionUrl?: string;
-  }> = [];
+  const results: DigestedReelResult[] = [];
 
-  let completedCount = 0;
+  // Process in batches
+  for (let i = 0; i < pendingPosts.length; i += batchSize) {
+    const chunk = pendingPosts.slice(i, i + batchSize);
+    renderProgressBar(i, stats.total, stats, `Batch ${Math.floor(i / batchSize) + 1}...`);
 
-  // Process a single reel item
-  async function processItem(item: ParsedPostItem) {
-    renderProgressBar(completedCount, stats.total, stats, item.url);
-
-    try {
-      // 1. Try audio download if yt-dlp is available
-      let audioData: { base64?: string; mimeType?: string } | null = null;
-      if (ytDlpReady) {
-        audioData = await tryDownloadAudio(item.url, tempDir);
+    if (dryRun) {
+      // Simulate
+      const parsedBatch = await digestReelsBatch(chunk);
+      for (const p of parsedBatch) {
+        const original = chunk[p.batchIndex] || chunk[0];
+        results.push({
+          url: original.url,
+          title: p.title,
+          category: p.category,
+          quadrant: p.quadrant,
+          tags: p.tags,
+          summary: p.summary,
+          actionableTakeaway: p.actionableTakeaway,
+          author: original.author,
+          savedAt: original.savedAt,
+        });
+        stats.success++;
       }
+      renderProgressBar(Math.min(i + batchSize, stats.total), stats.total, stats);
+      continue;
+    }
 
-      // 2. Digest with Gemini Flash
-      const insight = await extractMediaInsight(item.url, userId, {
-        title: item.title,
-        author: item.author,
-        audioBase64: audioData?.base64,
-        audioMimeType: audioData?.mimeType,
-      });
+    // Live execution
+    const digestedBatch = await digestReelsBatch(chunk);
 
-      // 3. Save to Firestore
-      const docId = await createKnowledgeItem(insight);
-      stats.success++;
+    for (const item of digestedBatch) {
+      const original = chunk[item.batchIndex];
+      if (!original) continue;
 
-      // 4. Sync to Notion if configured
-      let notionUrl: string | undefined;
-      if (isNotionConfigured()) {
-        try {
-          const notionRes = await syncKnowledgeItemToNotion({
-            ...insight,
-            id: docId,
-          });
-          notionUrl = notionRes.url;
-          stats.notion++;
-        } catch (notionErr) {
-          // Notion error does not halt the pipeline
+      try {
+        let firestoreId: string | undefined;
+        let notionUrl: string | undefined;
+
+        // 1. Save to Firestore
+        if (syncFirestore) {
+          const knowledgeItem: KnowledgeItem = {
+            userId,
+            timestamp: original.savedAt || new Date(),
+            category: item.category,
+            title: item.title,
+            content: item.summary,
+            tags: Array.from(new Set([...item.tags, item.quadrant.toLowerCase()])),
+            actionableTakeaway: item.actionableTakeaway,
+            sourceUrl: original.url,
+            sourceType: "instagram",
+            author: original.author,
+            quadrant: item.quadrant,
+          };
+          firestoreId = await createKnowledgeItem(knowledgeItem);
+          stats.success++;
         }
-      }
 
-      results.push({
-        url: item.url,
-        title: insight.title,
-        category: insight.category,
-        notionUrl,
-      });
-    } catch (err) {
-      stats.errors++;
-      console.error(`\n⚠️ Failed to ingest ${item.url}:`, err instanceof Error ? err.message : err);
-    } finally {
-      completedCount++;
-      renderProgressBar(completedCount, stats.total, stats);
+        // 2. Sync to Notion (with safe rate limit delay: 350ms)
+        if (notionReady) {
+          try {
+            await sleep(350);
+            const notionRes = await syncKnowledgeItemToNotion({
+              userId,
+              timestamp: original.savedAt || new Date(),
+              category: item.category,
+              title: item.title,
+              content: item.summary,
+              tags: Array.from(new Set([...item.tags, item.quadrant.toLowerCase()])),
+              actionableTakeaway: item.actionableTakeaway,
+              sourceUrl: original.url,
+              author: original.author,
+              quadrant: item.quadrant,
+            });
+            notionUrl = notionRes.url;
+            stats.notion++;
+          } catch (notionErr: any) {
+            // Notion error shouldn't crash the script
+          }
+        }
+
+        // 3. Update checkpoint
+        checkpoint.processedUrls[original.url] = {
+          title: item.title,
+          category: item.category,
+          firestoreId,
+          notionUrl,
+          processedAt: new Date().toISOString(),
+        };
+        checkpoint.totalProcessed++;
+
+        results.push({
+          url: original.url,
+          title: item.title,
+          category: item.category,
+          quadrant: item.quadrant,
+          tags: item.tags,
+          summary: item.summary,
+          actionableTakeaway: item.actionableTakeaway,
+          author: original.author,
+          savedAt: original.savedAt,
+          firestoreId,
+          notionUrl,
+        });
+      } catch (err) {
+        stats.errors++;
+      }
+    }
+
+    // Save checkpoint after every batch
+    saveCheckpoint(checkpoint);
+    renderProgressBar(Math.min(i + batchSize, stats.total), stats.total, stats);
+
+    // Courtesy pause between Gemini batch requests
+    if (i + batchSize < pendingPosts.length) {
+      await sleep(1000);
     }
   }
 
-  // Worker pool for concurrency control
-  let itemIndex = 0;
-  async function worker() {
-    while (itemIndex < posts.length) {
-      const current = posts[itemIndex++];
-      await processItem(current);
-      if (delayMs > 0 && itemIndex < posts.length) {
-        await sleep(delayMs);
-      }
-    }
-  }
-
-  const workers = Array.from({ length: Math.min(concurrency, posts.length) }, () => worker());
-  await Promise.all(workers);
-
-  // Final render
   renderProgressBar(stats.total, stats.total, stats);
   console.log("\n\n" + "=".repeat(60));
-  console.log("🎉 Bulk Ingestion Complete!");
-  console.log(`📦 Processed: ${stats.total}`);
-  console.log(`✅ Ingested to Knowledge Garden: ${stats.success}`);
-  console.log(`📓 Synced to Notion: ${stats.notion}`);
+  console.log(dryRun ? "🧪 Dry Run Complete!" : "🎉 Instagram Ingestion Complete!");
+  console.log(`📦 Processed this run: ${results.length}`);
+  console.log(`✅ Saved to Knowledge Garden (Firestore): ${stats.success}`);
+  console.log(`📓 Synced to Notion Database: ${stats.notion}`);
+  console.log(`⏩ Previously Processed: ${stats.skipped}`);
   if (stats.errors > 0) {
     console.log(`⚠️ Errors: ${stats.errors}`);
   }
   console.log("=".repeat(60));
 
   if (results.length > 0) {
-    console.log("\nRecent Ingestions:");
-    results.slice(0, 10).forEach((r, idx) => {
-      console.log(
-        `  ${idx + 1}. [${r.category.toUpperCase()}] ${r.title} ${
-          r.notionUrl ? `-> ${r.notionUrl}` : ""
-        }`
-      );
+    console.log("\n🌟 Sample Digested Cards:");
+    results.slice(0, 5).forEach((r, idx) => {
+      console.log(`\n[${idx + 1}] [${r.quadrant.toUpperCase()} / ${r.category.toUpperCase()}] ${r.title}`);
+      console.log(`    👤 Creator: @${r.author || "unknown"}`);
+      console.log(`    💡 Takeaway: ${r.actionableTakeaway}`);
+      console.log(`    🏷️ Tags: ${r.tags.join(", ")}`);
+      if (r.notionUrl) console.log(`    📓 Notion: ${r.notionUrl}`);
     });
-    if (results.length > 10) {
-      console.log(`  ... and ${results.length - 10} more.`);
-    }
   }
 }
 

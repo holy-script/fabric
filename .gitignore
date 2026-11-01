@@ -9,3 +9,6 @@ service-account.json
 
 .vercel
 .env*
+saved_posts.json
+.reels_import_checkpoint.json
+*.checkpoint.json

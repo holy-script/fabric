@@ -268,6 +268,32 @@ export async function syncKnowledgeItemToNotion(
   // Children blocks: Content paragraphs + callout for takeaway
   const children: any[] = [];
 
+  if (item.sourceUrl) {
+    children.push({
+      object: "block",
+      type: "paragraph",
+      paragraph: {
+        rich_text: [
+          {
+            type: "text",
+            text: {
+              content: "🔗 Source: " + item.sourceUrl,
+              link: { url: item.sourceUrl },
+            },
+          },
+          ...(item.author
+            ? [
+                {
+                  type: "text",
+                  text: { content: ` | Creator: @${item.author}` },
+                },
+              ]
+            : []),
+        ],
+      },
+    });
+  }
+
   if (item.content) {
     const paragraphs = item.content
       .split(/\n\s*\n/)

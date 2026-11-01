@@ -38,6 +38,10 @@ export interface KnowledgeItem {
   content: string;
   tags: string[];
   actionableTakeaway?: string;
+  sourceUrl?: string;
+  sourceType?: string;
+  author?: string;
+  quadrant?: string;
 }
 
 export interface ActiveSession {

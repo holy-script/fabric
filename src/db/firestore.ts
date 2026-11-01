@@ -82,24 +82,62 @@ export async function getKnowledgeItems(
     query = query.where("category", "==", category);
   }
 
-  const snapshot = await query
-    .orderBy("timestamp", "desc")
-    .limit(limitCount)
-    .get();
+  try {
+    const snapshot = await query
+      .orderBy("timestamp", "desc")
+      .limit(limitCount)
+      .get();
 
-  return snapshot.docs.map((doc) => {
-    const data = doc.data();
-    return {
-      id: doc.id,
-      userId: data.userId,
-      timestamp: data.timestamp?.toDate() || new Date(),
-      category: data.category,
-      title: data.title,
-      content: data.content,
-      tags: data.tags || [],
-      actionableTakeaway: data.actionableTakeaway,
-    };
-  });
+    return snapshot.docs.map((doc) => {
+      const data = doc.data();
+      return {
+        id: doc.id,
+        userId: data.userId,
+        timestamp: data.timestamp?.toDate() || new Date(),
+        category: data.category,
+        title: data.title,
+        content: data.content,
+        tags: data.tags || [],
+        actionableTakeaway: data.actionableTakeaway,
+        sourceUrl: data.sourceUrl,
+        author: data.author,
+        quadrant: data.quadrant,
+      };
+    });
+  } catch (err: any) {
+    // Resilient fallback if composite index is pending or not created yet
+    if (err?.code === 9 || err?.message?.includes("index")) {
+      const fallbackSnap = await knowledgeCollection
+        .where("userId", "==", userId)
+        .limit(limitCount * 4)
+        .get();
+
+      let items = fallbackSnap.docs.map((doc) => {
+        const data = doc.data();
+        return {
+          id: doc.id,
+          userId: data.userId,
+          timestamp: data.timestamp?.toDate() || new Date(),
+          category: data.category,
+          title: data.title,
+          content: data.content,
+          tags: data.tags || [],
+          actionableTakeaway: data.actionableTakeaway,
+          sourceUrl: data.sourceUrl,
+          author: data.author,
+          quadrant: data.quadrant,
+        };
+      });
+
+      if (category) {
+        items = items.filter((d) => d.category.toLowerCase() === category.toLowerCase());
+      }
+
+      items.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
+      return items.slice(0, limitCount);
+    }
+    throw err;
+  }
 }
 
 // Helper: Start a /spark session

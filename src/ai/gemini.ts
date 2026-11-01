@@ -13,7 +13,7 @@ import { getActivePluginPromptGuidance } from "../plugins/manager.js";
 const genAI = new GoogleGenerativeAI(config.geminiApiKey);
 
 const model = genAI.getGenerativeModel({
-  model: "gemini-2.5-flash",
+  model: "gemini-3.5-flash-lite",
 });
 
 function cleanJsonOutput(text: string): string {
