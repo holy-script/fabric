@@ -1,7 +1,7 @@
 import type { Context } from "grammy";
 import fs from "fs";
 import path from "path";
-import { getActiveSession, createTrade } from "../../db/firestore.js";
+import { getActiveSession, createTrade, setVaultChannelId } from "../../db/firestore.js";
 import { parseTradeWithGemini } from "../../ai/gemini.js";
 import { findMediaUrl } from "../../media/extractor.js";
 import { handleMediaUrl } from "./media.js";
@@ -25,6 +25,8 @@ export async function handleNaturalMessage(ctx: Context) {
   if (channelChat && (channelChat.type === "channel" || channelChat.id < 0)) {
     const channelId = channelChat.id.toString();
     process.env.TELEGRAM_VAULT_CHANNEL_ID = channelId;
+
+    await setVaultChannelId(channelId, userId);
 
     if (fs.existsSync(ENV_PATH)) {
       let content = fs.readFileSync(ENV_PATH, "utf-8");

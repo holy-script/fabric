@@ -26,6 +26,8 @@ if (process.env.FIREBASE_SERVICE_ACCOUNT_PATH) {
 
 export const config = {
   telegramToken: process.env.TELEGRAM_BOT_TOKEN as string,
+  telegramUserId: process.env.TELEGRAM_USER_ID || "1131646846",
+  telegramVaultChannelId: process.env.TELEGRAM_VAULT_CHANNEL_ID,
   geminiApiKey: process.env.GEMINI_API_KEY as string,
   firebaseProjectId: process.env.FIREBASE_PROJECT_ID as string,
   firebaseServiceAccountPath: serviceAccountPath,

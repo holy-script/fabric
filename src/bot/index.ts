@@ -26,6 +26,7 @@ import { handleGithub } from "./commands/github.js";
 import { handleNaturalMessage } from "./handlers/message.js";
 import { handleVoiceMessage } from "./handlers/voice.js";
 import { handleCallbackQuery } from "./handlers/callbacks.js";
+import { setVaultChannelId } from "../db/firestore.js";
 
 export function createBot() {
   const bot = new Bot(config.telegramToken);
@@ -89,6 +90,53 @@ export function createBot() {
 
   // Interactive inline keyboard callbacks
   bot.on("callback_query:data", handleCallbackQuery);
+
+  // Channel Auto-Discovery when bot is added as admin to a channel
+  bot.on("my_chat_member", async (ctx) => {
+    try {
+      const chat = ctx.chat;
+      const status = ctx.myChatMember?.new_chat_member?.status;
+      if (chat.type === "channel" && (status === "administrator" || status === "member")) {
+        const channelId = chat.id.toString();
+        await setVaultChannelId(channelId, config.telegramUserId || "1131646846");
+        if (config.telegramUserId) {
+          await ctx.api.sendMessage(
+            config.telegramUserId,
+            `🎉 *Vault Channel Connected!*\n\n` +
+              `📁 Channel: *${chat.title || "Private Vault"}*\n` +
+              `🆔 ID: \`${channelId}\`\n\n` +
+              `The archiver is now ready to stream all videos directly into this channel!`,
+            { parse_mode: "Markdown" }
+          );
+        }
+      }
+    } catch (err) {
+      console.error("Error handling my_chat_member:", err);
+    }
+  });
+
+  // Channel Auto-Discovery when any post is made in the channel
+  bot.on("channel_post", async (ctx) => {
+    try {
+      const chat = ctx.chat;
+      if (chat.type === "channel" || chat.id < 0) {
+        const channelId = chat.id.toString();
+        await setVaultChannelId(channelId, config.telegramUserId || "1131646846");
+        if (config.telegramUserId) {
+          await ctx.api.sendMessage(
+            config.telegramUserId,
+            `🎉 *Vault Channel Detected from Post!*\n\n` +
+              `📁 Channel: *${chat.title || "Private Vault"}*\n` +
+              `🆔 ID: \`${channelId}\`\n\n` +
+              `Saved channel ID to Firestore. Launching video archiver!`,
+            { parse_mode: "Markdown" }
+          );
+        }
+      }
+    } catch (err) {
+      console.error("Error handling channel_post:", err);
+    }
+  });
 
   // Natural language message fallback (including Instagram/YouTube auto-digestion)
   bot.on("message:text", handleNaturalMessage);

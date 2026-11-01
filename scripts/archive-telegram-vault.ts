@@ -7,7 +7,7 @@ import { promisify } from "util";
 import { Bot, InputFile } from "grammy";
 import { config } from "../src/config/env.js";
 import { parseInstagramExport, type ParsedReelItem } from "./import-reels.js";
-import { updateKnowledgeItemStreamUrl, getUserState } from "../src/db/firestore.js";
+import { updateKnowledgeItemStreamUrl, getUserState, getVaultChannelId } from "../src/db/firestore.js";
 import { appendMediaStreamToNotionPage } from "../src/notion/client.js";
 
 const execFileAsync = promisify(execFile);
@@ -155,33 +155,47 @@ async function main() {
     channelId = tracker.channelId;
   }
 
-  // If still missing, check Firestore userState
+  // If still missing, check Firestore settings & userState
   if (!channelId) {
     try {
-      const state = await getUserState(process.env.TELEGRAM_USER_ID || "1131646846");
-      if ((state as any).vaultChannelId) {
-        channelId = (state as any).vaultChannelId;
-        tracker.channelId = channelId!;
+      const dbChannelId = await getVaultChannelId(process.env.TELEGRAM_USER_ID || "1131646846");
+      if (dbChannelId) {
+        channelId = dbChannelId;
+        tracker.channelId = channelId;
       }
     } catch {}
   }
 
   console.log("\n🎬 ================ THE FABRIC: TELEGRAM VIDEO VAULT ================");
-  console.log(`Channel ID: ${channelId || "❌ NOT SET (Please provide --channel <id> or add to .env)"}`);
+  console.log(`Channel ID: ${channelId || "⏳ Waiting for connection..."}`);
   console.log(`Tor SOCKS5: ${noProxy ? "Disabled" : proxy}`);
   console.log(`Temp Dir:   ${TEMP_MEDIA_DIR}`);
   console.log("====================================================================\n");
 
   if (!channelId) {
-    console.error("❌ Missing Telegram Vault Channel ID!");
-    console.log(`
-To connect your private channel:
-1. Create a Private Channel in Telegram (e.g. "Fabric Vault").
-2. Add @fabric_os_bot as an Administrator.
-3. Forward any post from that channel to @fabric_os_bot, or get its ID (starts with -100).
-4. Run:
-   bun run scripts/archive-telegram-vault.ts --channel <channel_id>
-    `);
+    console.log("⏳ Channel ID not detected yet in .env or Firestore.");
+    console.log("👉 Please do ONE of the following:");
+    console.log("   1. Add @fabric_os_bot to your private channel as an Administrator.");
+    console.log("   2. Post any message in that channel, OR forward a message from it to @fabric_os_bot.");
+    console.log("   3. Or pass it directly via: bun run scripts/archive-telegram-vault.ts --channel <id>");
+    console.log("\nListening for channel connection (checking Firestore every 3s)...");
+
+    for (let attempt = 0; attempt < 60; attempt++) {
+      await sleep(3000);
+      try {
+        const detected = await getVaultChannelId(process.env.TELEGRAM_USER_ID || "1131646846");
+        if (detected) {
+          channelId = detected;
+          tracker.channelId = detected;
+          console.log(`\n🎉 Channel connected dynamically: ${channelId}`);
+          break;
+        }
+      } catch {}
+    }
+  }
+
+  if (!channelId) {
+    console.error("\n❌ Channel ID not received after timeout. Please run with --channel <id> or add @fabric_os_bot to the channel as admin.");
     process.exit(1);
   }
 
@@ -325,3 +339,4 @@ main().catch((err) => {
   console.error("Fatal error:", err);
   process.exit(1);
 });
+

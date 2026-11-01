@@ -44,6 +44,42 @@ export const knowledgeCollection = db.collection("knowledge");
 export const sessionsCollection = db.collection("sessions");
 export const userStatesCollection = db.collection("userState");
 export const goalsCollection = db.collection("goals");
+export const settingsCollection = db.collection("settings");
+
+export async function setVaultChannelId(channelId: string, userId: string = "1131646846"): Promise<void> {
+  try {
+    await Promise.all([
+      settingsCollection.doc("vault").set({
+        channelId,
+        updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+      }, { merge: true }),
+      userStatesCollection.doc(userId).set({
+        vaultChannelId: channelId,
+        updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+      }, { merge: true }),
+    ]);
+  } catch (err) {
+    console.warn("⚠️ Could not persist vaultChannelId to Firestore:", err);
+  }
+}
+
+export async function getVaultChannelId(userId: string = "1131646846"): Promise<string | null> {
+  try {
+    const doc = await settingsCollection.doc("vault").get();
+    if (doc.exists && doc.data()?.channelId) {
+      return doc.data()!.channelId as string;
+    }
+  } catch {}
+
+  try {
+    const userDoc = await userStatesCollection.doc(userId).get();
+    if (userDoc.exists && userDoc.data()?.vaultChannelId) {
+      return userDoc.data()!.vaultChannelId as string;
+    }
+  } catch {}
+
+  return null;
+}
 
 // Helper: Log a completed trade
 export async function createTrade(trade: Omit<Trade, "id">): Promise<string> {

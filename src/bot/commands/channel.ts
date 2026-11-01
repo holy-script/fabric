@@ -1,6 +1,8 @@
 import type { Context } from "grammy";
 import fs from "fs";
 import path from "path";
+import { setVaultChannelId } from "../../db/firestore.js";
+import { config } from "../../config/env.js";
 
 const ENV_PATH = path.resolve(process.cwd(), ".env");
 
@@ -12,9 +14,9 @@ export async function handleSetChannel(ctx: Context) {
       `🎬 *Telegram Video Vault Setup*\n\n` +
         `Usage: \`/setchannel <channel_id>\`\n\n` +
         `_How to get your channel ID:_\n` +
-        `1. Create a Private Channel in Telegram (e.g. "Fabric Vault").\n` +
-        `2. Add @fabric_os_bot as an **Administrator**.\n` +
-        `3. Forward any message from that channel directly into this chat!`,
+        `1. Add @fabric_os_bot to your private channel as an **Administrator**.\n` +
+        `2. Send any message in that channel, or forward any message from it to this bot!\n` +
+        `3. Or provide the numeric ID (starts with -100).`,
       { parse_mode: "Markdown" }
     );
     return;
@@ -25,6 +27,8 @@ export async function handleSetChannel(ctx: Context) {
   try {
     const chat = await ctx.api.getChat(channelId);
     process.env.TELEGRAM_VAULT_CHANNEL_ID = channelId;
+
+    await setVaultChannelId(channelId, ctx.from?.id.toString() || config.telegramUserId || "1131646846");
 
     // Append/update .env file
     if (fs.existsSync(ENV_PATH)) {
@@ -55,3 +59,4 @@ export async function handleSetChannel(ctx: Context) {
     );
   }
 }
+
