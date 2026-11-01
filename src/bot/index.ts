@@ -6,6 +6,13 @@ import { handleSettle } from "./commands/settle.js";
 import { handleLog } from "./commands/log.js";
 import { handleWin, handleGotcha } from "./commands/win.js";
 import { handleBalance, handleAsk } from "./commands/balance.js";
+import {
+  handlePlugins,
+  handleInstall,
+  handleUninstall,
+  handleSwap,
+} from "./commands/plugins.js";
+import { handleMuse } from "./commands/muse.js";
 import { handleNaturalMessage } from "./handlers/message.js";
 import { handleVoiceMessage } from "./handlers/voice.js";
 import { handleCallbackQuery } from "./handlers/callbacks.js";
@@ -22,6 +29,8 @@ export function createBot() {
       { command: "win", description: "Bank a win or breakthrough" },
       { command: "gotcha", description: "Record a bug, trap, or pitfall" },
       { command: "balance", description: "View currency balances & telemetry" },
+      { command: "plugins", description: "Manage Ways of Working plugins" },
+      { command: "muse", description: "Summon the Muse for creative sparks" },
       { command: "ask", description: "Consult the 4F Advisor engine" },
       { command: "start", description: "Overview & instructions" },
     ])
@@ -35,6 +44,11 @@ export function createBot() {
   bot.command("win", handleWin);
   bot.command("gotcha", handleGotcha);
   bot.command("balance", handleBalance);
+  bot.command("plugins", handlePlugins);
+  bot.command("install", handleInstall);
+  bot.command("uninstall", handleUninstall);
+  bot.command("swap", handleSwap);
+  bot.command("muse", handleMuse);
   bot.command("ask", handleAsk);
 
   // Voice memo ingestion (multimodal)

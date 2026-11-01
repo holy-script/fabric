@@ -8,6 +8,7 @@ import {
   SYSTEM_QUERY_ADVISOR,
 } from "./prompts.js";
 import type { Trade, KnowledgeItem, UserState } from "../db/types.js";
+import { getActivePluginPromptGuidance } from "../plugins/manager.js";
 
 const genAI = new GoogleGenerativeAI(config.geminiApiKey);
 
@@ -37,6 +38,8 @@ export async function parseTradeWithGemini(
     startedAt: Date;
   }
 ): Promise<Omit<Trade, "id">> {
+  const pluginGuidance = await getActivePluginPromptGuidance(userId);
+
   const contextStr = sessionContext
     ? `\nActive Session Context:
 - Planned Task: ${sessionContext.taskDescription}
@@ -45,6 +48,7 @@ export async function parseTradeWithGemini(
     : "";
 
   const prompt = `${SYSTEM_TRADE_PARSER}
+${pluginGuidance}
 ${contextStr}
 
 User Input: "${rawText}"`;
@@ -119,8 +123,11 @@ export async function parseVoiceWithGemini(
   audioBase64: string,
   mimeType = "audio/ogg"
 ): Promise<VoiceParseResult> {
+  const pluginGuidance = await getActivePluginPromptGuidance(userId);
+  const fullPrompt = `${SYSTEM_VOICE_PARSER}\n${pluginGuidance}`;
+
   const result = await model.generateContent([
-    SYSTEM_VOICE_PARSER,
+    fullPrompt,
     {
       inlineData: {
         mimeType,
@@ -247,6 +254,8 @@ export async function askAdvisor(
   userState: UserState,
   recentTrades: Trade[]
 ): Promise<string> {
+  const pluginGuidance = await getActivePluginPromptGuidance(userState.userId);
+
   const stateSummary = `Current User Telemetry:
 - Total Focus Hours: ${userState.totalFocusHours}
 - Total Facts Acquired: ${userState.totalFactsAcquired}
@@ -262,6 +271,7 @@ export async function askAdvisor(
     .join(", ")}`;
 
   const prompt = `${SYSTEM_QUERY_ADVISOR}
+${pluginGuidance}
 
 ${stateSummary}
 
