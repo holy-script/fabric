@@ -101,3 +101,4 @@ export const STARTER_DOMAINS: Record<string, DomainDefinition> = {
     suggestedCommands: ["/spark"],
   },
 };
+

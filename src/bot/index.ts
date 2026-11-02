@@ -21,6 +21,8 @@ import { handleSidequest } from "./commands/sidequest.js";
 import { handleVitality, handleMeal } from "./commands/vitality.js";
 import { handleDsa } from "./commands/dsa.js";
 import { handleDomain } from "./commands/domain.js";
+import { handleVoiceCommand } from "./commands/voice.js";
+import { handleSms } from "./commands/sms.js";
 import { handlePortfolio } from "./commands/portfolio.js";
 import { handleWins, handleGotchas, handleSearch, handleGarden } from "./commands/garden.js";
 import { handleGoal, handleGoals, handleClaim } from "./commands/goals.js";
@@ -67,6 +69,8 @@ export function createBot() {
       { command: "meal", description: "Log whole-food meal & metabolic impact" },
       { command: "sidequest", description: "Anti-fatigue creative escape hatch" },
       { command: "dsa", description: "Explainable DSA Foundry & Mental Models" },
+      { command: "voice", description: "Toggle natural Voice-to-Voice spoken replies" },
+      { command: "sms", description: "Airtel GSM SMS Gateway (100 free SMS/day via ADB)" },
       { command: "start", description: "Overview & instructions" },
     ])
     .catch((err) => console.error("Could not set bot commands:", err));
@@ -110,6 +114,8 @@ export function createBot() {
   bot.command("meal", handleMeal);
   bot.command("sidequest", handleSidequest);
   bot.command("dsa", handleDsa);
+  bot.command("voice", handleVoiceCommand);
+  bot.command("sms", handleSms);
   bot.command("ask", handleAsk);
 
   // Voice memo ingestion (multimodal)

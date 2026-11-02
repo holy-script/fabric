@@ -1,8 +1,10 @@
 import type { Context } from "grammy";
-import { InlineKeyboard } from "grammy";
+import { InlineKeyboard, InputFile } from "grammy";
+import fs from "fs";
 import { config } from "../../config/env.js";
 import { parseVoiceWithGemini, askAdvisor } from "../../ai/gemini.js";
 import { generateSocraticChallenge } from "../../ai/challenger.js";
+import { generateSpeechAudio } from "../../services/tts.js";
 import {
   createTrade,
   createKnowledgeItem,
@@ -150,6 +152,17 @@ export async function handleVoiceMessage(ctx: Context) {
         `🎙️ *Voice Question:*\n_${result.transcript}_\n\n${answer}`,
         { parse_mode: "Markdown" }
       );
+
+      // If voice mode is active on user profile, respond with spoken voice note
+      if ((state as any).voiceMode) {
+        try {
+          const audioPath = await generateSpeechAudio(answer, (state as any).voiceName);
+          await ctx.replyWithVoice(new InputFile(audioPath));
+          if (fs.existsSync(audioPath)) fs.unlinkSync(audioPath);
+        } catch (vErr) {
+          console.warn("Could not send voice response:", vErr);
+        }
+      }
     } else {
       await ctx.api.editMessageText(
         ctx.chat!.id,

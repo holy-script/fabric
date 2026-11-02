@@ -25,3 +25,4 @@ export interface UserDomainState {
   maxActiveSlots: number; // Defaults to 7
   lastSwappedAt?: string;
 }
+
