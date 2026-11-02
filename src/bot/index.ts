@@ -16,6 +16,10 @@ import { handleMuse } from "./commands/muse.js";
 import { handleReflect } from "./commands/reflect.js";
 import { handleCluster, handlePath } from "./commands/cluster.js";
 import { handleSetChannel } from "./commands/channel.js";
+import { handleGold } from "./commands/gold.js";
+import { handleSidequest } from "./commands/sidequest.js";
+import { handleVitality, handleMeal } from "./commands/vitality.js";
+import { handleDsa } from "./commands/dsa.js";
 import { handlePortfolio } from "./commands/portfolio.js";
 import { handleWins, handleGotchas, handleSearch, handleGarden } from "./commands/garden.js";
 import { handleGoal, handleGoals, handleClaim } from "./commands/goals.js";
@@ -56,6 +60,11 @@ export function createBot() {
       { command: "plugins", description: "Manage Ways of Working plugins" },
       { command: "muse", description: "Summon the Muse for creative sparks" },
       { command: "ask", description: "Consult the 4F Advisor engine" },
+      { command: "gold", description: "GOLDBEES ETF Dip Tracker & Allocation Formula" },
+      { command: "vitality", description: "Biological Architecture, Meals & Grooming" },
+      { command: "meal", description: "Log whole-food meal & metabolic impact" },
+      { command: "sidequest", description: "Anti-fatigue creative escape hatch" },
+      { command: "dsa", description: "Explainable DSA Foundry & Mental Models" },
       { command: "start", description: "Overview & instructions" },
     ])
     .catch((err) => console.error("Could not set bot commands:", err));
@@ -92,6 +101,11 @@ export function createBot() {
   bot.command("synthesize", handleCluster);
   bot.command("path", handlePath);
   bot.command("setchannel", handleSetChannel);
+  bot.command("gold", handleGold);
+  bot.command("vitality", handleVitality);
+  bot.command("meal", handleMeal);
+  bot.command("sidequest", handleSidequest);
+  bot.command("dsa", handleDsa);
   bot.command("ask", handleAsk);
 
   // Voice memo ingestion (multimodal)

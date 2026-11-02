@@ -6,6 +6,8 @@ import { handlePlugins } from "../commands/plugins.js";
 import { handleBriefing } from "../commands/briefing.js";
 import { executeSimulation } from "../commands/simulate.js";
 import { handleSentinel } from "../commands/sentinel.js";
+import { handleDsa } from "../commands/dsa.js";
+import { handleSidequest } from "../commands/sidequest.js";
 import { installPlugin, uninstallPlugin, swapPlugin } from "../../plugins/manager.js";
 import { unlockGoal, getUserState, findKnowledgeItem } from "../../db/firestore.js";
 import { setActiveReflectionSession } from "../commands/reflect.js";
@@ -80,6 +82,30 @@ export async function handleCallbackQuery(ctx: Context) {
   } else if (data === "action:ask_prompt") {
     await ctx.reply(
       `❓ *Ask the Advisor:*\nSend \`/ask <question>\` or send a voice note asking for advice on trade-offs!`,
+      { parse_mode: "Markdown" }
+    );
+  } else if (data === "action:dsa_roll") {
+    await handleDsa(ctx);
+  } else if (data === "action:sidequest_roll") {
+    await handleSidequest(ctx);
+  } else if (data === "action:meal_prompt") {
+    await ctx.reply(
+      `🥗 *Log a Clean Meal:*\nSend \`/meal <what you ate>\` (e.g. \`/meal 3 eggs, sourdough toast, black coffee\`)!`,
+      { parse_mode: "Markdown" }
+    );
+  } else if (data === "action:spark_kinetic") {
+    await ctx.reply(
+      `⚡ *Kinetic Session Initiated:*\nSend \`/spark 15m plyometrics and dancercise\` to lock into flow!`,
+      { parse_mode: "Markdown" }
+    );
+  } else if (data === "action:grooming_guide") {
+    await ctx.reply(
+      `🧴 *Somatic Grooming Protocol:*\n\n` +
+        `• *AM:* Cold splash $\\rightarrow$ Cleanser $\\rightarrow$ Vitamin C $\\rightarrow$ Moisturizer $\\rightarrow$ SPF 50.\n` +
+        `• *Beard:* Boar-bristle brush downward $\\rightarrow$ 4 drops jojoba/argan oil $\\rightarrow$ Check neckline symmetry.\n` +
+        `• *Scent:* 2 sprays signature fragrance on pulse points (wrist + neck side).\n` +
+        `• *PM:* Gentle foaming cleanser $\\rightarrow$ Barrier repair cream.\n\n` +
+        `_Aesthetic self-respect builds an indomitable mindset._`,
       { parse_mode: "Markdown" }
     );
   } else if (data === "action:portfolio_export") {
