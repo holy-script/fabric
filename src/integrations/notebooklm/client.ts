@@ -113,3 +113,4 @@ export async function queryNotebookLM(notebookId: string, question: string): Pro
   const { stdout } = await execFileAsync("notebooklm", ["ask", notebookId, question]);
   return stdout.trim();
 }
+

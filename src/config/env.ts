@@ -2,6 +2,10 @@ import dotenv from "dotenv";
 import path from "path";
 import fs from "fs";
 
+const projectEnvPath = path.resolve(process.cwd(), ".env");
+if (fs.existsSync(projectEnvPath)) {
+  dotenv.config({ path: projectEnvPath });
+}
 dotenv.config();
 
 const requiredEnvVars = [
@@ -18,9 +22,13 @@ for (const key of requiredEnvVars) {
 
 let serviceAccountPath: string | undefined;
 if (process.env.FIREBASE_SERVICE_ACCOUNT_PATH) {
-  const resolved = path.resolve(process.cwd(), process.env.FIREBASE_SERVICE_ACCOUNT_PATH);
-  if (fs.existsSync(resolved)) {
-    serviceAccountPath = resolved;
+  const fabricRootDir = process.cwd();
+  const candidate1 = path.resolve(fabricRootDir, process.env.FIREBASE_SERVICE_ACCOUNT_PATH);
+  const candidate2 = path.resolve(process.cwd(), process.env.FIREBASE_SERVICE_ACCOUNT_PATH);
+  if (fs.existsSync(candidate1)) {
+    serviceAccountPath = candidate1;
+  } else if (fs.existsSync(candidate2)) {
+    serviceAccountPath = candidate2;
   }
 }
 

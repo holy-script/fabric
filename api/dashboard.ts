@@ -1500,11 +1500,18 @@ export default async function handler(
         navTabGraph?.classList.add('bg-zinc-800', 'text-cyan-400', 'shadow-md', 'border-cyan-500/30');
         navTabGraph?.classList.remove('text-zinc-400', 'border-transparent');
 
-        // Resize canvas and reheat physics
+        // Immediate and staggered resize for smooth layout transitions
+        if (window.resizeGraphCanvas) window.resizeGraphCanvas();
+        if (window.reheatSimulation) window.reheatSimulation(0.6);
+
         setTimeout(() => {
           if (window.resizeGraphCanvas) window.resizeGraphCanvas();
           if (window.reheatSimulation) window.reheatSimulation(0.5);
-        }, 30);
+        }, 40);
+
+        setTimeout(() => {
+          if (window.resizeGraphCanvas) window.resizeGraphCanvas();
+        }, 120);
 
       } else {
         // default: hud
@@ -1894,7 +1901,8 @@ export default async function handler(
       let selectedNode = null;
       let hoveredNode = null;
 
-      const camera = { panX: 0, panY: 0, zoom: 1.0 };
+      const isMobile = window.innerWidth < 640;
+      const camera = { panX: 0, panY: 0, zoom: isMobile ? 0.65 : 0.85 };
       let dpr = window.devicePixelRatio || 1;
       let width = 0;
       let height = 0;
@@ -1956,14 +1964,29 @@ export default async function handler(
       window.reheatSimulation = reheatSimulation;
 
       function resizeGraphCanvas() {
+        const parent = canvas.parentElement;
         const rect = canvas.getBoundingClientRect();
-        if (rect.width === 0 || rect.height === 0) return;
-        width = rect.width;
-        height = rect.height;
-        canvas.width = width * dpr;
-        canvas.height = height * dpr;
+        const w = rect.width || parent?.clientWidth || window.innerWidth || 380;
+        const h = rect.height || parent?.clientHeight || (window.innerWidth < 640 ? 460 : 520);
+        if (w === 0 || h === 0) return;
+        width = w;
+        height = h;
+        canvas.width = Math.round(width * dpr);
+        canvas.height = Math.round(height * dpr);
+        canvas.style.width = width + 'px';
+        canvas.style.height = height + 'px';
       }
       window.resizeGraphCanvas = resizeGraphCanvas;
+
+      if (window.ResizeObserver && canvas.parentElement) {
+        try {
+          const ro = new ResizeObserver(() => {
+            resizeGraphCanvas();
+            reheatSimulation(0.3);
+          });
+          ro.observe(canvas.parentElement);
+        } catch (e) {}
+      }
 
       window.addEventListener('resize', resizeGraphCanvas);
       resizeGraphCanvas();
@@ -2398,7 +2421,7 @@ export default async function handler(
         triggerHaptic('light');
         camera.panX = 0;
         camera.panY = 0;
-        camera.zoom = 1.0;
+        camera.zoom = window.innerWidth < 640 ? 0.65 : 0.85;
         reheatSimulation(0.4);
       };
 
