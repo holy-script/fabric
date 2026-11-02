@@ -159,3 +159,43 @@ export async function exportMasterHeuristicsToNotebookLM(): Promise<NotebookSour
   };
 }
 
+export interface IITMGrokkingBundle {
+  subject: string;
+  title: string;
+  filePath: string;
+  fileName: string;
+  questionCount: number;
+}
+
+/**
+ * Returns available IIT Madras Quiz 1 Grokking source bundles.
+ */
+export function getIITMGrokkingBundles(): IITMGrokkingBundle[] {
+  const subjects = [
+    {
+      subject: "cn",
+      title: "IITM BS: Computer Networks (Quiz 1)",
+      fileName: "IITM_Quiz1_Computer_Networks_Grokking_Mastery.md",
+      questionCount: 24,
+    },
+    {
+      subject: "csd",
+      title: "IITM BS: Computer Systems Design (Quiz 1)",
+      fileName: "IITM_Quiz1_Computer_Systems_Design_Grokking_Mastery.md",
+      questionCount: 23,
+    },
+    {
+      subject: "bdbn",
+      title: "IITM BS: Big Data & Biological Networks (Quiz 1)",
+      fileName: "IITM_Quiz1_BDBN_Grokking_Mastery.md",
+      questionCount: 70,
+    },
+  ];
+
+  return subjects.map((s) => ({
+    ...s,
+    filePath: path.join(EXPORT_DIR, s.fileName),
+  }));
+}
+
+

@@ -7,6 +7,7 @@ import { parseTradeWithGemini } from "../../ai/gemini.js";
 import { generateSocraticChallenge } from "../../ai/challenger.js";
 import { findMediaUrl } from "../../media/extractor.js";
 import { handleMediaUrl } from "./media.js";
+import { extractGoogleAiModeShare } from "../../services/sharegoogle.js";
 import { processUserReflectionNote } from "../commands/reflect.js";
 import { classifyMessageIntent, answerConversationalQuery } from "../../ai/conversation.js";
 import { generateSpeechAudio } from "../../services/tts.js";
@@ -93,6 +94,31 @@ export async function handleNaturalMessage(ctx: Context) {
   const mediaDetection = findMediaUrl(text);
   if (mediaDetection) {
     return handleMediaUrl(ctx, mediaDetection.url);
+  }
+
+  // 3b. Check if message contains a Google AI Mode Shared Link (share.google/aimode/...)
+  const aiModeMatch = text.match(/https?:\/\/share\.google\/aimode\/[a-zA-Z0-9_-]+/);
+  if (aiModeMatch) {
+    const shareUrl = aiModeMatch[0];
+    const waitMsg = await ctx.reply("🌐 *Decoding Google AI Mode Blueprint...*", { parse_mode: "Markdown" });
+    try {
+      const decoded = await extractGoogleAiModeShare(shareUrl);
+      if (decoded && decoded.sourceFilePath) {
+        await ctx.api.deleteMessage(ctx.chat!.id, waitMsg.message_id).catch(() => {});
+        await ctx.replyWithDocument(new InputFile(decoded.sourceFilePath, path.basename(decoded.sourceFilePath)), {
+          caption:
+            `🌐 *Google AI Mode Synthesis Extracted!*\n\n` +
+            `🎯 *Prompt:* _"${decoded.prompt.slice(0, 100)}${decoded.prompt.length > 100 ? "..." : ""}"_\n\n` +
+            `📦 The complete multi-phase plan, milestones, and audio overview prompt have been packaged into this Markdown source document for NotebookLM.\n\n` +
+            `Tap below to import directly into Google NotebookLM:`,
+          parse_mode: "Markdown",
+          reply_markup: new InlineKeyboard().url("🎙️ Open Google NotebookLM", "https://notebooklm.google.com"),
+        });
+        return;
+      }
+    } catch (e) {
+      console.warn("Failed to decode AI Mode share:", e);
+    }
   }
 
   // Check if there is an active session

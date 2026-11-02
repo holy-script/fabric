@@ -4,6 +4,7 @@ import {
   exportClusterToNotebookLM,
   exportAllClustersToNotebookLM,
   exportMasterHeuristicsToNotebookLM,
+  getIITMGrokkingBundles,
 } from "../../integrations/notebooklm/exporter.js";
 import { checkNotebookLMStatus } from "../../integrations/notebooklm/client.js";
 import { getOrLoadGraph } from "../../graph/query.js";
@@ -18,7 +19,13 @@ export async function handleNotebookLMCommand(ctx: Context): Promise<void> {
   if (subCommand === "export") {
     if (!target || target === "list") {
       const graph = await getOrLoadGraph();
-      let list = `📚 *Available Clusters for NotebookLM Export:*\n\n`;
+      let list = `📚 *Available Bundles for NotebookLM Export:*\n\n`;
+      list += `🎓 *IIT Madras BS Degree (Quiz 1 Grokking Mastery):*\n`;
+      list += `• \`/nlm export cn\` — Computer Networks (24 PYQs + Formulas)\n`;
+      list += `• \`/nlm export csd\` — Computer Systems Design (23 PYQs + Mux/Radix)\n`;
+      list += `• \`/nlm export bdbn\` — Big Data & Bio Networks (70 PYQs + Centrality)\n`;
+      list += `• \`/nlm export iitm\` — All 3 subjects combined\n\n`;
+      list += `🧠 *Fabric OS Knowledge Clusters:*\n`;
       list += `• \`/nlm export heuristics\` — Master Heuristics & Axioms\n`;
       list += `• \`/nlm export all\` — Export all 14 clusters\n\n`;
       for (const c of graph.clusters) {
@@ -65,6 +72,37 @@ export async function handleNotebookLMCommand(ctx: Context): Promise<void> {
       return;
     }
 
+    // IITM Grokking Export: /nlm export cn | csd | bdbn | iitm
+    const iitmBundles = getIITMGrokkingBundles();
+    if (target === "iitm" || target === "iitm_all") {
+      await ctx.reply("⏳ _Sending all 3 IITM BS Quiz 1 Grokking Notebooks..._", { parse_mode: "Markdown" });
+      for (const b of iitmBundles) {
+        await ctx.replyWithDocument(new InputFile(b.filePath, b.fileName), {
+          caption: `🎓 *${b.title}*\n\nContains **${b.questionCount}** real exam questions, master formulas, and audio prompt for NotebookLM!`,
+          parse_mode: "Markdown",
+        });
+      }
+      return;
+    }
+
+    const matchedIitm = iitmBundles.find((b) => b.subject === target || `iitm_${b.subject}` === target);
+    if (matchedIitm) {
+      await ctx.replyWithDocument(new InputFile(matchedIitm.filePath, matchedIitm.fileName), {
+        caption:
+          `🎓 *IITM BS Quiz 1 Source Bundle: ${matchedIitm.title}*\n\n` +
+          `• **Exam Questions:** \`${matchedIitm.questionCount}\` verified PYQs\n` +
+          `• **File:** \`${matchedIitm.fileName}\`\n\n` +
+          `Import into NotebookLM to generate grounded practice answers and an **Audio Overview (Podcast)**!`,
+        parse_mode: "Markdown",
+        reply_markup: {
+          inline_keyboard: [
+            [{ text: "🎙️ Open Google NotebookLM", url: "https://notebooklm.google.com" }],
+          ],
+        },
+      });
+      return;
+    }
+
     // Export single cluster
     const bundle = await exportClusterToNotebookLM(target);
     if (!bundle) {
@@ -100,6 +138,9 @@ export async function handleNotebookLMCommand(ctx: Context): Promise<void> {
 
   guide += `📦 *Export Commands:*\n`;
   guide += `• \`/nlm export <cluster>\` — Generates a citation-grounded Markdown bundle and sends the \`.md\` file to this chat\n`;
+  guide += `• \`/nlm export cn\` — Export IITM Computer Networks Study Guide\n`;
+  guide += `• \`/nlm export csd\` — Export IITM Systems Design Study Guide\n`;
+  guide += `• \`/nlm export bdbn\` — Export IITM Biological Networks Study Guide\n`;
   guide += `• \`/nlm export all\` — Exports all 14 clusters into \`data/notebooklm_sources/\`\n`;
   guide += `• \`/nlm export heuristics\` — Exports master decision rules\n\n`;
 
@@ -119,6 +160,9 @@ export async function handleNotebookLMCommand(ctx: Context): Promise<void> {
     parse_mode: "Markdown",
     reply_markup: {
       inline_keyboard: [
+        [
+          { text: "🎓 Export IITM BS Quiz 1 Guides", callback_data: "prep:export_menu" },
+        ],
         [
           { text: "🤖 Export AI Agents Cluster", callback_data: "nlm:export:cluster_ai_autonomous_systems" },
           { text: "💻 Export Software Systems", callback_data: "nlm:export:cluster_software_developer_ergonomics" },

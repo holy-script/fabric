@@ -1,7 +1,8 @@
 import type { Context } from "grammy";
 import { InlineKeyboard, InputFile } from "grammy";
-import { exportClusterToNotebookLM, exportMasterHeuristicsToNotebookLM } from "../../integrations/notebooklm/exporter.js";
+import { exportClusterToNotebookLM, exportMasterHeuristicsToNotebookLM, getIITMGrokkingBundles } from "../../integrations/notebooklm/exporter.js";
 import { getOrLoadGraph } from "../../graph/query.js";
+import { loadQuestionBank, formatQuestionCard, handlePrep } from "../commands/prep.js";
 import { handleBalance } from "../commands/balance.js";
 import { handleSettle } from "../commands/settle.js";
 import { handlePlugins } from "../commands/plugins.js";
@@ -518,12 +519,35 @@ export async function handleCallbackQuery(ctx: Context) {
     });
   } else if (data.startsWith("nlm:export:")) {
     const target = data.replace("nlm:export:", "");
+    const iitmBundles = getIITMGrokkingBundles();
+
     if (target === "heuristics") {
       const bundle = await exportMasterHeuristicsToNotebookLM();
       await ctx.replyWithDocument(new InputFile(bundle.filePath, bundle.fileName), {
         caption: `📚 *NotebookLM Source Bundle:* Master Heuristics & Axioms\n\nContains **${bundle.itemCount}** synthesized principles ready for grounding in NotebookLM.`,
         parse_mode: "Markdown",
       });
+    } else if (target === "iitm" || target === "iitm_all") {
+      await ctx.reply("⏳ _Sending all 3 IITM BS Quiz 1 Grokking Notebooks..._", { parse_mode: "Markdown" });
+      for (const b of iitmBundles) {
+        await ctx.replyWithDocument(new InputFile(b.filePath, b.fileName), {
+          caption: `🎓 *${b.title}*\n\nContains **${b.questionCount}** real exam questions, master formulas, and audio prompt for NotebookLM!`,
+          parse_mode: "Markdown",
+        });
+      }
+    } else if (["cn", "csd", "bdbn"].includes(target)) {
+      const b = iitmBundles.find((x) => x.subject === target);
+      if (b) {
+        await ctx.replyWithDocument(new InputFile(b.filePath, b.fileName), {
+          caption:
+            `🎓 *IITM BS Quiz 1 Source Bundle: ${b.title}*\n\n` +
+            `• **Exam Questions:** \`${b.questionCount}\` verified PYQs\n` +
+            `• **File:** \`${b.fileName}\`\n\n` +
+            `Upload to NotebookLM to generate grounded practice answers and an **Audio Overview (Podcast)**!`,
+          parse_mode: "Markdown",
+          reply_markup: new InlineKeyboard().url("🎙️ Open Google NotebookLM", "https://notebooklm.google.com"),
+        });
+      }
     } else {
       const bundle = await exportClusterToNotebookLM(target);
       if (bundle) {
@@ -544,11 +568,141 @@ export async function handleCallbackQuery(ctx: Context) {
   } else if (data === "nlm:list") {
     const graph = await getOrLoadGraph();
     let list = `📚 *Available Clusters for NotebookLM Export:*\n\n`;
+    list += `• \`/nlm export cn\` — IITM Computer Networks\n`;
+    list += `• \`/nlm export csd\` — IITM Systems Design\n`;
+    list += `• \`/nlm export bdbn\` — IITM Biological Networks\n`;
     list += `• \`/nlm export heuristics\` — Master Heuristics & Axioms\n`;
     list += `• \`/nlm export all\` — Export all 14 clusters\n\n`;
     for (const c of graph.clusters) {
       list += `• \`/nlm export ${c.id}\` — *${c.label}* (${c.nodeIds.length} sources)\n`;
     }
     await ctx.reply(list, { parse_mode: "Markdown" });
+  } else if (data === "prep:menu") {
+    await handlePrep(ctx);
+  } else if (data === "prep:export_menu") {
+    const keyboard = new InlineKeyboard()
+      .text("📘 Export Computer Networks", "nlm:export:cn")
+      .row()
+      .text("⚡ Export Systems Design", "nlm:export:csd")
+      .row()
+      .text("🧬 Export Biological Networks", "nlm:export:bdbn")
+      .row()
+      .text("🎓 Export All 3 (IITM Pack)", "nlm:export:iitm")
+      .row()
+      .text("🏠 Back to Hub", "prep:menu");
+
+    await ctx.reply(
+      `🎙️ *IITM BS Quiz 1 Source Bundles for Google NotebookLM*\n\n` +
+        `Select a course below to immediately receive its compiled Markdown study guide file.\n` +
+        `You can then upload it to NotebookLM to generate high-yield active recall quizzes and dual-host audio overviews!`,
+      { parse_mode: "Markdown", reply_markup: keyboard }
+    );
+  } else if (data.startsWith("prep:q:")) {
+    // format: prep:q:<subjectKey>:<qIdx>
+    const parts = data.split(":");
+    let subjectKey = parts[2];
+    const requestedIdx = parts[3];
+
+    const bank = loadQuestionBank();
+    const subjectKeys = Object.keys(bank);
+
+    if (subjectKey === "random" || !bank[subjectKey]) {
+      subjectKey = subjectKeys[Math.floor(Math.random() * subjectKeys.length)];
+    }
+
+    const list = bank[subjectKey]?.questions || [];
+    if (list.length === 0) {
+      await ctx.reply("⚠️ No questions found for this subject.");
+      return;
+    }
+
+    const qIdx =
+      requestedIdx === "random" || isNaN(Number(requestedIdx))
+        ? Math.floor(Math.random() * list.length)
+        : Number(requestedIdx) % list.length;
+
+    const q = list[qIdx];
+    const { text: msg, keyboard } = formatQuestionCard(subjectKey, qIdx, q);
+    await ctx.reply(msg, { parse_mode: "Markdown", reply_markup: keyboard });
+  } else if (data.startsWith("prep_ans:")) {
+    // format: prep_ans:<subjectKey>:<qIdx>:<optIdx>
+    const [, , subjectKey, qIdxStr, optIdxStr] = data.split(":");
+    const bank = loadQuestionBank();
+    const qList = bank[subjectKey]?.questions || [];
+    const qIdx = Number(qIdxStr);
+    const optIdx = Number(optIdxStr);
+    const q = qList[qIdx];
+
+    if (!q) {
+      await ctx.reply("⚠️ Question no longer available.");
+      return;
+    }
+
+    const chosenOpt = q.options[optIdx] || "";
+    const isCorrect = chosenOpt.includes("✓ Correct") || (q.correct && q.correct.some((c) => c.includes(chosenOpt.trim())));
+
+    const correctOpt = q.options.find((o) => o.includes("✓ Correct")) || q.answer || "See explanation";
+    const cleanCorrect = correctOpt.replace("✓ Correct", "").trim();
+
+    let reply = "";
+    if (isCorrect) {
+      reply += `🎯 *CORRECT! (+${q.marks} Marks)*\n\n`;
+    } else {
+      reply += `❌ *INCORRECT*\n\n`;
+      reply += `• Your choice: *${chosenOpt.replace("✓ Correct", "").trim()}*\n`;
+      reply += `• Verified Answer: *${cleanCorrect}*\n\n`;
+    }
+
+    reply += `🧠 *Grokking First-Principles & Invariants:*\n`;
+    reply += `• *Paper Source:* \`${q.source_paper}\`\n`;
+    reply += `• *Exam Rule:* High-pressure 45-min IITM quizzes test edge conditions and unit conversions (e.g. bits vs bytes, propagation vs transmission delay, radix digit bounds).\n`;
+
+    const keyboard = new InlineKeyboard()
+      .text("➡️ Next Question", `prep:q:${subjectKey}:random`)
+      .row()
+      .text("🎲 Mix Subject", "prep:q:random:random")
+      .text("🏠 Academic Hub", "prep:menu");
+
+    await ctx.reply(reply, { parse_mode: "Markdown", reply_markup: keyboard });
+  } else if (data.startsWith("prep_sol:")) {
+    // format: prep_sol:<subjectKey>:<qIdx>
+    const [, , subjectKey, qIdxStr] = data.split(":");
+    const bank = loadQuestionBank();
+    const q = bank[subjectKey]?.questions[Number(qIdxStr)];
+
+    if (!q) {
+      await ctx.reply("⚠️ Question not found.");
+      return;
+    }
+
+    let reply = `💡 *Official Solution & Verification:*\n`;
+    reply += `*Paper:* \`${q.source_paper}\` | *Value:* \`${q.marks} Marks\`\n\n`;
+    reply += `❓ *Question:*\n${q.text}\n\n`;
+
+    if (q.options && q.options.length > 0) {
+      reply += `*All Options:*\n`;
+      for (const opt of q.options) {
+        const isTrue = opt.includes("✓ Correct");
+        const clean = opt.replace("✓ Correct", "").trim();
+        reply += `${isTrue ? "✅ **" + clean + "** *(Correct)*" : "▫️ " + clean}\n`;
+      }
+      reply += `\n`;
+    }
+
+    if (q.answer) {
+      reply += `*Exact Evaluated Value:* \`${q.answer}\`\n\n`;
+    }
+
+    reply += `📐 *Grokking Mental Model:*\n`;
+    reply += `Check the corresponding master formula in your NotebookLM guide (\`/nlm export ${
+      subjectKey === "Computer_Networks" ? "cn" : subjectKey === "Computer_Systems_Design" ? "csd" : "bdbn"
+    }\`).`;
+
+    const keyboard = new InlineKeyboard()
+      .text("➡️ Next Question", `prep:q:${subjectKey}:random`)
+      .row()
+      .text("🏠 Academic Hub", "prep:menu");
+
+    await ctx.reply(reply, { parse_mode: "Markdown", reply_markup: keyboard });
   }
 }

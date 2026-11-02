@@ -22,6 +22,8 @@ r2_pools*.json
 
 # Local Knowledge Graph Cache
 data/knowledge_graph.json
-data/notebooklm_sources/
+data/notebooklm_sources/*
+!data/notebooklm_sources/IITM_*
+!data/notebooklm_sources/iitm_*
 
 .telegram_vault_tracker.json
