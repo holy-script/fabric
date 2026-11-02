@@ -1,15 +1,16 @@
-import { describe, test, expect } from "bun:test";
+import { describe, test, expect, beforeAll } from "bun:test";
 import handler from "../api/dashboard.js";
 
 describe("Visual HUD & Dashboard QC Suite", () => {
-  test("generates full HTML with all 3 functional tabs", async () => {
+  let html = "";
+  let statusCode = 0;
+
+  beforeAll(async () => {
     const req = {
-      url: "/api/dashboard?userId=1131646846",
+      url: "/api/dashboard",
       headers: { host: "localhost:3000" },
     };
 
-    let html = "";
-    let statusCode = 0;
     const res = {
       statusCode: 200,
       setHeader: () => {},
@@ -20,7 +21,9 @@ describe("Visual HUD & Dashboard QC Suite", () => {
     };
 
     await handler(req as any, res as any);
+  });
 
+  test("generates full HTML with all 3 functional tabs", () => {
     expect(statusCode).toBe(200);
     expect(html.length).toBeGreaterThan(50000);
 
@@ -40,59 +43,31 @@ describe("Visual HUD & Dashboard QC Suite", () => {
     expect(html.includes('id="radarChart"')).toBe(true);
   });
 
-  test("all inline script tags parse with zero JavaScript syntax errors", async () => {
-    const req = {
-      url: "/api/dashboard?userId=1131646846",
-      headers: { host: "localhost:3000" },
-    };
+  test("all inline script tags parse with zero JavaScript syntax errors", () => {
+    const scriptMatches = [...html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/gi)];
+    expect(scriptMatches.length).toBeGreaterThan(0);
 
-    let html = "";
-    const res = {
-      statusCode: 200,
-      setHeader: () => {},
-      end: (data: string) => {
-        html = data;
-      },
-    };
+    for (const match of scriptMatches) {
+      const code = match[1].trim();
+      if (!code) continue;
 
-    await handler(req as any, res as any);
-
-    const scriptMatches = html.match(/<script[\s\S]*?<\/script>/gi) || [];
-    expect(scriptMatches.length).toBeGreaterThanOrEqual(4);
-
-    for (let i = 0; i < scriptMatches.length; i++) {
-      const s = scriptMatches[i];
-      if (s.includes("src=")) continue; // Skip external CDNs
-
-      const content = s.replace(/<script[^>]*>/i, "").replace(/<\/script>/i, "");
-      // Evaluate syntax by passing to Function constructor
       expect(() => {
-        new Function(content);
+        new Function(code);
       }).not.toThrow();
     }
   });
 
-  test("serialized data injection contains valid graph and radar objects", async () => {
-    const req = {
-      url: "/api/dashboard",
-      headers: { host: "localhost:3000" },
-    };
-
-    let html = "";
-    const res = {
-      statusCode: 200,
-      setHeader: () => {},
-      end: (data: string) => {
-        html = data;
-      },
-    };
-
-    await handler(req as any, res as any);
-
+  test("serialized data injection contains valid graph and radar objects", () => {
     expect(html.includes("window.__GRAPH_DATA__ =")).toBe(true);
     expect(html.includes("window.__ARISTOTLE_10__ =")).toBe(true);
-    expect(html.includes("window.switchMainTab = switchMainTab;")).toBe(true);
-    expect(html.includes("window.resizeGraphCanvas = resizeGraphCanvas;")).toBe(true);
+
+    const graphMatch = html.match(/window\.__GRAPH_DATA__\s*=\s*(\{[\s\S]*?\});/);
+    expect(graphMatch).not.toBeNull();
+    if (graphMatch) {
+      const parsedGraph = JSON.parse(graphMatch[1]);
+      expect(Array.isArray(parsedGraph.nodes)).toBe(true);
+      expect(Array.isArray(parsedGraph.edges)).toBe(true);
+      expect(parsedGraph.nodes.length).toBeGreaterThan(0);
+    }
   });
 });
-

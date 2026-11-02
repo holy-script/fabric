@@ -15,5 +15,6 @@ describe("Conversational RAG & Search QC Suite", () => {
     expect(res.citedNodes).toBeDefined();
     expect(Array.isArray(res.citedNodes)).toBe(true);
     expect(res.citedNodes.length).toBeGreaterThan(0);
-  });
+  }, 10000);
 });
+

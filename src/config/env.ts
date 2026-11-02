@@ -41,4 +41,8 @@ export const config = {
   firebaseServiceAccountPath: serviceAccountPath,
   firebaseServiceAccountKey: process.env.FIREBASE_SERVICE_ACCOUNT_KEY,
   port: parseInt(process.env.PORT || "3000", 10),
+  searchApiKey: process.env.SEARCHAPI_API_KEY || process.env.SEARCH_API_KEY,
+  serpApiKey: process.env.SERPAPI_API_KEY,
+  googleSearchApiKey: process.env.GOOGLE_SEARCH_API_KEY,
+  googleSearchCx: process.env.GOOGLE_SEARCH_CX,
 };

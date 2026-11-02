@@ -1,7 +1,7 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { config } from "../config/env.js";
 import { searchGraph } from "../graph/query.js";
-import { searchWeb } from "../services/websearch.js";
+import { searchWebDetailed } from "../services/websearch.js";
 import { getUserState, getRecentTrades } from "../db/firestore.js";
 import { getAllDomains } from "../domains/manager.js";
 import type { UserState, Trade } from "../db/types.js";
@@ -82,10 +82,17 @@ export async function answerConversationalQuery(
   userId: string,
   query: string
 ): Promise<ConversationTurnResult> {
+  // Fast safe fetch with 1000ms timeout to be antifragile against Firestore quota exhaustion
+  const safeFetch = <T>(p: Promise<T>, fallback: T): Promise<T> =>
+    Promise.race([
+      p.catch(() => fallback),
+      new Promise<T>((resolve) => setTimeout(() => resolve(fallback), 1000)),
+    ]);
+
   const [userState, recentTrades, domainState] = await Promise.all([
-    getUserState(userId),
-    getRecentTrades(userId, 3),
-    getAllDomains(userId),
+    safeFetch(getUserState(userId), null),
+    safeFetch(getRecentTrades(userId, 3), []),
+    safeFetch(getAllDomains(userId), { active: [], bench: [] } as any),
   ]);
 
   // 1. Query Knowledge Graph for matching nodes, vaulted reels, heuristics
@@ -131,10 +138,13 @@ export async function answerConversationalQuery(
 
   if (needsWeb) {
     try {
-      const webResults = await searchWeb(query, 3);
-      if (webResults.length > 0) {
-        webContextStr = "### LIVE WEB GROUNDING (DuckDuckGo):\n";
-        for (const item of webResults) {
+      const searchRes = await searchWebDetailed(query, 3);
+      if (searchRes.results.length > 0 || searchRes.aiOverview) {
+        webContextStr = `### LIVE WEB GROUNDING (Engine: ${searchRes.engineUsed.toUpperCase()}):\n`;
+        if (searchRes.aiOverview) {
+          webContextStr += `AI Overview Summary: ${searchRes.aiOverview}\n\n`;
+        }
+        for (const item of searchRes.results) {
           webContextStr += `- ${item.title}: ${item.snippet}\n  URL: ${item.url}\n`;
           webCitations.push({ title: item.title, url: item.url });
         }

@@ -88,15 +88,18 @@ export default async function handler(
     let liveBattery: any = null;
     let latestBiometrics: any = null;
 
-    // Parallel multi-source fetch
+    // Parallel multi-source fetch with strict timeout to prevent Firestore quota hangs
+    const withTimeout = <T>(p: Promise<T>, ms: number, fallback: T): Promise<T> =>
+      Promise.race([p, new Promise<T>((resolve) => setTimeout(() => resolve(fallback), ms))]);
+
     const [stateRes, tradesRes, goalsRes, graphRes, domainsRes, batteryRes, bioRes] = await Promise.allSettled([
-      userId ? getUserState(userId) : Promise.resolve(null),
-      userId ? getRecentTrades(userId, 10) : Promise.resolve([]),
-      userId ? getUserGoals(userId) : Promise.resolve([]),
+      userId ? withTimeout(getUserState(userId), 1500, null) : Promise.resolve(null),
+      userId ? withTimeout(getRecentTrades(userId, 10), 1500, []) : Promise.resolve([]),
+      userId ? withTimeout(getUserGoals(userId), 1500, []) : Promise.resolve([]),
       getGraphSummary(),
-      userId ? getAllDomains(userId) : Promise.resolve(null),
+      userId ? withTimeout(getAllDomains(userId), 1500, null) : Promise.resolve(null),
       getDeviceBattery().catch(() => null),
-      userId ? getLatestBiometrics(userId).catch(() => null) : Promise.resolve(null),
+      userId ? withTimeout(getLatestBiometrics(userId).catch(() => null), 1500, null) : Promise.resolve(null),
     ]);
 
     if (stateRes.status === "fulfilled" && stateRes.value) userState = stateRes.value;
