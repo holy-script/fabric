@@ -9,7 +9,7 @@ describe("Multi-Engine Web Search QC Suite", () => {
     expect(res.results[0].title).toBeDefined();
     expect(res.results[0].url.startsWith("http")).toBe(true);
     expect(["google_ai_mode", "google_cse", "duckduckgo_api", "duckduckgo_html"]).toContain(res.engineUsed);
-  });
+  }, 12000);
 
   it("handles long-tail queries with clean snippet extraction", async () => {
     const results = await searchWeb("game feel collision juice tips", 2);
@@ -19,7 +19,7 @@ describe("Multi-Engine Web Search QC Suite", () => {
       expect(results[0].title.length).toBeGreaterThan(3);
       expect(results[0].snippet.length).toBeGreaterThan(10);
     }
-  });
+  }, 12000);
 
   it("handles empty queries gracefully", async () => {
     const res = await searchWebDetailed("", 3);

@@ -39,19 +39,7 @@ export async function searchWebDetailed(query: string, limit = 5): Promise<WebSe
   const q = query.trim();
   if (!q) return { results: [], engineUsed: "none" };
 
-  // 1. Check for Google AI Mode via SearchApi.io
-  if (config.searchApiKey) {
-    try {
-      const searchApiRes = await querySearchApiGoogleAiMode(q, limit, config.searchApiKey);
-      if (searchApiRes.results.length > 0 || searchApiRes.aiOverview) {
-        return searchApiRes;
-      }
-    } catch (err) {
-      console.warn("[WebSearch] SearchApi Google AI Mode failed, falling back:", err);
-    }
-  }
-
-  // 2. Check for Google AI Mode via SerpApi
+  // 1. Check for Google AI Mode via SerpApi (Fastest, ~5s with rich reconstructed markdown & references)
   if (config.serpApiKey) {
     try {
       const serpApiRes = await querySerpApiGoogleAiMode(q, limit, config.serpApiKey);
@@ -60,6 +48,18 @@ export async function searchWebDetailed(query: string, limit = 5): Promise<WebSe
       }
     } catch (err) {
       console.warn("[WebSearch] SerpApi Google AI Mode failed, falling back:", err);
+    }
+  }
+
+  // 2. Check for Google AI Mode via SearchApi.io
+  if (config.searchApiKey) {
+    try {
+      const searchApiRes = await querySearchApiGoogleAiMode(q, limit, config.searchApiKey);
+      if (searchApiRes.results.length > 0 || searchApiRes.aiOverview) {
+        return searchApiRes;
+      }
+    } catch (err) {
+      console.warn("[WebSearch] SearchApi Google AI Mode failed, falling back:", err);
     }
   }
 
@@ -94,6 +94,77 @@ export async function searchWebDetailed(query: string, limit = 5): Promise<WebSe
 }
 
 /**
+ * Queries Google AI Mode via SerpApi
+ * Endpoint: https://serpapi.com/search.json?engine=google_ai_mode
+ */
+async function querySerpApiGoogleAiMode(query: string, limit: number, apiKey: string): Promise<WebSearchResponse> {
+  const params = new URLSearchParams({
+    engine: "google_ai_mode",
+    q: query,
+    api_key: apiKey,
+  });
+
+  const res = await fetch(`https://serpapi.com/search.json?${params.toString()}`, {
+    signal: AbortSignal.timeout(7500),
+  });
+
+  if (!res.ok) {
+    throw new Error(`SerpApi returned HTTP ${res.status}`);
+  }
+
+  const data: any = await res.json();
+  const results: WebSearchResult[] = [];
+  let aiOverview: string | undefined = undefined;
+
+  if (data.reconstructed_markdown || data.ai_overview) {
+    aiOverview = data.reconstructed_markdown || (typeof data.ai_overview === "string" ? data.ai_overview : data.ai_overview?.snippet || data.ai_overview?.text);
+  }
+
+  const refList = data.references || data.ai_overview?.sources || [];
+  if (Array.isArray(refList)) {
+    for (const s of refList.slice(0, limit)) {
+      results.push({
+        title: s.title || "AI Mode Source",
+        snippet: s.snippet || "",
+        url: s.link || "",
+        sourceEngine: "google_ai_mode",
+        aiOverview,
+      });
+    }
+  }
+
+  if (data.organic_results && Array.isArray(data.organic_results)) {
+    for (const org of data.organic_results.slice(0, limit)) {
+      if (!results.some((r) => r.url === org.link)) {
+        results.push({
+          title: org.title || "",
+          snippet: org.snippet || "",
+          url: org.link || "",
+          sourceEngine: "google_ai_mode",
+          aiOverview,
+        });
+      }
+    }
+  }
+
+  if (results.length === 0 && aiOverview) {
+    results.push({
+      title: `Google AI Mode: ${query}`,
+      snippet: aiOverview.replace(/[#*`_]/g, "").slice(0, 300) + "…",
+      url: `https://www.google.com/search?q=${encodeURIComponent(query)}&udm=50`,
+      sourceEngine: "google_ai_mode",
+      aiOverview,
+    });
+  }
+
+  return {
+    results: results.slice(0, limit),
+    aiOverview,
+    engineUsed: "google_ai_mode",
+  };
+}
+
+/**
  * Queries Google AI Mode via SearchApi.io
  * Endpoint: https://www.searchapi.io/api/v1/search?engine=google_ai_mode
  */
@@ -105,7 +176,7 @@ async function querySearchApiGoogleAiMode(query: string, limit: number, apiKey: 
   });
 
   const res = await fetch(`https://www.searchapi.io/api/v1/search?${params.toString()}`, {
-    signal: AbortSignal.timeout(6000),
+    signal: AbortSignal.timeout(9000),
   });
 
   if (!res.ok) {
@@ -117,18 +188,20 @@ async function querySearchApiGoogleAiMode(query: string, limit: number, apiKey: 
   let aiOverview: string | undefined = undefined;
 
   // Extract AI Overview text & citations
-  if (data.ai_overview) {
-    aiOverview = typeof data.ai_overview === "string" ? data.ai_overview : data.ai_overview.text;
-    if (data.ai_overview.references && Array.isArray(data.ai_overview.references)) {
-      for (const ref of data.ai_overview.references.slice(0, limit)) {
-        results.push({
-          title: ref.title || "AI Mode Reference",
-          snippet: ref.snippet || ref.source || "",
-          url: ref.link || ref.url || "",
-          sourceEngine: "google_ai_mode",
-          aiOverview,
-        });
-      }
+  if (data.markdown || data.ai_overview) {
+    aiOverview = data.markdown || (typeof data.ai_overview === "string" ? data.ai_overview : data.ai_overview?.text);
+  }
+
+  const refList = data.reference_links || data.ai_overview?.references || [];
+  if (Array.isArray(refList)) {
+    for (const ref of refList.slice(0, limit)) {
+      results.push({
+        title: ref.title || "AI Mode Reference",
+        snippet: ref.snippet || ref.source || "",
+        url: ref.link || ref.url || "",
+        sourceEngine: "google_ai_mode",
+        aiOverview,
+      });
     }
   }
 
@@ -147,63 +220,14 @@ async function querySearchApiGoogleAiMode(query: string, limit: number, apiKey: 
     }
   }
 
-  return {
-    results: results.slice(0, limit),
-    aiOverview,
-    engineUsed: "google_ai_mode",
-  };
-}
-
-/**
- * Queries Google AI Mode via SerpApi
- * Endpoint: https://serpapi.com/search.json?engine=google_ai_mode
- */
-async function querySerpApiGoogleAiMode(query: string, limit: number, apiKey: string): Promise<WebSearchResponse> {
-  const params = new URLSearchParams({
-    engine: "google_ai_mode",
-    q: query,
-    api_key: apiKey,
-  });
-
-  const res = await fetch(`https://serpapi.com/search.json?${params.toString()}`, {
-    signal: AbortSignal.timeout(6000),
-  });
-
-  if (!res.ok) {
-    throw new Error(`SerpApi returned HTTP ${res.status}`);
-  }
-
-  const data: any = await res.json();
-  const results: WebSearchResult[] = [];
-  let aiOverview: string | undefined = undefined;
-
-  if (data.ai_overview) {
-    aiOverview = data.ai_overview.snippet || data.ai_overview.text;
-    if (data.ai_overview.sources && Array.isArray(data.ai_overview.sources)) {
-      for (const s of data.ai_overview.sources.slice(0, limit)) {
-        results.push({
-          title: s.title || "AI Mode Source",
-          snippet: s.snippet || "",
-          url: s.link || "",
-          sourceEngine: "google_ai_mode",
-          aiOverview,
-        });
-      }
-    }
-  }
-
-  if (data.organic_results && Array.isArray(data.organic_results)) {
-    for (const org of data.organic_results.slice(0, limit)) {
-      if (!results.some((r) => r.url === org.link)) {
-        results.push({
-          title: org.title || "",
-          snippet: org.snippet || "",
-          url: org.link || "",
-          sourceEngine: "google_ai_mode",
-          aiOverview,
-        });
-      }
-    }
+  if (results.length === 0 && aiOverview) {
+    results.push({
+      title: `Google AI Mode: ${query}`,
+      snippet: aiOverview.replace(/[#*`_]/g, "").slice(0, 300) + "…",
+      url: `https://www.google.com/search?q=${encodeURIComponent(query)}&udm=50`,
+      sourceEngine: "google_ai_mode",
+      aiOverview,
+    });
   }
 
   return {
