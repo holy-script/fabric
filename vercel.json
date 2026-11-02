@@ -3,6 +3,12 @@
   "buildCommand": "tsc",
   "outputDirectory": "dist",
   "cleanUrls": true,
+  "rewrites": [
+    { "source": "/", "destination": "/api/dashboard" },
+    { "source": "/dashboard", "destination": "/api/dashboard" },
+    { "source": "/a2a", "destination": "/api/a2a" },
+    { "source": "/health", "destination": "/api/webhooks/health" }
+  ],
   "crons": [
     {
       "path": "/api/cron/sentinel",

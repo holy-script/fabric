@@ -74,7 +74,10 @@ export default async function handler(
   try {
     const url = new URL(req.url || "", `https://${req.headers.host || "localhost"}`);
     const userId =
-      url.searchParams.get("userId") || (req as unknown as { query?: Record<string, string> }).query?.userId || "";
+      url.searchParams.get("userId") ||
+      (req as unknown as { query?: Record<string, string> }).query?.userId ||
+      process.env.TELEGRAM_USER_ID ||
+      "1131646846";
 
     let userState: UserState | null = null;
     let recentTrades: Trade[] = [];
@@ -1511,6 +1514,18 @@ export default async function handler(
       }
     }
 
+    // Explicitly bind to window for inline onclick handlers
+    window.switchMainTab = switchMainTab;
+    window.openTelegramVaultUrl = openTelegramVaultUrl;
+    window.openExternalUrl = openExternalUrl;
+    window.copyCommand = copyCommand;
+    window.triggerHaptic = triggerHaptic;
+
+    // Direct event listener binding as foolproof fallback
+    document.getElementById('navTabHud')?.addEventListener('click', (e) => { e.preventDefault(); switchMainTab('hud'); });
+    document.getElementById('navTabWorkbench')?.addEventListener('click', (e) => { e.preventDefault(); switchMainTab('workbench'); });
+    document.getElementById('navTabGraph')?.addEventListener('click', (e) => { e.preventDefault(); switchMainTab('graph'); });
+
     // Auto-detect URL parameter or hash
     const urlParams = new URLSearchParams(window.location.search);
     const initialTab = urlParams.get('tab') || window.location.hash.replace('#', '');
@@ -2451,7 +2466,7 @@ export default async function handler(
                       (cluster.totalReels || cluster.nodeIds.length) + ' Cataloged Reels',
                     '</span>',
                   '</div>',
-                  '<button onclick="setClusterFilter(\'all\')" class="text-[11px] font-mono text-cyan-400 hover:text-cyan-300 transition">',
+                  '<button onclick="setClusterFilter(&quot;all&quot;)" class="text-[11px] font-mono text-cyan-400 hover:text-cyan-300 transition">',
                     'Show All &rarr;',
                   '</button>',
                 '</div>',
@@ -2520,7 +2535,7 @@ export default async function handler(
           actionButtonsHtml = '<div class="flex flex-col sm:flex-row gap-2 pt-1.5">';
           if (tgLink) {
             actionButtonsHtml += [
-              '<a href="' + escapeClientHtml(tgLink) + '" target="_blank" rel="noopener noreferrer" onclick="openTelegramVaultUrl(\'' + escapeClientHtml(tgLink) + '\'); return false;" class="flex-1 py-2.5 px-3.5 rounded-xl bg-gradient-to-r from-purple-600 via-indigo-600 to-purple-700 hover:from-purple-500 hover:to-indigo-500 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-lg shadow-purple-600/30 active:scale-95 transition no-underline">',
+              '<a href="' + escapeClientHtml(tgLink) + '" target="_blank" rel="noopener noreferrer" data-url="' + escapeClientHtml(tgLink) + '" onclick="openTelegramVaultUrl(this.dataset.url); return false;" class="flex-1 py-2.5 px-3.5 rounded-xl bg-gradient-to-r from-purple-600 via-indigo-600 to-purple-700 hover:from-purple-500 hover:to-indigo-500 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-lg shadow-purple-600/30 active:scale-95 transition no-underline">',
                 '<span class="text-sm">🎬</span>',
                 '<span>Stream Telegram Video</span>',
                 '<svg class="w-3.5 h-3.5 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>',
@@ -2529,7 +2544,7 @@ export default async function handler(
           }
           if (notionLink) {
             actionButtonsHtml += [
-              '<a href="' + escapeClientHtml(notionLink) + '" target="_blank" rel="noopener noreferrer" onclick="openExternalUrl(\'' + escapeClientHtml(notionLink) + '\'); return false;" class="flex-1 py-2.5 px-3.5 rounded-xl bg-zinc-800/90 hover:bg-zinc-700 border border-zinc-700 text-zinc-100 font-bold text-xs flex items-center justify-center gap-2 shadow-md active:scale-95 transition no-underline">',
+              '<a href="' + escapeClientHtml(notionLink) + '" target="_blank" rel="noopener noreferrer" data-url="' + escapeClientHtml(notionLink) + '" onclick="openExternalUrl(this.dataset.url); return false;" class="flex-1 py-2.5 px-3.5 rounded-xl bg-zinc-800/90 hover:bg-zinc-700 border border-zinc-700 text-zinc-100 font-bold text-xs flex items-center justify-center gap-2 shadow-md active:scale-95 transition no-underline">',
                 '<span class="text-sm">📑</span>',
                 '<span>Open Notion Card</span>',
                 '<svg class="w-3.5 h-3.5 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>',
@@ -2549,7 +2564,7 @@ export default async function handler(
           ? '<span class="text-xs text-zinc-600 italic">No direct synapses in this subgraph.</span>'
           : '<div class="flex flex-wrap gap-1.5 max-h-36 overflow-y-auto pr-1">' + neighborList.map((nbr) => {
               const nbrStyle = NODE_STYLES[nbr.type] || NODE_STYLES.concept;
-              return '<button onclick="selectNodeById(\'' + escapeClientHtml(nbr.id) + '\')" class="px-2.5 py-1 rounded-lg text-[10px] font-mono flex items-center gap-1.5 transition active:scale-95 bg-zinc-900 border border-zinc-800 hover:border-zinc-700 text-zinc-300" title="' + escapeClientHtml(nbr.label) + '">' +
+              return '<button data-node-id="' + escapeClientHtml(nbr.id) + '" onclick="selectNodeById(this.dataset.nodeId)" class="px-2.5 py-1 rounded-lg text-[10px] font-mono flex items-center gap-1.5 transition active:scale-95 bg-zinc-900 border border-zinc-800 hover:border-zinc-700 text-zinc-300" title="' + escapeClientHtml(nbr.label) + '">' +
                 '<span class="w-1.5 h-1.5 rounded-full" style="background-color: ' + nbrStyle.color + ';"></span>' +
                 '<span class="truncate max-w-[140px]">' + escapeClientHtml(nbr.label) + '</span>' +
                 '<span class="text-[8px] text-zinc-500 uppercase">(' + escapeClientHtml(nbr.relation) + ')</span>' +

@@ -1,5 +1,7 @@
 import type { Context } from "grammy";
-import { InlineKeyboard } from "grammy";
+import { InlineKeyboard, InputFile } from "grammy";
+import { exportClusterToNotebookLM, exportMasterHeuristicsToNotebookLM } from "../../integrations/notebooklm/exporter.js";
+import { getOrLoadGraph } from "../../graph/query.js";
 import { handleBalance } from "../commands/balance.js";
 import { handleSettle } from "../commands/settle.js";
 import { handlePlugins } from "../commands/plugins.js";
@@ -514,5 +516,39 @@ export async function handleCallbackQuery(ctx: Context) {
     await ctx.reply("🔕 *FOCI Alerts Muted:* Prolonged stress biofeedback alerts paused for 30 minutes.", {
       parse_mode: "Markdown",
     });
+  } else if (data.startsWith("nlm:export:")) {
+    const target = data.replace("nlm:export:", "");
+    if (target === "heuristics") {
+      const bundle = await exportMasterHeuristicsToNotebookLM();
+      await ctx.replyWithDocument(new InputFile(bundle.filePath, bundle.fileName), {
+        caption: `📚 *NotebookLM Source Bundle:* Master Heuristics & Axioms\n\nContains **${bundle.itemCount}** synthesized principles ready for grounding in NotebookLM.`,
+        parse_mode: "Markdown",
+      });
+    } else {
+      const bundle = await exportClusterToNotebookLM(target);
+      if (bundle) {
+        await ctx.replyWithDocument(new InputFile(bundle.filePath, bundle.fileName), {
+          caption:
+            `🎙️ *NotebookLM Source Document Generated!*\n\n` +
+            `• **Cluster:** *${bundle.clusterLabel}*\n` +
+            `• **Sources Included:** \`${bundle.itemCount}\` curated items\n` +
+            `• **File:** \`${bundle.fileName}\`\n\n` +
+            `Upload this document to NotebookLM to generate an **Audio Overview (Podcast)** or grounded study guide!`,
+          parse_mode: "Markdown",
+          reply_markup: new InlineKeyboard().url("🌐 Open Google NotebookLM", "https://notebooklm.google.com"),
+        });
+      } else {
+        await ctx.reply(`⚠️ Could not find cluster: ${target}`);
+      }
+    }
+  } else if (data === "nlm:list") {
+    const graph = await getOrLoadGraph();
+    let list = `📚 *Available Clusters for NotebookLM Export:*\n\n`;
+    list += `• \`/nlm export heuristics\` — Master Heuristics & Axioms\n`;
+    list += `• \`/nlm export all\` — Export all 14 clusters\n\n`;
+    for (const c of graph.clusters) {
+      list += `• \`/nlm export ${c.id}\` — *${c.label}* (${c.nodeIds.length} sources)\n`;
+    }
+    await ctx.reply(list, { parse_mode: "Markdown" });
   }
 }

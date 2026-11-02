@@ -22,5 +22,6 @@ r2_pools*.json
 
 # Local Knowledge Graph Cache
 data/knowledge_graph.json
+data/notebooklm_sources/
 
 .telegram_vault_tracker.json
