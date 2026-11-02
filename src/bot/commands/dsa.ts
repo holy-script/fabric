@@ -6,7 +6,7 @@ import { config } from "../../config/env.js";
 const genAI = new GoogleGenerativeAI(config.geminiApiKey);
 const model = genAI.getGenerativeModel({ model: "gemini-3.5-flash-lite" });
 
-const CORE_DSA_PATTERNS = [
+export const CORE_DSA_PATTERNS = [
   "Two Pointers & Opposite Direction Convergence",
   "Sliding Window (Dynamic & Fixed Size)",
   "Monotonic Stack (Next Greater Element & Boundary Shadows)",
@@ -21,16 +21,10 @@ const CORE_DSA_PATTERNS = [
   "Dynamic Programming (Overlapping Subproblems & Tabulation)",
 ];
 
-export async function handleDsa(ctx: Context) {
-  const query = ctx.message?.text?.replace(/^\/dsa\s*/i, "").trim();
-  const selectedPattern = query || CORE_DSA_PATTERNS[Math.floor(Math.random() * CORE_DSA_PATTERNS.length)];
+export async function generateDsaLesson(pattern?: string): Promise<{ pattern: string; content: string }> {
+  const selectedPattern = pattern || CORE_DSA_PATTERNS[Math.floor(Math.random() * CORE_DSA_PATTERNS.length)];
 
-  const waitMsg = await ctx.reply(`🧠 *Formulating Explainable DSA Foundry on "${selectedPattern}"...*`, {
-    parse_mode: "Markdown",
-  });
-
-  try {
-    const prompt = `
+  const prompt = `
 You are the Lead Algorithmic Mentor for "The Fabric: Craft Foundry".
 Teach the user this Data Structure & Algorithm pattern: "${selectedPattern}".
 
@@ -56,8 +50,21 @@ Ask the user a crisp, targeted question: "How would you update the invariant if 
 Keep the total explanation under 280 words, punchy, clear, and deeply memorable.
 `;
 
-    const response = await model.generateContent(prompt);
-    const content = response.response.text().trim();
+  const response = await model.generateContent(prompt);
+  const content = response.response.text().trim();
+  return { pattern: selectedPattern, content };
+}
+
+export async function handleDsa(ctx: Context) {
+  const query = ctx.message?.text?.replace(/^\/dsa\s*/i, "").trim();
+  const selectedPattern = query || CORE_DSA_PATTERNS[Math.floor(Math.random() * CORE_DSA_PATTERNS.length)];
+
+  const waitMsg = await ctx.reply(`🧠 *Formulating Explainable DSA Foundry on "${selectedPattern}"...*`, {
+    parse_mode: "Markdown",
+  });
+
+  try {
+    const { content } = await generateDsaLesson(selectedPattern);
 
     const keyboard = new InlineKeyboard()
       .text("🎲 Another Pattern", "action:dsa_roll")

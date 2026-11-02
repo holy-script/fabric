@@ -83,6 +83,44 @@ export async function getVaultChannelId(userId: string = "1131646846"): Promise<
   return null;
 }
 
+export interface InstagramSettings {
+  sessionId?: string;
+  dsUserId?: string;
+  csrfToken?: string;
+  username?: string;
+  updatedAt?: admin.firestore.Timestamp | Date;
+  lastSyncAt?: admin.firestore.Timestamp | Date;
+  totalSynced?: number;
+}
+
+export async function setInstagramSettings(
+  settings: Partial<InstagramSettings>
+): Promise<void> {
+  try {
+    await settingsCollection.doc("instagram").set(
+      {
+        ...settings,
+        updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+      },
+      { merge: true }
+    );
+  } catch (err) {
+    console.warn("⚠️ Could not persist instagram settings to Firestore:", err);
+  }
+}
+
+export async function getInstagramSettings(): Promise<InstagramSettings | null> {
+  try {
+    const doc = await settingsCollection.doc("instagram").get();
+    if (doc.exists) {
+      return doc.data() as InstagramSettings;
+    }
+  } catch (err) {
+    console.warn("⚠️ Could not read settings/instagram from Firestore:", err);
+  }
+  return null;
+}
+
 // Helper: Log a completed trade
 export async function createTrade(trade: Omit<Trade, "id">): Promise<string> {
   const docRef = await tradesCollection.add({
@@ -140,6 +178,8 @@ export async function getKnowledgeItems(
         sourceUrl: data.sourceUrl,
         author: data.author,
         quadrant: data.quadrant,
+        userConclusions: data.userConclusions,
+        userReflections: data.userReflections,
       };
     });
   } catch (err: any) {
@@ -164,6 +204,8 @@ export async function getKnowledgeItems(
           sourceUrl: data.sourceUrl,
           author: data.author,
           quadrant: data.quadrant,
+          userConclusions: data.userConclusions,
+          userReflections: data.userReflections,
         };
       });
 

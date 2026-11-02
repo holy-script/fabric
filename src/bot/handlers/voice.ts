@@ -2,16 +2,16 @@ import type { Context } from "grammy";
 import { InlineKeyboard, InputFile } from "grammy";
 import fs from "fs";
 import { config } from "../../config/env.js";
-import { parseVoiceWithGemini, askAdvisor } from "../../ai/gemini.js";
+import { parseVoiceWithGemini } from "../../ai/gemini.js";
 import { generateSocraticChallenge } from "../../ai/challenger.js";
 import { generateSpeechAudio } from "../../services/tts.js";
 import {
   createTrade,
   createKnowledgeItem,
   getUserState,
-  getRecentTrades,
 } from "../../db/firestore.js";
 import { processUserReflectionNote } from "../commands/reflect.js";
+import { answerConversationalQuery } from "../../ai/conversation.js";
 
 export async function handleVoiceMessage(ctx: Context) {
   const userId = ctx.from?.id.toString();
@@ -140,37 +140,49 @@ export async function handleVoiceMessage(ctx: Context) {
           `🏷️ ${result.knowledge.tags.map((t) => `#${t}`).join(" ")}`,
         { parse_mode: "Markdown" }
       );
-    } else if (result.intent === "question" || result.question) {
+    } else {
+      // 5. Conversational Turn (Question, Discussion, Knowledge Search, Web Grounding)
       const query = result.question || result.transcript;
-      const state = await getUserState(userId);
-      const recent = await getRecentTrades(userId, 5);
-      const answer = await askAdvisor(query, state, recent);
+      const [turn, state] = await Promise.all([
+        answerConversationalQuery(userId, query),
+        getUserState(userId),
+      ]);
 
-      await ctx.api.editMessageText(
-        ctx.chat!.id,
-        statusMsg.message_id,
-        `🎙️ *Voice Question:*\n_${result.transcript}_\n\n${answer}`,
-        { parse_mode: "Markdown" }
-      );
+      let replyMarkdown = `🎙️ *Voice Note:* _"${result.transcript}"_\n\n${turn.text}`;
 
-      // If voice mode is active on user profile, respond with spoken voice note
-      if ((state as any).voiceMode) {
+      if (turn.citedNodes.length > 0) {
+        const topReel = turn.citedNodes.find((n) => n.url);
+        if (topReel && topReel.url) {
+          replyMarkdown += `\n\n🎬 *Vault Reference:* [${topReel.title}](${topReel.url})`;
+        }
+      }
+
+      try {
+        await ctx.api.editMessageText(ctx.chat!.id, statusMsg.message_id, replyMarkdown, {
+          parse_mode: "Markdown",
+          link_preview_options: { is_disabled: true },
+        });
+      } catch {
+        await ctx.api.editMessageText(
+          ctx.chat!.id,
+          statusMsg.message_id,
+          replyMarkdown.replace(/[*_`]/g, "")
+        );
+      }
+
+      // If voice mode is active on user profile, respond with spoken audio
+      if ((state as any)?.voiceMode) {
         try {
-          const audioPath = await generateSpeechAudio(answer, (state as any).voiceName);
+          const audioPath = await generateSpeechAudio(
+            turn.text.slice(0, 800),
+            (state as any)?.voiceName
+          );
           await ctx.replyWithVoice(new InputFile(audioPath));
           if (fs.existsSync(audioPath)) fs.unlinkSync(audioPath);
         } catch (vErr) {
           console.warn("Could not send voice response:", vErr);
         }
       }
-    } else {
-      await ctx.api.editMessageText(
-        ctx.chat!.id,
-        statusMsg.message_id,
-        `🎙️ *Transcribed:*\n_${result.transcript}_\n\n` +
-          `_Processed memo. Use \`/log\`, \`/win\`, or \`/ask\` to categorize specifically._`,
-        { parse_mode: "Markdown" }
-      );
     }
   } catch (error) {
     console.error("Voice processing error:", error);

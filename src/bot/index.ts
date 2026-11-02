@@ -22,16 +22,21 @@ import { handleVitality, handleMeal } from "./commands/vitality.js";
 import { handleDsa } from "./commands/dsa.js";
 import { handleDomain } from "./commands/domain.js";
 import { handleVoiceCommand } from "./commands/voice.js";
+import { handleComfy } from "./commands/comfy.js";
 import { handleSms } from "./commands/sms.js";
+import { handlePhone } from "./commands/phone.js";
 import { handlePortfolio } from "./commands/portfolio.js";
 import { handleWins, handleGotchas, handleSearch, handleGarden } from "./commands/garden.js";
 import { handleGoal, handleGoals, handleClaim } from "./commands/goals.js";
 import { handleBriefing } from "./commands/briefing.js";
+import { handleHeartbeat } from "./commands/heartbeat.js";
 import { handleDashboard } from "./commands/dashboard.js";
 import { handleSentinel } from "./commands/sentinel.js";
 import { handleSimulate } from "./commands/simulate.js";
 import { handleNotion } from "./commands/notion.js";
 import { handleGithub } from "./commands/github.js";
+import { handleSyncIg } from "./commands/syncig.js";
+import { deduplicateUpdates } from "./middleware/dedup.js";
 import { handleNaturalMessage } from "./handlers/message.js";
 import { handleVoiceMessage } from "./handlers/voice.js";
 import { handleCallbackQuery } from "./handlers/callbacks.js";
@@ -40,10 +45,15 @@ import { setVaultChannelId } from "../db/firestore.js";
 export function createBot() {
   const bot = new Bot(config.telegramToken);
 
+  // Deduplicate updates to prevent webhook timeout retry storms (e.g. 3x audio transcription)
+  bot.use(deduplicateUpdates);
+
   // Register bot commands menu in Telegram
   bot.api
     .setMyCommands([
       { command: "dashboard", description: "Open real-time in-chat Visual HUD" },
+      { command: "heartbeat", description: "Chronos Heartbeat circadian loop & pulse check" },
+      { command: "pulse", description: "Current-moment telemetry pulse & health check" },
       { command: "sentinel", description: "Autonomous Cognitive Audit & Mean Calibrator" },
       { command: "briefing", description: "Daily Flight Plan & Focus Budget" },
       { command: "spark", description: "Start a focused execution session" },
@@ -70,13 +80,18 @@ export function createBot() {
       { command: "sidequest", description: "Anti-fatigue creative escape hatch" },
       { command: "dsa", description: "Explainable DSA Foundry & Mental Models" },
       { command: "voice", description: "Toggle natural Voice-to-Voice spoken replies" },
+      { command: "comfy", description: "Local ComfyUI generative image synthesis" },
+      { command: "syncig", description: "Auto-sync Instagram Saved reels to Vault" },
       { command: "sms", description: "Airtel GSM SMS Gateway (100 free SMS/day via ADB)" },
+      { command: "phone", description: "Android hardware telemetry & Focus Mode (DND)" },
       { command: "start", description: "Overview & instructions" },
     ])
     .catch((err) => console.error("Could not set bot commands:", err));
 
   // Command handlers
   bot.command("start", handleStart);
+  bot.command("heartbeat", handleHeartbeat);
+  bot.command("pulse", handleHeartbeat);
   bot.command("dashboard", handleDashboard);
   bot.command("sentinel", handleSentinel);
   bot.command("briefing", handleBriefing);
@@ -115,7 +130,10 @@ export function createBot() {
   bot.command("sidequest", handleSidequest);
   bot.command("dsa", handleDsa);
   bot.command("voice", handleVoiceCommand);
+  bot.command("comfy", handleComfy);
+  bot.command("syncig", handleSyncIg);
   bot.command("sms", handleSms);
+  bot.command("phone", handlePhone);
   bot.command("ask", handleAsk);
 
   // Voice memo ingestion (multimodal)

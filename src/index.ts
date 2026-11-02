@@ -1,5 +1,6 @@
 import { createBot } from "./bot/index.js";
 import { db } from "./db/firestore.js";
+import { startHeartbeatScheduler, stopHeartbeatScheduler } from "./services/heartbeat.js";
 
 async function main() {
   console.log("🌌 Initializing The Fabric: 4F Meta-OS...");
@@ -17,17 +18,21 @@ async function main() {
   // Initialize and start bot
   const bot = createBot();
 
+  // Start Chronos Heartbeat autonomous circadian loop
+  startHeartbeatScheduler(bot);
+
   console.log("🚀 Starting Fabric Telegram Bot in polling mode...");
   bot.start({
     onStart: (botInfo) => {
       console.log(`🤖 Bot @${botInfo.username} is LIVE and listening.`);
-      console.log("Ready for commands: /start, /spark, /settle, /log, /win, /gotcha, /balance, /ask");
+      console.log("Ready for commands: /start, /spark, /settle, /log, /win, /gotcha, /balance, /ask, /heartbeat, /pulse");
     },
   });
 
   // Graceful shutdown
   const stopHandler = () => {
     console.log("\nShutting down Fabric bot...");
+    stopHeartbeatScheduler();
     bot.stop();
     process.exit(0);
   };

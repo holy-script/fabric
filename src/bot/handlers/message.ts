@@ -1,13 +1,15 @@
 import type { Context } from "grammy";
-import { InlineKeyboard } from "grammy";
+import { InlineKeyboard, InputFile } from "grammy";
 import fs from "fs";
 import path from "path";
-import { getActiveSession, createTrade, setVaultChannelId } from "../../db/firestore.js";
+import { getActiveSession, createTrade, setVaultChannelId, getUserState } from "../../db/firestore.js";
 import { parseTradeWithGemini } from "../../ai/gemini.js";
 import { generateSocraticChallenge } from "../../ai/challenger.js";
 import { findMediaUrl } from "../../media/extractor.js";
 import { handleMediaUrl } from "./media.js";
 import { processUserReflectionNote } from "../commands/reflect.js";
+import { classifyMessageIntent, answerConversationalQuery } from "../../ai/conversation.js";
+import { generateSpeechAudio } from "../../services/tts.js";
 
 const ENV_PATH = path.resolve(process.cwd(), ".env");
 
@@ -87,7 +89,7 @@ export async function handleNaturalMessage(ctx: Context) {
     return;
   }
 
-  // Check if message contains an Instagram Reel/Post or YouTube link
+  // 3. Check if message contains an Instagram Reel/Post or YouTube link
   const mediaDetection = findMediaUrl(text);
   if (mediaDetection) {
     return handleMediaUrl(ctx, mediaDetection.url);
@@ -96,34 +98,96 @@ export async function handleNaturalMessage(ctx: Context) {
   // Check if there is an active session
   const session = await getActiveSession(userId);
 
-  const statusMsg = await ctx.reply("🧠 *Parsing via Fabric telemetry...*", {
+  // 4. Intent Classification: Trade Logging vs Generic Conversation / Knowledge Query
+  const intent = await classifyMessageIntent(text, Boolean(session));
+
+  if (intent === "trade") {
+    const statusMsg = await ctx.reply("🧠 *Parsing via Fabric telemetry...*", {
+      parse_mode: "Markdown",
+    });
+
+    try {
+      const parsed = await parseTradeWithGemini(userId, text, session || undefined);
+      const tradeId = await createTrade(parsed);
+
+      const energySign = parsed.energyDelta > 0 ? `+${parsed.energyDelta}` : `${parsed.energyDelta}`;
+
+      await ctx.api.editMessageText(
+        ctx.chat!.id,
+        statusMsg.message_id,
+        `✅ *Trade Ingested* \`#${tradeId.slice(-6)}\`\n\n` +
+          `📦 *Module:* ${parsed.moduleName} (${parsed.tradeType})\n` +
+          `⏳ *Focus:* ${parsed.focusActualHours}h\n` +
+          `💡 *Facts Yield:* ${parsed.factsYield}\n` +
+          `💰 *Funds:* -$${parsed.fundsCost} / +$${parsed.fundsYield}\n` +
+          `⚡ *Energy Delta:* ${energySign}\n` +
+          `🏷️ ${parsed.tags.map((t) => `#${t}`).join(" ")}`,
+        { parse_mode: "Markdown" }
+      );
+    } catch (error) {
+      console.error("Natural message processing error:", error);
+      // Fallback to conversation if trade parsing fails
+      const turn = await answerConversationalQuery(userId, text);
+      await ctx.api.editMessageText(ctx.chat!.id, statusMsg.message_id, turn.text, {
+        parse_mode: "Markdown",
+      });
+    }
+    return;
+  }
+
+  // 5. Generic Conversation Turn (Chat, Ideas, Knowledge Base Search, Live Web Grounding)
+  const statusMsg = await ctx.reply("⚡ *Consulting Fabric Knowledge Base & Web...*", {
     parse_mode: "Markdown",
   });
 
   try {
-    const parsed = await parseTradeWithGemini(userId, text, session || undefined);
-    const tradeId = await createTrade(parsed);
+    const [turn, userState] = await Promise.all([
+      answerConversationalQuery(userId, text),
+      getUserState(userId),
+    ]);
 
-    const energySign = parsed.energyDelta > 0 ? `+${parsed.energyDelta}` : `${parsed.energyDelta}`;
+    let responseMarkdown = turn.text;
 
+    // Attach citations if relevant
+    if (turn.citedNodes.length > 0) {
+      const topReel = turn.citedNodes.find((n) => n.url);
+      if (topReel && topReel.url) {
+        responseMarkdown += `\n\n🎬 *Vault Reference:* [${topReel.title}](${topReel.url})`;
+      }
+    }
+
+    try {
+      await ctx.api.editMessageText(ctx.chat!.id, statusMsg.message_id, responseMarkdown, {
+        parse_mode: "Markdown",
+        link_preview_options: { is_disabled: true },
+      });
+    } catch {
+      await ctx.api.editMessageText(
+        ctx.chat!.id,
+        statusMsg.message_id,
+        responseMarkdown.replace(/[*_`]/g, "")
+      );
+    }
+
+    // Voice Response if Voice Mode is active
+    if ((userState as any)?.voiceMode) {
+      try {
+        const audioPath = await generateSpeechAudio(
+          turn.text.slice(0, 800),
+          (userState as any)?.voiceName
+        );
+        await ctx.replyWithVoice(new InputFile(audioPath));
+        if (fs.existsSync(audioPath)) fs.unlinkSync(audioPath);
+      } catch (vErr) {
+        console.warn("Could not send voice response:", vErr);
+      }
+    }
+  } catch (convErr) {
+    console.error("Conversation processing error:", convErr);
     await ctx.api.editMessageText(
       ctx.chat!.id,
       statusMsg.message_id,
-      `✅ *Trade Ingested* \`#${tradeId.slice(-6)}\`\n\n` +
-        `📦 *Module:* ${parsed.moduleName} (${parsed.tradeType})\n` +
-        `⏳ *Focus:* ${parsed.focusActualHours}h\n` +
-        `💡 *Facts Yield:* ${parsed.factsYield}\n` +
-        `💰 *Funds:* -$${parsed.fundsCost} / +$${parsed.fundsYield}\n` +
-        `⚡ *Energy Delta:* ${energySign}\n` +
-        `🏷️ ${parsed.tags.map((t) => `#${t}`).join(" ")}`,
-      { parse_mode: "Markdown" }
-    );
-  } catch (error) {
-    console.error("Natural message processing error:", error);
-    await ctx.api.editMessageText(
-      ctx.chat!.id,
-      statusMsg.message_id,
-      `I couldn't parse that as a trade. Try sending \`/ask ${text}\` if it was a question, or use \`/log <details>\`.`
+      `❌ Could not process conversation: ${convErr instanceof Error ? convErr.message : "Unknown error"}`
     );
   }
 }

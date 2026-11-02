@@ -69,6 +69,8 @@ export async function getAllDomains(userId: string): Promise<{
   return { active, bench, allMap };
 }
 
+export const getActiveDomainsState = getAllDomains;
+
 export async function swapDomain(
   userId: string,
   fromId: string,

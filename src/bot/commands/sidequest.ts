@@ -17,7 +17,7 @@ export interface SidequestItem {
   createdAt?: Date;
 }
 
-const DEFAULT_SIDEQUESTS: Omit<SidequestItem, "userId">[] = [
+export const DEFAULT_SIDEQUESTS: Omit<SidequestItem, "userId">[] = [
   {
     title: "Minimalist GLSL Shader Sandbox",
     category: "weird_tech",

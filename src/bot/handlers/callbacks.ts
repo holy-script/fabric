@@ -8,11 +8,30 @@ import { executeSimulation } from "../commands/simulate.js";
 import { handleSentinel } from "../commands/sentinel.js";
 import { handleDsa } from "../commands/dsa.js";
 import { handleSidequest } from "../commands/sidequest.js";
+import {
+  handlePhone,
+  formatPhoneCard,
+  formatDisconnectedMessage,
+} from "../commands/phone.js";
+import {
+  getActiveDevice,
+  getDeviceStatsSummary,
+  triggerDnd,
+} from "../../services/telemetry-adb.js";
 import { swapDomain } from "../../domains/manager.js";
 import { installPlugin, uninstallPlugin, swapPlugin } from "../../plugins/manager.js";
 import { unlockGoal, getUserState, findKnowledgeItem } from "../../db/firestore.js";
 import { setActiveReflectionSession } from "../commands/reflect.js";
 import { exportPortfolioToNotion, isNotionConfigured } from "../../notion/exporter.js";
+import { handleHeartbeat } from "../commands/heartbeat.js";
+import { handleGold } from "../commands/gold.js";
+import { handleDomain } from "../commands/domain.js";
+import {
+  sendDawnBriefing,
+  sendMiddayReset,
+  sendTwilightSettle,
+  setHeartbeatEnabled,
+} from "../../services/heartbeat.js";
 
 export async function handleCallbackQuery(ctx: Context) {
   const data = ctx.callbackQuery?.data;
@@ -218,6 +237,104 @@ export async function handleCallbackQuery(ctx: Context) {
         parse_mode: "Markdown",
         reply_markup: keyboard,
       }
+    );
+  } else if (data === "action:phone_refresh") {
+    const { device, status } = await getActiveDevice();
+    if (status !== "connected" || !device) {
+      if (ctx.callbackQuery?.message) {
+        await ctx.api.editMessageText(
+          ctx.chat!.id,
+          ctx.callbackQuery.message.message_id,
+          formatDisconnectedMessage(status, device?.id),
+          { parse_mode: "Markdown" }
+        );
+      } else {
+        await ctx.reply(formatDisconnectedMessage(status, device?.id), {
+          parse_mode: "Markdown",
+        });
+      }
+      return;
+    }
+
+    try {
+      const summary = await getDeviceStatsSummary(device.id);
+      const { text: cardText, keyboard } = formatPhoneCard(summary);
+      if (ctx.callbackQuery?.message) {
+        await ctx.api.editMessageText(
+          ctx.chat!.id,
+          ctx.callbackQuery.message.message_id,
+          cardText,
+          {
+            parse_mode: "Markdown",
+            reply_markup: keyboard,
+          }
+        );
+      } else {
+        await ctx.reply(cardText, {
+          parse_mode: "Markdown",
+          reply_markup: keyboard,
+        });
+      }
+    } catch (err: any) {
+      await ctx.reply(`⚠️ Telemetry refresh error: ${err.message}`);
+    }
+  } else if (data === "action:phone_dnd_on" || data === "action:phone_dnd_off") {
+    const enable = data === "action:phone_dnd_on";
+    const { device, status } = await getActiveDevice();
+    if (status !== "connected" || !device) {
+      await ctx.reply(formatDisconnectedMessage(status, device?.id), {
+        parse_mode: "Markdown",
+      });
+      return;
+    }
+
+    try {
+      await triggerDnd(enable, device.id);
+      const summary = await getDeviceStatsSummary(device.id);
+      const { text: cardText, keyboard } = formatPhoneCard(summary);
+      if (ctx.callbackQuery?.message) {
+        await ctx.api.editMessageText(
+          ctx.chat!.id,
+          ctx.callbackQuery.message.message_id,
+          cardText,
+          {
+            parse_mode: "Markdown",
+            reply_markup: keyboard,
+          }
+        );
+      } else {
+        await ctx.reply(cardText, {
+          parse_mode: "Markdown",
+          reply_markup: keyboard,
+        });
+      }
+    } catch (err: any) {
+      await ctx.reply(`⚠️ Failed to toggle DND: ${err.message}`);
+    }
+  } else if (data === "action:heartbeat_status") {
+    await handleHeartbeat(ctx);
+  } else if (data === "action:heartbeat_on") {
+    await setHeartbeatEnabled(userId, true);
+    await ctx.reply("🟢 *Chronos Heartbeat Proactive Loop Activated!*", { parse_mode: "Markdown" });
+    await handleHeartbeat(ctx);
+  } else if (data === "action:heartbeat_off") {
+    await setHeartbeatEnabled(userId, false);
+    await ctx.reply("🔴 *Chronos Heartbeat Proactive Loop Muted.*", { parse_mode: "Markdown" });
+    await handleHeartbeat(ctx);
+  } else if (data === "action:heartbeat_test_dawn") {
+    await sendDawnBriefing(ctx.api as any, userId);
+  } else if (data === "action:heartbeat_test_midday") {
+    await sendMiddayReset(ctx.api as any, userId);
+  } else if (data === "action:heartbeat_test_twilight") {
+    await sendTwilightSettle(ctx.api as any, userId);
+  } else if (data === "action:gold_analysis") {
+    await handleGold(ctx);
+  } else if (data === "action:domain_menu") {
+    await handleDomain(ctx);
+  } else if (data === "action:reflect_prompt") {
+    await ctx.reply(
+      `🪞 *Reflect on Knowledge:*\nSend \`/reflect <topic or keyword>\` (e.g., \`/reflect squat\` or \`/reflect trading\`) to layer your conclusions!`,
+      { parse_mode: "Markdown" }
     );
   }
 }
