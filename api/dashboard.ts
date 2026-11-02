@@ -1884,10 +1884,10 @@ export default async function handler(
       };
 
       const QUADRANT_OFFSETS = {
-        Focus: { x: -180, y: -160 },
-        Facts: { x: 180, y: -160 },
-        Funds: { x: 180, y: 160 },
-        Feedback: { x: -180, y: 160 },
+        Focus: { x: -110, y: -90 },
+        Facts: { x: 110, y: -90 },
+        Funds: { x: 110, y: 90 },
+        Feedback: { x: -110, y: 90 },
       };
 
       let allNodes = [];
@@ -1902,21 +1902,21 @@ export default async function handler(
       let hoveredNode = null;
 
       const isMobile = window.innerWidth < 640;
-      const camera = { panX: 0, panY: 0, zoom: isMobile ? 0.65 : 0.85 };
+      const camera = { panX: 0, panY: 0, zoom: isMobile ? 0.9 : 1.05 };
       let dpr = window.devicePixelRatio || 1;
       let width = 0;
       let height = 0;
 
       let alpha = 1.0;
       let isPaused = false;
-      const ALPHA_DECAY = 0.0035;
+      const ALPHA_DECAY = 0.004;
       const MIN_ALPHA = 0.001;
 
       allNodes = (graphData.nodes || []).map((raw) => {
         const style = NODE_STYLES[raw.type] || NODE_STYLES.concept;
         const qOffset = QUADRANT_OFFSETS[raw.quadrant] || { x: 0, y: 0 };
         const angle = Math.random() * Math.PI * 2;
-        const dist = raw.type === 'dimension' ? 40 : 50 + Math.random() * 110;
+        const dist = raw.type === 'dimension' ? 15 : 25 + Math.random() * 60;
         
         return {
           ...raw,
@@ -2002,10 +2002,11 @@ export default async function handler(
         const count = nodes.length;
         if (count === 0) return;
 
-        const kRep = 3600 * alpha;
-        const kSpring = 0.038;
-        const kGrav = 0.007;
+        const kRep = 220 * alpha;
+        const kSpring = 0.045;
+        const kGrav = 0.018 * alpha;
         const damping = 0.82;
+        const maxBoundary = (Math.min(width || 400, height || 500) / (camera.zoom || 1)) * 0.44;
 
         for (let i = 0; i < count; i++) {
           const n1 = nodes[i];
@@ -2013,7 +2014,7 @@ export default async function handler(
             const n2 = nodes[j];
             const dx = n2.x - n1.x;
             const dy = n2.y - n1.y;
-            const distSq = dx * dx + dy * dy + 100;
+            const distSq = dx * dx + dy * dy + 160;
             const dist = Math.sqrt(distSq);
             const force = kRep / distSq;
             const fx = (dx / dist) * force;
@@ -2033,7 +2034,7 @@ export default async function handler(
           const dx = n2.x - n1.x;
           const dy = n2.y - n1.y;
           const dist = Math.sqrt(dx * dx + dy * dy) || 1;
-          const idealDist = (n1.type === 'dimension' || n2.type === 'dimension') ? 130 : 80;
+          const idealDist = (n1.type === 'dimension' || n2.type === 'dimension') ? 75 : 48;
           const force = (dist - idealDist) * kSpring * alpha;
           const fx = (dx / dist) * force;
           const fy = (dy / dist) * force;
@@ -2046,19 +2047,28 @@ export default async function handler(
           const n = nodes[i];
           if (n.isFixed) continue;
 
-          n.vx -= n.x * kGrav * alpha;
-          n.vy -= n.y * kGrav * alpha;
+          n.vx -= n.x * kGrav;
+          n.vy -= n.y * kGrav;
           n.vx *= damping;
           n.vy *= damping;
 
           const speed = Math.hypot(n.vx, n.vy);
-          if (speed > 12) {
-            n.vx = (n.vx / speed) * 12;
-            n.vy = (n.vy / speed) * 12;
+          if (speed > 8) {
+            n.vx = (n.vx / speed) * 8;
+            n.vy = (n.vy / speed) * 8;
           }
 
           n.x += n.vx;
           n.y += n.vy;
+
+          // Soft boundary containment to guarantee nodes stay visible in camera
+          const distFromCenter = Math.hypot(n.x, n.y);
+          if (distFromCenter > maxBoundary) {
+            n.x = (n.x / distFromCenter) * maxBoundary;
+            n.y = (n.y / distFromCenter) * maxBoundary;
+            n.vx *= 0.4;
+            n.vy *= 0.4;
+          }
         }
 
         alpha = Math.max(MIN_ALPHA, alpha - ALPHA_DECAY);
@@ -2421,7 +2431,7 @@ export default async function handler(
         triggerHaptic('light');
         camera.panX = 0;
         camera.panY = 0;
-        camera.zoom = window.innerWidth < 640 ? 0.65 : 0.85;
+        camera.zoom = window.innerWidth < 640 ? 0.9 : 1.05;
         reheatSimulation(0.4);
       };
 
