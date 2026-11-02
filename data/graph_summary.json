@@ -1,0 +1,3278 @@
+{
+  "nodes": [
+    {
+      "id": "dim_focus",
+      "type": "dimension",
+      "label": "Focus (Time & Attention)",
+      "description": "Deliberate attention, flow states, distraction reduction, and cognitive depth.",
+      "weight": 100,
+      "quadrant": "Focus",
+      "category": "",
+      "tags": [
+        "focus",
+        "time",
+        "flow",
+        "attention"
+      ],
+      "author": "",
+      "actionableTakeaway": "",
+      "telegramStreamUrl": "",
+      "notionUrl": ""
+    },
+    {
+      "id": "dim_facts",
+      "type": "dimension",
+      "label": "Facts (Systems & Tools)",
+      "description": "Concrete knowledge, programming patterns, AI architectures, hardware, and creative craft.",
+      "weight": 100,
+      "quadrant": "Facts",
+      "category": "",
+      "tags": [
+        "facts",
+        "tools",
+        "systems",
+        "code",
+        "design"
+      ],
+      "author": "",
+      "actionableTakeaway": "",
+      "telegramStreamUrl": "",
+      "notionUrl": ""
+    },
+    {
+      "id": "dim_funds",
+      "type": "dimension",
+      "label": "Funds (Vitality & Capital)",
+      "description": "Physical vitality, biomechanics, cellular energy, capital allocation, and financial sovereignty.",
+      "weight": 100,
+      "quadrant": "Funds",
+      "category": "",
+      "tags": [
+        "funds",
+        "vitality",
+        "biomechanics",
+        "wealth",
+        "energy"
+      ],
+      "author": "",
+      "actionableTakeaway": "",
+      "telegramStreamUrl": "",
+      "notionUrl": ""
+    },
+    {
+      "id": "dim_feedback",
+      "type": "dimension",
+      "label": "Feedback (Psychology & Balance)",
+      "description": "Interpersonal mirrors, psychological integration, boundary enforcement, and Aristotelian mean.",
+      "weight": 100,
+      "quadrant": "Feedback",
+      "category": "",
+      "tags": [
+        "feedback",
+        "psychology",
+        "relationships",
+        "balance"
+      ],
+      "author": "",
+      "actionableTakeaway": "",
+      "telegramStreamUrl": "",
+      "notionUrl": ""
+    },
+    {
+      "id": "concept_dopamine_optimization",
+      "type": "concept",
+      "label": "Dopamine Optimization",
+      "description": "Strategic regulation of baseline dopamine and reward prediction errors to sustain deliberate drive and mitigate refractory troughs.",
+      "weight": 50,
+      "quadrant": "Focus",
+      "category": "",
+      "tags": [
+        "dopamine",
+        "focus",
+        "attention",
+        "habits",
+        "discipline"
+      ],
+      "author": "",
+      "actionableTakeaway": "",
+      "telegramStreamUrl": "",
+      "notionUrl": ""
+    },
+    {
+      "id": "concept_plyometric_tendon_elasticity",
+      "type": "concept",
+      "label": "Plyometric Tendon Elasticity",
+      "description": "Conditioning the kinetic chain and fascial stiffness to store and release elastic energy with maximal rate of force development.",
+      "weight": 50,
+      "quadrant": "Funds",
+      "category": "",
+      "tags": [
+        "plyometrics",
+        "tendon",
+        "biomechanics",
+        "mobility",
+        "athletics"
+      ],
+      "author": "",
+      "actionableTakeaway": "",
+      "telegramStreamUrl": "",
+      "notionUrl": ""
+    },
+    {
+      "id": "concept_cinematic_color_grading",
+      "type": "concept",
+      "label": "Cinematic Color Grading",
+      "description": "Color science, gamut management, custom LUT engineering, and contrast curves to evoke psychological mood and visual depth.",
+      "weight": 50,
+      "quadrant": "Facts",
+      "category": "",
+      "tags": [
+        "color-grading",
+        "cinematography",
+        "design",
+        "art",
+        "media"
+      ],
+      "author": "",
+      "actionableTakeaway": "",
+      "telegramStreamUrl": "",
+      "notionUrl": ""
+    },
+    {
+      "id": "concept_neurodivergent_hyperfocus",
+      "type": "concept",
+      "label": "Neurodivergent Hyperfocus",
+      "description": "Harnessing intense attentional channeling and managing sensory input modulation in atypical neurobiology.",
+      "weight": 50,
+      "quadrant": "Focus",
+      "category": "",
+      "tags": [
+        "hyperfocus",
+        "adhd",
+        "focus",
+        "psychology",
+        "mindset"
+      ],
+      "author": "",
+      "actionableTakeaway": "",
+      "telegramStreamUrl": "",
+      "notionUrl": ""
+    },
+    {
+      "id": "concept_game_feel_mechanics",
+      "type": "concept",
+      "label": "Game Feel Mechanics",
+      "description": "Designing tactile micro-feedback loops, parry frames, screen shake, hitstop, and responsive input feel.",
+      "weight": 50,
+      "quadrant": "Facts",
+      "category": "",
+      "tags": [
+        "game-design",
+        "game-feel",
+        "animation",
+        "engineering",
+        "design"
+      ],
+      "author": "",
+      "actionableTakeaway": "",
+      "telegramStreamUrl": "",
+      "notionUrl": ""
+    },
+    {
+      "id": "concept_biomechanical_joint_alignment",
+      "type": "concept",
+      "label": "Biomechanical Joint Alignment",
+      "description": "Optimizing anatomical leverage, knee-over-toe loading, spinal mechanics, and mobility under load.",
+      "weight": 50,
+      "quadrant": "Funds",
+      "category": "",
+      "tags": [
+        "biomechanics",
+        "mobility",
+        "fitness",
+        "vitality",
+        "health"
+      ],
+      "author": "",
+      "actionableTakeaway": "",
+      "telegramStreamUrl": "",
+      "notionUrl": ""
+    },
+    {
+      "id": "concept_relational_psychological_mirrors",
+      "type": "concept",
+      "label": "Relational Psychological Mirrors",
+      "description": "Treating interpersonal friction and emotional triggers as reflective diagnostics of unintegrated internal shadow.",
+      "weight": 50,
+      "quadrant": "Feedback",
+      "category": "",
+      "tags": [
+        "relationships",
+        "psychology",
+        "feedback",
+        "reflection",
+        "mindset"
+      ],
+      "author": "",
+      "actionableTakeaway": "",
+      "telegramStreamUrl": "",
+      "notionUrl": ""
+    },
+    {
+      "id": "concept_emotional_exhaustion_departure",
+      "type": "concept",
+      "label": "Emotional Exhaustion & Departure",
+      "description": "Decoupling from energy-depleting dynamics through decisive emotional boundaries and non-reactive detachment.",
+      "weight": 50,
+      "quadrant": "Feedback",
+      "category": "",
+      "tags": [
+        "boundaries",
+        "psychology",
+        "communication",
+        "resilience"
+      ],
+      "author": "",
+      "actionableTakeaway": "",
+      "telegramStreamUrl": "",
+      "notionUrl": ""
+    },
+    {
+      "id": "concept_autonomous_ai_agents",
+      "type": "concept",
+      "label": "Autonomous AI Agents",
+      "description": "Multi-agent cognitive meshes, tool-use execution loops, prompt protocols, and recursive self-refinement.",
+      "weight": 50,
+      "quadrant": "Facts",
+      "category": "",
+      "tags": [
+        "ai",
+        "automation",
+        "engineering",
+        "software",
+        "workflow"
+      ],
+      "author": "",
+      "actionableTakeaway": "",
+      "telegramStreamUrl": "",
+      "notionUrl": ""
+    },
+    {
+      "id": "concept_deep_work_flow_state",
+      "type": "concept",
+      "label": "Deep Work & Flow State Induction",
+      "description": "Creating structured uninterrupted blocks where cognitive processing speed and pattern recognition peak.",
+      "weight": 50,
+      "quadrant": "Focus",
+      "category": "",
+      "tags": [
+        "focus",
+        "productivity",
+        "workflow",
+        "discipline",
+        "execution"
+      ],
+      "author": "",
+      "actionableTakeaway": "",
+      "telegramStreamUrl": "",
+      "notionUrl": ""
+    },
+    {
+      "id": "concept_cellular_vitality_circadian",
+      "type": "concept",
+      "label": "Cellular Vitality & Circadian Biology",
+      "description": "Aligning suprachiasmatic circadian rhythm, light exposure, sleep architecture, and metabolic recovery cycles.",
+      "weight": 50,
+      "quadrant": "Funds",
+      "category": "",
+      "tags": [
+        "vitality",
+        "nutrition",
+        "health",
+        "longevity",
+        "recovery"
+      ],
+      "author": "",
+      "actionableTakeaway": "",
+      "telegramStreamUrl": "",
+      "notionUrl": ""
+    },
+    {
+      "id": "concept_asymmetric_capital_allocation",
+      "type": "concept",
+      "label": "Asymmetric Capital & Financial Leverage",
+      "description": "Deploying resources into high-convexity opportunities where downside is strictly bounded and upside is uncapped.",
+      "weight": 50,
+      "quadrant": "Funds",
+      "category": "",
+      "tags": [
+        "funds",
+        "wealth",
+        "finance",
+        "strategy",
+        "execution"
+      ],
+      "author": "",
+      "actionableTakeaway": "",
+      "telegramStreamUrl": "",
+      "notionUrl": ""
+    },
+    {
+      "id": "concept_stoic_mean_equanimity",
+      "type": "concept",
+      "label": "Aristotelian Mean & Stoic Equanimity",
+      "description": "Calibrating emotional responses to the golden mean between deficiency and excess, maintaining unflinching interior calm.",
+      "weight": 50,
+      "quadrant": "Feedback",
+      "category": "",
+      "tags": [
+        "feedback",
+        "philosophy",
+        "reflection",
+        "resilience",
+        "mindset"
+      ],
+      "author": "",
+      "actionableTakeaway": "",
+      "telegramStreamUrl": "",
+      "notionUrl": ""
+    },
+    {
+      "id": "concept_3d_procedural_motion",
+      "type": "concept",
+      "label": "3D Procedural Motion & Animation",
+      "description": "Procedural geometry generation, node-based shaders, physical simulation, and spatial keyframe curves.",
+      "weight": 50,
+      "quadrant": "Facts",
+      "category": "",
+      "tags": [
+        "animation",
+        "design",
+        "art",
+        "media",
+        "craft"
+      ],
+      "author": "",
+      "actionableTakeaway": "",
+      "telegramStreamUrl": "",
+      "notionUrl": ""
+    },
+    {
+      "id": "concept_ergonomic_hardware_edc",
+      "type": "concept",
+      "label": "Ergonomic Hardware & Minimalist EDC",
+      "description": "Selecting friction-free physical gear, tactile input devices, and biomechanically supportive workspace setups.",
+      "weight": 50,
+      "quadrant": "Facts",
+      "category": "",
+      "tags": [
+        "hardware",
+        "engineering",
+        "everyday-carry",
+        "design",
+        "tools"
+      ],
+      "author": "",
+      "actionableTakeaway": "",
+      "telegramStreamUrl": "",
+      "notionUrl": ""
+    },
+    {
+      "id": "concept_audio_sound_engineering",
+      "type": "concept",
+      "label": "Sound Design & Audio Engineering",
+      "description": "Sculpting frequencies, psychoacoustic spatial placement, harmonic distortion, and dynamic compression.",
+      "weight": 50,
+      "quadrant": "Facts",
+      "category": "",
+      "tags": [
+        "sound-design",
+        "music",
+        "audio",
+        "art",
+        "media"
+      ],
+      "author": "",
+      "actionableTakeaway": "",
+      "telegramStreamUrl": "",
+      "notionUrl": ""
+    },
+    {
+      "id": "concept_frictionless_execution_habits",
+      "type": "concept",
+      "label": "Frictionless Execution & Habit Scaffolding",
+      "description": "Lowering physical activation energy for high-leverage habits while erecting insurmountable friction around vices.",
+      "weight": 50,
+      "quadrant": "Focus",
+      "category": "",
+      "tags": [
+        "habits",
+        "productivity",
+        "execution",
+        "discipline",
+        "workflow"
+      ],
+      "author": "",
+      "actionableTakeaway": "",
+      "telegramStreamUrl": "",
+      "notionUrl": ""
+    },
+    {
+      "id": "concept_high_agency_communication",
+      "type": "concept",
+      "label": "High-Agency Communication & Boundaries",
+      "description": "Direct, radical clarity in interpersonal exchange without defensive posturing, maintaining sovereign boundaries.",
+      "weight": 50,
+      "quadrant": "Feedback",
+      "category": "",
+      "tags": [
+        "communication",
+        "relationships",
+        "feedback",
+        "growth"
+      ],
+      "author": "",
+      "actionableTakeaway": "",
+      "telegramStreamUrl": "",
+      "notionUrl": ""
+    },
+    {
+      "id": "concept_narrative_rhetoric_storytelling",
+      "type": "concept",
+      "label": "Narrative Architecture & Persuasive Storytelling",
+      "description": "Structuring visceral storytelling arcs, thematic tension, and framing to capture human attention and instill belief.",
+      "weight": 50,
+      "quadrant": "Facts",
+      "category": "",
+      "tags": [
+        "storytelling",
+        "media",
+        "culture",
+        "writing",
+        "communication"
+      ],
+      "author": "",
+      "actionableTakeaway": "",
+      "telegramStreamUrl": "",
+      "notionUrl": ""
+    },
+    {
+      "id": "concept_hypertrophy_kinetic_chain",
+      "type": "concept",
+      "label": "Hypertrophy Mechanics & Strength Loading",
+      "description": "Progressive mechanical tension, lengthened partial repetitions, and systemic fatigue management for muscle architecture.",
+      "weight": 50,
+      "quadrant": "Funds",
+      "category": "",
+      "tags": [
+        "fitness",
+        "biomechanics",
+        "vitality",
+        "strength"
+      ],
+      "author": "",
+      "actionableTakeaway": "",
+      "telegramStreamUrl": "",
+      "notionUrl": ""
+    },
+    {
+      "id": "heuristic_dopamine_trough",
+      "type": "heuristic",
+      "label": "Dopamine Baseline Conservation",
+      "description": "Dopamine peaks induce proportional neurochemical troughs; protect baseline over chasing artificial peaks.",
+      "weight": 30,
+      "quadrant": "Focus",
+      "category": "",
+      "tags": [
+        "dopamine",
+        "habits",
+        "focus"
+      ],
+      "author": "",
+      "actionableTakeaway": "",
+      "telegramStreamUrl": "",
+      "notionUrl": ""
+    },
+    {
+      "id": "heuristic_tendon_elasticity",
+      "type": "heuristic",
+      "label": "Rate of Force Development Primacy",
+      "description": "Tendon elasticity requires high rate of force development under minimal metabolic fatigue.",
+      "weight": 30,
+      "quadrant": "Funds",
+      "category": "",
+      "tags": [
+        "plyometrics",
+        "biomechanics",
+        "athletics"
+      ],
+      "author": "",
+      "actionableTakeaway": "",
+      "telegramStreamUrl": "",
+      "notionUrl": ""
+    },
+    {
+      "id": "heuristic_game_feel_juice",
+      "type": "heuristic",
+      "label": "Tactile Hitstop Feedback Ratio",
+      "description": "Game feel is 80% audio-visual freeze and punch, and 20% raw hit collision logic.",
+      "weight": 30,
+      "quadrant": "Facts",
+      "category": "",
+      "tags": [
+        "game-feel",
+        "design",
+        "animation"
+      ],
+      "author": "",
+      "actionableTakeaway": "",
+      "telegramStreamUrl": "",
+      "notionUrl": ""
+    },
+    {
+      "id": "heuristic_relational_mirror",
+      "type": "heuristic",
+      "label": "Interpersonal Shadow Reflection",
+      "description": "Every persistent relational friction point is an unintegrated mirror of disowned personal shadow.",
+      "weight": 30,
+      "quadrant": "Feedback",
+      "category": "",
+      "tags": [
+        "relationships",
+        "psychology",
+        "reflection"
+      ],
+      "author": "",
+      "actionableTakeaway": "",
+      "telegramStreamUrl": "",
+      "notionUrl": ""
+    },
+    {
+      "id": "heuristic_activation_energy",
+      "type": "heuristic",
+      "label": "Activation Energy Scaffolding",
+      "description": "Lowering activation energy by 10% increases habit execution probability by 100%.",
+      "weight": 30,
+      "quadrant": "Focus",
+      "category": "",
+      "tags": [
+        "habits",
+        "execution",
+        "productivity"
+      ],
+      "author": "",
+      "actionableTakeaway": "",
+      "telegramStreamUrl": "",
+      "notionUrl": ""
+    },
+    {
+      "id": "heuristic_color_restraint",
+      "type": "heuristic",
+      "label": "Color Gamut Subtraction",
+      "description": "Cinematic color grading achieves dramatic impact through gamut restraint and tonal contrast, not saturation.",
+      "weight": 30,
+      "quadrant": "Facts",
+      "category": "",
+      "tags": [
+        "color-grading",
+        "cinematography",
+        "art"
+      ],
+      "author": "",
+      "actionableTakeaway": "",
+      "telegramStreamUrl": "",
+      "notionUrl": ""
+    },
+    {
+      "id": "heuristic_agentic_boundaries",
+      "type": "heuristic",
+      "label": "Deterministic Schema Boundaries for Agents",
+      "description": "Autonomous AI agents perform best when constrained by strictly typed state schemas and deterministic guardrails.",
+      "weight": 30,
+      "quadrant": "Facts",
+      "category": "",
+      "tags": [
+        "ai",
+        "engineering",
+        "automation"
+      ],
+      "author": "",
+      "actionableTakeaway": "",
+      "telegramStreamUrl": "",
+      "notionUrl": ""
+    },
+    {
+      "id": "heuristic_circadian_anchor",
+      "type": "heuristic",
+      "label": "Circadian Lux Photon Anchoring",
+      "description": "Morning lux photons into the retina anchor the suprachiasmatic nucleus for daytime alertness and nocturnal melatonin.",
+      "weight": 30,
+      "quadrant": "Funds",
+      "category": "",
+      "tags": [
+        "vitality",
+        "sleep",
+        "circadian"
+      ],
+      "author": "",
+      "actionableTakeaway": "",
+      "telegramStreamUrl": "",
+      "notionUrl": ""
+    },
+    {
+      "id": "heuristic_golden_mean",
+      "type": "heuristic",
+      "label": "Equilibrium Between Extremes",
+      "description": "Virtue and peak performance reside at the harmonic mean between the deficiency and excess of emotional reaction.",
+      "weight": 30,
+      "quadrant": "Feedback",
+      "category": "",
+      "tags": [
+        "stoicism",
+        "balance",
+        "philosophy"
+      ],
+      "author": "",
+      "actionableTakeaway": "",
+      "telegramStreamUrl": "",
+      "notionUrl": ""
+    },
+    {
+      "id": "heuristic_asymmetric_convexity",
+      "type": "heuristic",
+      "label": "Convexity and Bounded Downside",
+      "description": "Never allocate focus to games where downside is catastrophic or upside is strictly capped.",
+      "weight": 30,
+      "quadrant": "Funds",
+      "category": "",
+      "tags": [
+        "funds",
+        "wealth",
+        "strategy"
+      ],
+      "author": "",
+      "actionableTakeaway": "",
+      "telegramStreamUrl": "",
+      "notionUrl": ""
+    },
+    {
+      "id": "heuristic_ergonomic_friction",
+      "type": "heuristic",
+      "label": "Physical Micro-Friction Compound Effect",
+      "description": "Any micro-friction in hardware or desk posture compounds into severe cognitive fatigue over an 8-hour sprint.",
+      "weight": 30,
+      "quadrant": "Facts",
+      "category": "",
+      "tags": [
+        "hardware",
+        "ergonomics",
+        "edc"
+      ],
+      "author": "",
+      "actionableTakeaway": "",
+      "telegramStreamUrl": "",
+      "notionUrl": ""
+    },
+    {
+      "id": "heuristic_boundary_departure",
+      "type": "heuristic",
+      "label": "Decisive Departure Over Chronic Repair",
+      "description": "When communication fails to resolve chronic energy drain, silent structural departure is required.",
+      "weight": 30,
+      "quadrant": "Feedback",
+      "category": "",
+      "tags": [
+        "boundaries",
+        "relationships",
+        "resilience"
+      ],
+      "author": "",
+      "actionableTakeaway": "",
+      "telegramStreamUrl": "",
+      "notionUrl": ""
+    },
+    {
+      "id": "reel_3Dky1YAPnYRaUhS83tWi",
+      "type": "reel",
+      "label": "Relationships as Psychological Mirrors",
+      "description": "Relationships as Psychological Mirrors",
+      "weight": 1.8,
+      "quadrant": "Facts",
+      "category": "insight",
+      "tags": [],
+      "author": "Unknown",
+      "actionableTakeaway": "",
+      "telegramStreamUrl": "https://t.me/c/4325133626/3",
+      "notionUrl": "https://app.notion.com/p/Relationships-as-Psychological-Mirrors-40bb60bdd61f8156bd6ded1498b26ae3"
+    },
+    {
+      "id": "reel_fLfTvlsS1uwQJe0Kru16",
+      "type": "reel",
+      "label": "The Mechanics of Emotional Exhaustion and Relational Departure",
+      "description": "The Mechanics of Emotional Exhaustion and Relational Departure",
+      "weight": 1.8,
+      "quadrant": "Facts",
+      "category": "insight",
+      "tags": [],
+      "author": "Unknown",
+      "actionableTakeaway": "",
+      "telegramStreamUrl": "https://t.me/c/4325133626/4",
+      "notionUrl": "https://app.notion.com/p/The-Mechanics-of-Emotional-Exhaustion-and-Relational-Departure-40bb60bdd61f810dbee8d37971e2df28"
+    },
+    {
+      "id": "reel_6vOSR7DQsmCWI3kzy1qP",
+      "type": "reel",
+      "label": "Biomechanical Optimization for Upper Body Training",
+      "description": "Biomechanical Optimization for Upper Body Training",
+      "weight": 1.8,
+      "quadrant": "Facts",
+      "category": "tool",
+      "tags": [],
+      "author": "Unknown",
+      "actionableTakeaway": "",
+      "telegramStreamUrl": "https://t.me/c/4325133626/5",
+      "notionUrl": "https://app.notion.com/p/Biomechanical-Optimization-for-Upper-Body-Training-40bb60bdd61f8145a725cbec04203c60"
+    },
+    {
+      "id": "reel_WCpCU25gnHzu2dERpK5Z",
+      "type": "reel",
+      "label": "Designing Impactful Game Feel: 5 Pillars of Parry Mechanics",
+      "description": "Designing Impactful Game Feel: 5 Pillars of Parry Mechanics",
+      "weight": 1.8,
+      "quadrant": "Facts",
+      "category": "strategy",
+      "tags": [],
+      "author": "Unknown",
+      "actionableTakeaway": "",
+      "telegramStreamUrl": "https://t.me/c/4325133626/6",
+      "notionUrl": "https://app.notion.com/p/Designing-Impactful-Game-Feel-5-Pillars-of-Parry-Mechanics-40bb60bdd61f81efa950f0bf7171df3b"
+    },
+    {
+      "id": "reel_y3X4z3KwS99HCLC4pIhK",
+      "type": "reel",
+      "label": "Frictionless Triggers for Entering Deep Flow States",
+      "description": "Frictionless Triggers for Entering Deep Flow States",
+      "weight": 1.8,
+      "quadrant": "Facts",
+      "category": "strategy",
+      "tags": [],
+      "author": "Unknown",
+      "actionableTakeaway": "",
+      "telegramStreamUrl": "https://t.me/c/4325133626/7",
+      "notionUrl": "https://app.notion.com/p/Frictionless-Triggers-for-Entering-Deep-Flow-States-40bb60bdd61f81bc89d4e6f68e3a8745"
+    },
+    {
+      "id": "reel_iaeiSv8IjNshL8IRQqpb",
+      "type": "reel",
+      "label": "Optimizing Energy and Time for High-Stakes Side Hustles",
+      "description": "Optimizing Energy and Time for High-Stakes Side Hustles",
+      "weight": 1.8,
+      "quadrant": "Facts",
+      "category": "strategy",
+      "tags": [],
+      "author": "Unknown",
+      "actionableTakeaway": "",
+      "telegramStreamUrl": "https://t.me/c/4325133626/8",
+      "notionUrl": "https://app.notion.com/p/Optimizing-Energy-and-Time-for-High-Stakes-Side-Hustles-40bb60bdd61f81fdadfaf8be5e1444f7"
+    },
+    {
+      "id": "reel_cS60r4DqlMf3cu7GHsxq",
+      "type": "reel",
+      "label": "The 30-Day Compound Mindset Protocol",
+      "description": "The 30-Day Compound Mindset Protocol",
+      "weight": 1.8,
+      "quadrant": "Facts",
+      "category": "insight",
+      "tags": [],
+      "author": "Unknown",
+      "actionableTakeaway": "",
+      "telegramStreamUrl": "https://t.me/c/4325133626/9",
+      "notionUrl": "https://app.notion.com/p/The-30-Day-Compound-Mindset-Protocol-40bb60bdd61f810e9a32ec7f09dfa66a"
+    },
+    {
+      "id": "reel_Ybkn33Hgl1GjnYHiSI27",
+      "type": "reel",
+      "label": "Automating Life Negotiations with AI Agents",
+      "description": "Automating Life Negotiations with AI Agents",
+      "weight": 1.8,
+      "quadrant": "Facts",
+      "category": "tool",
+      "tags": [],
+      "author": "Unknown",
+      "actionableTakeaway": "",
+      "telegramStreamUrl": "https://t.me/c/4325133626/16",
+      "notionUrl": "https://app.notion.com/p/Automating-Life-Negotiations-with-AI-Agents-40bb60bdd61f812aab50c7695ac4f183"
+    },
+    {
+      "id": "reel_RDwjdmQ1BQ1UMJLyS9HJ",
+      "type": "reel",
+      "label": "Global AI Coding Hackathon: Build Agent Workflows",
+      "description": "Global AI Coding Hackathon: Build Agent Workflows",
+      "weight": 1.8,
+      "quadrant": "Facts",
+      "category": "win",
+      "tags": [],
+      "author": "Unknown",
+      "actionableTakeaway": "",
+      "telegramStreamUrl": "https://t.me/c/4325133626/21",
+      "notionUrl": "https://app.notion.com/p/Global-AI-Coding-Hackathon-Build-Agent-Workflows-40bb60bdd61f81e2a38cf7b1046559cb"
+    },
+    {
+      "id": "reel_vlB1vyU1jaUoby0pykGu",
+      "type": "reel",
+      "label": "Tri-Dimensional Strength: Physical, Mental, Spiritual Mastery",
+      "description": "Pick one domain from each category (Physical, Mental, Spiritual) and deliberately commit to tracking your progression in them weekly.",
+      "weight": 1.8,
+      "quadrant": "Funds",
+      "category": "strategy",
+      "tags": [],
+      "author": "shashank.beyondmuscles",
+      "actionableTakeaway": "Pick one domain from each category (Physical, Mental, Spiritual) and deliberately commit to tracking your progression in them weekly.",
+      "telegramStreamUrl": "https://t.me/c/4325133626/34",
+      "notionUrl": "https://app.notion.com/p/Tri-Dimensional-Strength-Physical-Mental-Spiritual-Mastery-40bb60bdd61f8164b7c3d84b8dc7f6e9"
+    },
+    {
+      "id": "reel_eGyAaln1VMch9zZ8Gmmu",
+      "type": "reel",
+      "label": "Decoding the Behavioral Loops of Procrastination",
+      "description": "When avoiding a task, name the underlying emotion causing the friction and commit to working on it for just two minutes.",
+      "weight": 1.8,
+      "quadrant": "Feedback",
+      "category": "insight",
+      "tags": [],
+      "author": "pierredalati",
+      "actionableTakeaway": "When avoiding a task, name the underlying emotion causing the friction and commit to working on it for just two minutes.",
+      "telegramStreamUrl": "https://t.me/c/4325133626/36",
+      "notionUrl": "https://app.notion.com/p/Decoding-the-Behavioral-Loops-of-Procrastination-40bb60bdd61f81b2b66be3738295d90a"
+    },
+    {
+      "id": "reel_bE80nj0Vl1OtLVJWkwy4",
+      "type": "reel",
+      "label": "Cultivating Daily Mindfulness and Internal Equilibrium",
+      "description": "Set a mid-day alarm to pause, take three deep diaphragmatic breaths, and reset your emotional state.",
+      "weight": 1.8,
+      "quadrant": "Feedback",
+      "category": "strategy",
+      "tags": [],
+      "author": "mostlyfine27",
+      "actionableTakeaway": "Set a mid-day alarm to pause, take three deep diaphragmatic breaths, and reset your emotional state.",
+      "telegramStreamUrl": "https://t.me/c/4325133626/37",
+      "notionUrl": "https://app.notion.com/p/Cultivating-Daily-Mindfulness-and-Internal-Equilibrium-40bb60bdd61f81b38d71eaaec032344e"
+    },
+    {
+      "id": "reel_J74JjMHwlYk3gEU2zQhn",
+      "type": "reel",
+      "label": "Self-Actualization Through Aesthetic Self-Mastery",
+      "description": "Treat your daily routines and personal presentation with the same respect and curation you would afford an honored guest.",
+      "weight": 1.8,
+      "quadrant": "Feedback",
+      "category": "insight",
+      "tags": [],
+      "author": "codeymoonsun",
+      "actionableTakeaway": "Treat your daily routines and personal presentation with the same respect and curation you would afford an honored guest.",
+      "telegramStreamUrl": "https://t.me/c/4325133626/38",
+      "notionUrl": "https://app.notion.com/p/Self-Actualization-Through-Aesthetic-Self-Mastery-40bb60bdd61f81d6a440c531d7f7aa78"
+    },
+    {
+      "id": "reel_NdNRsfGOAHJqoa2vOaFq",
+      "type": "reel",
+      "label": "Rewiring Subconscious Resistance to Overcome Procrastination",
+      "description": "Establish a daily 5-minute audio or mental priming routine for 6 weeks to systematically dismantle procrastination triggers.",
+      "weight": 1.8,
+      "quadrant": "Focus",
+      "category": "strategy",
+      "tags": [],
+      "author": "keithbarry",
+      "actionableTakeaway": "Establish a daily 5-minute audio or mental priming routine for 6 weeks to systematically dismantle procrastination triggers.",
+      "telegramStreamUrl": "https://t.me/c/4325133626/39",
+      "notionUrl": "https://app.notion.com/p/Rewiring-Subconscious-Resistance-to-Overcome-Procrastination-40bb60bdd61f81749503fd0b43e1246f"
+    },
+    {
+      "id": "reel_JEe8au83E626YsEpMBk5",
+      "type": "reel",
+      "label": "Audio-Induced Flow State and Sensory Shifts",
+      "description": "Curate a specific, lyric-free audio track or binaural beat playlist that signals your brain it is time for deep focus.",
+      "weight": 1.8,
+      "quadrant": "Focus",
+      "category": "strategy",
+      "tags": [],
+      "author": "drifting.musically",
+      "actionableTakeaway": "Curate a specific, lyric-free audio track or binaural beat playlist that signals your brain it is time for deep focus.",
+      "telegramStreamUrl": "https://t.me/c/4325133626/42",
+      "notionUrl": "https://app.notion.com/p/Audio-Induced-Flow-State-and-Sensory-Shifts-40bb60bdd61f81c4b87cc82d5921c88c"
+    },
+    {
+      "id": "reel_HjUXXw9fpom0dYwOyl3K",
+      "type": "reel",
+      "label": "Real-Time Posture Tracking to Combat Desk Fatigue",
+      "description": "Use your phone's tilt sensors or a desktop utility to monitor spinal drift during prolonged sedentary work blocks.",
+      "weight": 1.8,
+      "quadrant": "Funds",
+      "category": "tool",
+      "tags": [],
+      "author": "get.aligno",
+      "actionableTakeaway": "Use your phone's tilt sensors or a desktop utility to monitor spinal drift during prolonged sedentary work blocks.",
+      "telegramStreamUrl": "https://t.me/c/4325133626/43",
+      "notionUrl": "https://app.notion.com/p/Real-Time-Posture-Tracking-to-Combat-Desk-Fatigue-40bb60bdd61f81dea1f8e1eca2c239e0"
+    },
+    {
+      "id": "reel_1VEOZjHgyaaxHSwsMXL0",
+      "type": "reel",
+      "label": "High-Protein Seasonal Nutrition Formulation",
+      "description": "Integrate a high-protein, nutrient-dense soup recipe into your weekly meal rotation to hit macro targets effortlessly.",
+      "weight": 1.8,
+      "quadrant": "Funds",
+      "category": "strategy",
+      "tags": [],
+      "author": "gskcooks2k23",
+      "actionableTakeaway": "Integrate a high-protein, nutrient-dense soup recipe into your weekly meal rotation to hit macro targets effortlessly.",
+      "telegramStreamUrl": "https://t.me/c/4325133626/45",
+      "notionUrl": "https://app.notion.com/p/High-Protein-Seasonal-Nutrition-Formulation-40bb60bdd61f81a38fccc8a13f99949e"
+    },
+    {
+      "id": "reel_qUZT4sUx88Lb6jEPCPNj",
+      "type": "reel",
+      "label": "High-Performance Lifestyle Optimization",
+      "description": "Identify one friction point in your daily routine tomorrow and eliminate it tonight.",
+      "weight": 1.8,
+      "quadrant": "Focus",
+      "category": "insight",
+      "tags": [],
+      "author": "thejakeabdo",
+      "actionableTakeaway": "Identify one friction point in your daily routine tomorrow and eliminate it tonight.",
+      "telegramStreamUrl": "https://t.me/c/4325133626/52",
+      "notionUrl": "https://app.notion.com/p/High-Performance-Lifestyle-Optimization-40bb60bdd61f81ee8127ea5378f90d70"
+    },
+    {
+      "id": "reel_U5yNQFGYlOMHUUnMsA9e",
+      "type": "reel",
+      "label": "Deep Meditative State Recognition",
+      "description": "Dedicate 10 minutes to silent, eyes-closed meditation focusing solely on the sensation of breathing.",
+      "weight": 1.8,
+      "quadrant": "Focus",
+      "category": "insight",
+      "tags": [],
+      "author": "awarexawake",
+      "actionableTakeaway": "Dedicate 10 minutes to silent, eyes-closed meditation focusing solely on the sensation of breathing.",
+      "telegramStreamUrl": "https://t.me/c/4325133626/53",
+      "notionUrl": "https://app.notion.com/p/Deep-Meditative-State-Recognition-40bb60bdd61f81c1971ce76f80b1a2bb"
+    },
+    {
+      "id": "reel_N1suCcqlij5Toq1WyvfE",
+      "type": "reel",
+      "label": "AI Receptionist Arbitrage Agency Model",
+      "description": "Identify 3 local businesses losing calls and pitch a voice AI lead-capture system using a rapid prototyping tool.",
+      "weight": 1.8,
+      "quadrant": "Funds",
+      "category": "strategy",
+      "tags": [],
+      "author": "arin_darcan",
+      "actionableTakeaway": "Identify 3 local businesses losing calls and pitch a voice AI lead-capture system using a rapid prototyping tool.",
+      "telegramStreamUrl": "https://t.me/c/4325133626/54",
+      "notionUrl": "https://app.notion.com/p/AI-Receptionist-Arbitrage-Agency-Model-40bb60bdd61f810eb76fd7b92484aff7"
+    },
+    {
+      "id": "reel_t4F0PEPYjl3RG4GVta94",
+      "type": "reel",
+      "label": "Advanced Behavioral Execution Framework",
+      "description": "Set a strict 45-minute block for your most important task with zero context switching permitted.",
+      "weight": 1.8,
+      "quadrant": "Focus",
+      "category": "strategy",
+      "tags": [],
+      "author": "thejakeabdo",
+      "actionableTakeaway": "Set a strict 45-minute block for your most important task with zero context switching permitted.",
+      "telegramStreamUrl": "https://t.me/c/4325133626/56",
+      "notionUrl": "https://app.notion.com/p/Advanced-Behavioral-Execution-Framework-40bb60bdd61f81e894c4eb1661b7c426"
+    },
+    {
+      "id": "reel_QP1IwXvQU6ofKc4exikq",
+      "type": "reel",
+      "label": "The Pomodoro-Calisthenics Synergy Protocol",
+      "description": "Implement 25 minutes of undistracted deep work followed immediately by 25 push-ups, repeating for 4 cycles.",
+      "weight": 1.8,
+      "quadrant": "Focus",
+      "category": "strategy",
+      "tags": [],
+      "author": "aynat_one",
+      "actionableTakeaway": "Implement 25 minutes of undistracted deep work followed immediately by 25 push-ups, repeating for 4 cycles.",
+      "telegramStreamUrl": "https://t.me/c/4325133626/59",
+      "notionUrl": "https://app.notion.com/p/The-Pomodoro-Calisthenics-Synergy-Protocol-40bb60bdd61f814cb48feb4914a75d3f"
+    },
+    {
+      "id": "reel_VlwikBiKK7KrhobSsR3C",
+      "type": "reel",
+      "label": "Novelty Seeking and Social Vitality",
+      "description": "Plan one completely new physical activity or outdoor experience with your peer group this weekend.",
+      "weight": 1.8,
+      "quadrant": "Funds",
+      "category": "win",
+      "tags": [],
+      "author": "bethesunbythediet",
+      "actionableTakeaway": "Plan one completely new physical activity or outdoor experience with your peer group this weekend.",
+      "telegramStreamUrl": "https://t.me/c/4325133626/61",
+      "notionUrl": "https://app.notion.com/p/Novelty-Seeking-and-Social-Vitality-40bb60bdd61f81459ba0d46ee5a5d731"
+    },
+    {
+      "id": "reel_0zckrgaUx6DEZpswutMe",
+      "type": "reel",
+      "label": "Cost-Efficiency in AI Video Generation Models",
+      "description": "Test cheaper AI video models (like Wan) for initial drafts and storyboarding before spending high credit volumes on premium models.",
+      "weight": 1.8,
+      "quadrant": "Facts",
+      "category": "strategy",
+      "tags": [],
+      "author": "terencesia",
+      "actionableTakeaway": "Test cheaper AI video models (like Wan) for initial drafts and storyboarding before spending high credit volumes on premium models.",
+      "telegramStreamUrl": "https://t.me/c/4325133626/66",
+      "notionUrl": "https://app.notion.com/p/Cost-Efficiency-in-AI-Video-Generation-Models-40bb60bdd61f81dd819ad2aa49686808"
+    },
+    {
+      "id": "reel_bL4n5P8d0lDIeXYnDlN8",
+      "type": "reel",
+      "label": "Google Playground: Instant AI Game Generation",
+      "description": "Leverage natural-language generation tools for rapid minimum viable product (MVP) prototyping before investing deep engineering hours.",
+      "weight": 1.8,
+      "quadrant": "Facts",
+      "category": "tool",
+      "tags": [],
+      "author": "ai.with.ni",
+      "actionableTakeaway": "Leverage natural-language generation tools for rapid minimum viable product (MVP) prototyping before investing deep engineering hours.",
+      "telegramStreamUrl": "https://t.me/c/4325133626/115",
+      "notionUrl": "https://app.notion.com/p/Google-Playground-Instant-AI-Game-Generation-40bb60bdd61f81368ceae338b111c463"
+    },
+    {
+      "id": "reel_bo3vzD5zpLxlNXHxTi6q",
+      "type": "reel",
+      "label": "Strategic Confusion in Competitive Execution",
+      "description": "Vary your execution tempos and communication structures during complex negotiations to prevent counterparts from building static counter-strategies.",
+      "weight": 1.8,
+      "quadrant": "Feedback",
+      "category": "strategy",
+      "tags": [],
+      "author": "profess.za",
+      "actionableTakeaway": "Vary your execution tempos and communication structures during complex negotiations to prevent counterparts from building static counter-strategies.",
+      "telegramStreamUrl": "https://t.me/c/4325133626/120",
+      "notionUrl": "https://app.notion.com/p/Strategic-Confusion-in-Competitive-Execution-40bb60bdd61f81efafeff84eb685cdb3"
+    },
+    {
+      "id": "reel_RmnHfOtT6u9cjWWEP2E5",
+      "type": "reel",
+      "label": "Juicy Game Development Animation Techniques",
+      "description": "Add screen shake, impact frames, or procedural scaling to your user interface elements or game objects to instantly improve perceived responsiveness.",
+      "weight": 1.8,
+      "quadrant": "Facts",
+      "category": "tool",
+      "tags": [],
+      "author": "vasilev.yegor",
+      "actionableTakeaway": "Add screen shake, impact frames, or procedural scaling to your user interface elements or game objects to instantly improve perceived responsiveness.",
+      "telegramStreamUrl": "https://t.me/c/4325133626/124",
+      "notionUrl": "https://app.notion.com/p/Juicy-Game-Development-Animation-Techniques-40bb60bdd61f81e6a29dfeaa39d19c0c"
+    },
+    {
+      "id": "reel_GsvyFvVJGJ2BLyWVB2s5",
+      "type": "reel",
+      "label": "Reverse Engineering IoT Hardware with AI",
+      "description": "Use LLMs to analyze local network API payloads from unencrypted smart home devices to build custom, zero-latency desktop controllers.",
+      "weight": 1.8,
+      "quadrant": "Facts",
+      "category": "win",
+      "tags": [],
+      "author": "sneha_sidequest",
+      "actionableTakeaway": "Use LLMs to analyze local network API payloads from unencrypted smart home devices to build custom, zero-latency desktop controllers.",
+      "telegramStreamUrl": "https://t.me/c/4325133626/128",
+      "notionUrl": "https://app.notion.com/p/Reverse-Engineering-IoT-Hardware-with-AI-40bb60bdd61f8191ac53efe3e5bee15c"
+    },
+    {
+      "id": "reel_JurNEG2PytBXzgtYfF38",
+      "type": "reel",
+      "label": "Compact Ergonomic Height-Adjustable Desk",
+      "description": "Evaluate your current workspace layout and consider an adjustable setup to easily alternate between sitting and standing postures.",
+      "weight": 1.8,
+      "quadrant": "Focus",
+      "category": "tool",
+      "tags": [],
+      "author": "srfurnituresmarrt",
+      "actionableTakeaway": "Evaluate your current workspace layout and consider an adjustable setup to easily alternate between sitting and standing postures.",
+      "telegramStreamUrl": "https://t.me/c/4325133626/168",
+      "notionUrl": "https://app.notion.com/p/Compact-Ergonomic-Height-Adjustable-Desk-40bb60bdd61f81e89561e952a706fb9a"
+    },
+    {
+      "id": "reel_hJHCQwdMXVR48bsgYjGC",
+      "type": "reel",
+      "label": "Strategic Execution and Mental Focus",
+      "description": "Identify your single highest-leverage task for the day and block out uninterrupted time to execute it without digital distractions.",
+      "weight": 1.8,
+      "quadrant": "Focus",
+      "category": "insight",
+      "tags": [],
+      "author": "iestyniwilliams",
+      "actionableTakeaway": "Identify your single highest-leverage task for the day and block out uninterrupted time to execute it without digital distractions.",
+      "telegramStreamUrl": "https://t.me/c/4325133626/217",
+      "notionUrl": "https://app.notion.com/p/Strategic-Execution-and-Mental-Focus-40bb60bdd61f8114b011c36a482684fb"
+    },
+    {
+      "id": "reel_wqUgMWPThwolJFo78VFK",
+      "type": "reel",
+      "label": "Affordable Ergonomic Electric Standing Desk",
+      "description": "Evaluate your current workspace ergonomics and integrate a sit-stand routine to reduce sedentary strain during deep work blocks.",
+      "weight": 1.8,
+      "quadrant": "Focus",
+      "category": "tool",
+      "tags": [],
+      "author": "techwiser",
+      "actionableTakeaway": "Evaluate your current workspace ergonomics and integrate a sit-stand routine to reduce sedentary strain during deep work blocks.",
+      "telegramStreamUrl": "https://t.me/c/4325133626/243",
+      "notionUrl": "https://app.notion.com/p/Affordable-Ergonomic-Electric-Standing-Desk-40bb60bdd61f811ea0a2d120c44658e0"
+    },
+    {
+      "id": "reel_hEdd29HYddxB2I4RP6JC",
+      "type": "reel",
+      "label": "Systemic Biomechanical Approach to Anterior Pelvic Tilt",
+      "description": "Instead of forcefully correcting static posture, assess your hip mobility and thoracic alignment to find the root mechanical restriction.",
+      "weight": 1.8,
+      "quadrant": "Funds",
+      "category": "strategy",
+      "tags": [],
+      "author": "venus_gabby",
+      "actionableTakeaway": "Instead of forcefully correcting static posture, assess your hip mobility and thoracic alignment to find the root mechanical restriction.",
+      "telegramStreamUrl": "https://t.me/c/4325133626/255",
+      "notionUrl": "https://app.notion.com/p/Systemic-Biomechanical-Approach-to-Anterior-Pelvic-Tilt-40bb60bdd61f81de914fd035b198fcf8"
+    },
+    {
+      "id": "reel_KzZI1tn45I6WBowWio9v",
+      "type": "reel",
+      "label": "Releasing Energy Drains: Posture Correction and Core Stability",
+      "description": "Spend 15 minutes 3-4 times a week focusing on slow, controlled spinal alignment and core stabilization drills.",
+      "weight": 1.8,
+      "quadrant": "Funds",
+      "category": "strategy",
+      "tags": [],
+      "author": "markus.moves",
+      "actionableTakeaway": "Spend 15 minutes 3-4 times a week focusing on slow, controlled spinal alignment and core stabilization drills.",
+      "telegramStreamUrl": "https://t.me/c/4325133626/260",
+      "notionUrl": "https://app.notion.com/p/Releasing-Energy-Drains-Posture-Correction-and-Core-Stability-40bb60bdd61f8105bc43d9945276a976"
+    },
+    {
+      "id": "reel_yba1yiZw81H9yye07BHl",
+      "type": "reel",
+      "label": "Fixing Pain, Movement Mechanics, and Structural Posture",
+      "description": "Assess your daily movement patterns for movement compensations and address joint restrictions early.",
+      "weight": 1.8,
+      "quadrant": "Funds",
+      "category": "strategy",
+      "tags": [],
+      "author": "conor_harris_",
+      "actionableTakeaway": "Assess your daily movement patterns for movement compensations and address joint restrictions early.",
+      "telegramStreamUrl": "https://t.me/c/4325133626/262",
+      "notionUrl": "https://app.notion.com/p/Fixing-Pain-Movement-Mechanics-and-Structural-Posture-40bb60bdd61f81869da7cd607918eeb7"
+    },
+    {
+      "id": "reel_pAalJALon2ZKGBmzTjbL",
+      "type": "reel",
+      "label": "Modular Engineering & Hardware Integration",
+      "description": "Audit your physical desk layout and cable management to eliminate friction points in daily hardware switching.",
+      "weight": 1.8,
+      "quadrant": "Facts",
+      "category": "tool",
+      "tags": [],
+      "author": "raaz.builds",
+      "actionableTakeaway": "Audit your physical desk layout and cable management to eliminate friction points in daily hardware switching.",
+      "telegramStreamUrl": "https://t.me/c/4325133626/317",
+      "notionUrl": "https://app.notion.com/p/Modular-Engineering-Hardware-Integration-40bb60bdd61f81878869fc9f42c1a797"
+    },
+    {
+      "id": "reel_SK0ZR0HszykWuykjoFFB",
+      "type": "reel",
+      "label": "Daily Joint Decompression and Mobility Ritual",
+      "description": "Perform a daily 3-move mobility sequence for 15 seconds each to maintain joint health and natural movement capacity.",
+      "weight": 1.8,
+      "quadrant": "Funds",
+      "category": "strategy",
+      "tags": [],
+      "author": "ruchomybalans",
+      "actionableTakeaway": "Perform a daily 3-move mobility sequence for 15 seconds each to maintain joint health and natural movement capacity.",
+      "telegramStreamUrl": "https://t.me/c/4325133626/382",
+      "notionUrl": "https://app.notion.com/p/Daily-Joint-Decompression-and-Mobility-Ritual-40bb60bdd61f81a988c6ea411e9a4840"
+    },
+    {
+      "id": "reel_83c8k6CEBWZxAyTVeSNG",
+      "type": "reel",
+      "label": "Kinetic Motion & Animation Study",
+      "description": "Observe natural biological movements to inform more fluid, organic digital animations or physical choreography.",
+      "weight": 1.8,
+      "quadrant": "Facts",
+      "category": "insight",
+      "tags": [],
+      "author": "merkurianin",
+      "actionableTakeaway": "Observe natural biological movements to inform more fluid, organic digital animations or physical choreography.",
+      "telegramStreamUrl": "https://t.me/c/4325133626/391",
+      "notionUrl": "https://app.notion.com/p/Kinetic-Motion-Animation-Study-40bb60bdd61f81f59ba9ffed815e2b1c"
+    },
+    {
+      "id": "reel_BxpDbhWlgoBg3egpC5K6",
+      "type": "reel",
+      "label": "Acoustic Layering & Sound Design Loop",
+      "description": "Experiment with non-traditional objects and tools to generate unique rhythmic textures for your creative projects.",
+      "weight": 1.8,
+      "quadrant": "Focus",
+      "category": "insight",
+      "tags": [],
+      "author": "jxhnnybeck",
+      "actionableTakeaway": "Experiment with non-traditional objects and tools to generate unique rhythmic textures for your creative projects.",
+      "telegramStreamUrl": "https://t.me/c/4325133626/410",
+      "notionUrl": "https://app.notion.com/p/Acoustic-Layering-Sound-Design-Loop-40bb60bdd61f8141ae7dfe7a2ba78f98"
+    },
+    {
+      "id": "reel_AwDTS5aN4UP56XnFDBD7",
+      "type": "reel",
+      "label": "Claude Code + Remotion: AI-Powered Motion Design",
+      "description": "Install Remotion inside your Claude Code environment to spin up video promos and motion assets via prompt descriptions rather than manual timeline keyframing.",
+      "weight": 1.8,
+      "quadrant": "Facts",
+      "category": "tool",
+      "tags": [],
+      "author": "drcintas",
+      "actionableTakeaway": "Install Remotion inside your Claude Code environment to spin up video promos and motion assets via prompt descriptions rather than manual timeline keyframing.",
+      "telegramStreamUrl": "https://t.me/c/4325133626/430",
+      "notionUrl": "https://app.notion.com/p/Claude-Code-Remotion-AI-Powered-Motion-Design-40bb60bdd61f812694a4d56d77508eb9"
+    },
+    {
+      "id": "reel_MrpcGFAUyhkbDkhyUMcX",
+      "type": "reel",
+      "label": "Synced Multi-Medium Storytelling (Manga + Album)",
+      "description": "Explore pairing distinct creative mediums (like reading a specific text while listening to a curated soundtrack) to enhance deep focus.",
+      "weight": 1.8,
+      "quadrant": "Focus",
+      "category": "insight",
+      "tags": [],
+      "author": "tobias_dray",
+      "actionableTakeaway": "Explore pairing distinct creative mediums (like reading a specific text while listening to a curated soundtrack) to enhance deep focus.",
+      "telegramStreamUrl": "https://t.me/c/4325133626/482",
+      "notionUrl": "https://app.notion.com/p/Synced-Multi-Medium-Storytelling-Manga-Album-40bb60bdd61f81a4ac7bf042bc497adf"
+    },
+    {
+      "id": "reel_B6sMg0da3qZETebPnIZh",
+      "type": "reel",
+      "label": "Rapid Audio Sampling Workflows for Music Producers",
+      "description": "Bookmark and utilize specialized browser extensions or direct audio-routing tools to import YouTube samples instantly into your DAW.",
+      "weight": 1.8,
+      "quadrant": "Facts",
+      "category": "tool",
+      "tags": [],
+      "author": "get.yoinking",
+      "actionableTakeaway": "Bookmark and utilize specialized browser extensions or direct audio-routing tools to import YouTube samples instantly into your DAW.",
+      "telegramStreamUrl": "https://t.me/c/4325133626/483",
+      "notionUrl": "https://app.notion.com/p/Rapid-Audio-Sampling-Workflows-for-Music-Producers-40bb60bdd61f819daa13dfd0a3fc0fef"
+    },
+    {
+      "id": "reel_EVsCP4cQfPPW7eaVpgEX",
+      "type": "reel",
+      "label": "Curated Japanese City Pop and Jazz Fusion Index",
+      "description": "Create a dedicated deep work playlist featuring instrumental Japanese jazz fusion to maintain an optimal flow state.",
+      "weight": 1.8,
+      "quadrant": "Focus",
+      "category": "insight",
+      "tags": [],
+      "author": "kennywrecks",
+      "actionableTakeaway": "Create a dedicated deep work playlist featuring instrumental Japanese jazz fusion to maintain an optimal flow state.",
+      "telegramStreamUrl": "https://t.me/c/4325133626/486",
+      "notionUrl": "https://app.notion.com/p/Curated-Japanese-City-Pop-and-Jazz-Fusion-Index-40bb60bdd61f818ba652d07746c1f4fb"
+    },
+    {
+      "id": "reel_szDEb5SabUW9EMoM34PC",
+      "type": "reel",
+      "label": "Advanced Sound Design Workflows",
+      "description": "Upgrade your audio workstation template to include pre-routed effect chains for faster ideation.",
+      "weight": 1.8,
+      "quadrant": "Facts",
+      "category": "tool",
+      "tags": [],
+      "author": "nest.acoustics",
+      "actionableTakeaway": "Upgrade your audio workstation template to include pre-routed effect chains for faster ideation.",
+      "telegramStreamUrl": "https://t.me/c/4325133626/492",
+      "notionUrl": "https://app.notion.com/p/Advanced-Sound-Design-Workflows-40bb60bdd61f815d90b6fa6460d238f4"
+    },
+    {
+      "id": "reel_s32q2aNhZkFMpZYImRjE",
+      "type": "reel",
+      "label": "Cross-Cultural Sales and Negotiation Tactics",
+      "description": "Research the communication and negotiation preferences of your prospect's cultural background before pitching.",
+      "weight": 1.8,
+      "quadrant": "Feedback",
+      "category": "strategy",
+      "tags": [],
+      "author": "thescottleese",
+      "actionableTakeaway": "Research the communication and negotiation preferences of your prospect's cultural background before pitching.",
+      "telegramStreamUrl": "https://t.me/c/4325133626/493",
+      "notionUrl": "https://app.notion.com/p/Cross-Cultural-Sales-and-Negotiation-Tactics-40bb60bdd61f8122843be9ff60d1925f"
+    },
+    {
+      "id": "reel_NnXa43ehPam1IGlCZhzf",
+      "type": "reel",
+      "label": "The 3D Pipeline Trick Behind Dead Cells Animation",
+      "description": "Leverage modern 3D asset pipelines and downsampling filters to achieve complex visual aesthetics with faster iteration times.",
+      "weight": 1.8,
+      "quadrant": "Facts",
+      "category": "insight",
+      "tags": [],
+      "author": "gondonkey",
+      "actionableTakeaway": "Leverage modern 3D asset pipelines and downsampling filters to achieve complex visual aesthetics with faster iteration times.",
+      "telegramStreamUrl": "https://t.me/c/4325133626/501",
+      "notionUrl": "https://app.notion.com/p/The-3D-Pipeline-Trick-Behind-Dead-Cells-Animation-40bb60bdd61f81d8b1dbed63e826c121"
+    },
+    {
+      "id": "reel_jvixCMuY1RbcvMej323y",
+      "type": "reel",
+      "label": "Native AI 3D Model Generation in Blender",
+      "description": "Explore the VIGA repository on GitHub to test native single-image-to-3D agentic pipelines inside your 3D design workflow.",
+      "weight": 1.8,
+      "quadrant": "Facts",
+      "category": "tool",
+      "tags": [],
+      "author": "marc.kaz",
+      "actionableTakeaway": "Explore the VIGA repository on GitHub to test native single-image-to-3D agentic pipelines inside your 3D design workflow.",
+      "telegramStreamUrl": "https://t.me/c/4325133626/519",
+      "notionUrl": "https://app.notion.com/p/Native-AI-3D-Model-Generation-in-Blender-40bb60bdd61f81eeb508cee6e1fa8369"
+    },
+    {
+      "id": "reel_j0DaUrtSqC2lKcXe9pyU",
+      "type": "reel",
+      "label": "Production-Grade AI Claims Processor via LangGraph & CrewAI",
+      "description": "Examine this multi-agent architecture repository to learn how to implement human-in-the-loop safety hooks and stateful memory in production AI workflows.",
+      "weight": 1.8,
+      "quadrant": "Facts",
+      "category": "tool",
+      "tags": [],
+      "author": "genieincodebottle",
+      "actionableTakeaway": "Examine this multi-agent architecture repository to learn how to implement human-in-the-loop safety hooks and stateful memory in production AI workflows.",
+      "telegramStreamUrl": "https://t.me/c/4325133626/539",
+      "notionUrl": "https://app.notion.com/p/Production-Grade-AI-Claims-Processor-via-LangGraph-CrewAI-40bb60bdd61f81a4bb5ad30e7a289b30"
+    },
+    {
+      "id": "reel_lgiWg6lTbN69KhrOFf6X",
+      "type": "reel",
+      "label": "Rapid Apple-Style 3D Scroll Animations via AI",
+      "description": "Combine AI frame generators and video tweening with code-generation agents to rapidly prototype high-end product animations.",
+      "weight": 1.8,
+      "quadrant": "Facts",
+      "category": "strategy",
+      "tags": [],
+      "author": "theaisurfer",
+      "actionableTakeaway": "Combine AI frame generators and video tweening with code-generation agents to rapidly prototype high-end product animations.",
+      "telegramStreamUrl": "https://t.me/c/4325133626/549",
+      "notionUrl": "https://app.notion.com/p/Rapid-Apple-Style-3D-Scroll-Animations-via-AI-40bb60bdd61f8101bc79c5246d658868"
+    },
+    {
+      "id": "reel_mRo6oujeG1lQ4MpiCmZw",
+      "type": "reel",
+      "label": "Quick Terminal Command Search Shortcut",
+      "description": "Master your terminal's history search (Ctrl+R or equivalent) to instantly recall complex scripts without re-typing.",
+      "weight": 1.8,
+      "quadrant": "Facts",
+      "category": "tool",
+      "tags": [],
+      "author": "journey.of.ani",
+      "actionableTakeaway": "Master your terminal's history search (Ctrl+R or equivalent) to instantly recall complex scripts without re-typing.",
+      "telegramStreamUrl": "https://t.me/c/4325133626/552",
+      "notionUrl": "https://app.notion.com/p/Quick-Terminal-Command-Search-Shortcut-40bb60bdd61f812f8073fa53a78c2cf8"
+    },
+    {
+      "id": "reel_6uOVSU4z5L9gyziywLzy",
+      "type": "reel",
+      "label": "Anti-Distraction and Focus Systems",
+      "description": "Implement a strict digital blocker on your primary devices to automatically restrict access to non-essential apps during deep work hours.",
+      "weight": 1.8,
+      "quadrant": "Focus",
+      "category": "strategy",
+      "tags": [],
+      "author": "nateherkai",
+      "actionableTakeaway": "Implement a strict digital blocker on your primary devices to automatically restrict access to non-essential apps during deep work hours.",
+      "telegramStreamUrl": "https://t.me/c/4325133626/645",
+      "notionUrl": "https://app.notion.com/p/Anti-Distraction-and-Focus-Systems-40bb60bdd61f81109710fb72661c6e66"
+    },
+    {
+      "id": "reel_sx6l8JsegrfkA99LLi13",
+      "type": "reel",
+      "label": "Frequency-First Vocabulary Selection",
+      "description": "Identify and master the top 100 most frequently used words in your target skill domain before expanding outward.",
+      "weight": 1.8,
+      "quadrant": "Facts",
+      "category": "strategy",
+      "tags": [],
+      "author": "mandarinwithchis",
+      "actionableTakeaway": "Identify and master the top 100 most frequently used words in your target skill domain before expanding outward.",
+      "telegramStreamUrl": "https://t.me/c/4325133626/653",
+      "notionUrl": "https://app.notion.com/p/Frequency-First-Vocabulary-Selection-40bb60bdd61f81b2b413d7b842c7a36c"
+    },
+    {
+      "id": "reel_go1x2QfZAB1J6qPxUbct",
+      "type": "reel",
+      "label": "Cinematic Blueprints for Obsessive Discipline",
+      "description": "Identify one daily standard you have compromised on, and reset your execution baseline starting today.",
+      "weight": 1.8,
+      "quadrant": "Feedback",
+      "category": "insight",
+      "tags": [],
+      "author": "muawii.fit",
+      "actionableTakeaway": "Identify one daily standard you have compromised on, and reset your execution baseline starting today.",
+      "telegramStreamUrl": "https://t.me/c/4325133626/688",
+      "notionUrl": "https://app.notion.com/p/Cinematic-Blueprints-for-Obsessive-Discipline-40bb60bdd61f81bf9e93d7cf3d45454a"
+    },
+    {
+      "id": "reel_bp7U1Dqlwq1lX8WOAFn3",
+      "type": "reel",
+      "label": "Viral Gamified Engagement Mechanics",
+      "description": "Study how gamified funnels leverage asymmetric rewards to drive user participation and community attention.",
+      "weight": 1.8,
+      "quadrant": "Focus",
+      "category": "strategy",
+      "tags": [],
+      "author": "salesforce",
+      "actionableTakeaway": "Study how gamified funnels leverage asymmetric rewards to drive user participation and community attention.",
+      "telegramStreamUrl": "https://t.me/c/4325133626/708",
+      "notionUrl": "https://app.notion.com/p/Viral-Gamified-Engagement-Mechanics-40bb60bdd61f81af9d13de01d074eeb4"
+    },
+    {
+      "id": "reel_RNhPhG1E5l8T6fNa7Lmw",
+      "type": "reel",
+      "label": "High-Resolution Relationship Intimacy Playbook",
+      "description": "Create a personalized relationship memory timeline or targeted appreciation list to deliberately invest in emotional equity.",
+      "weight": 1.8,
+      "quadrant": "Feedback",
+      "category": "strategy",
+      "tags": [],
+      "author": "yapping.daksh",
+      "actionableTakeaway": "Create a personalized relationship memory timeline or targeted appreciation list to deliberately invest in emotional equity.",
+      "telegramStreamUrl": "https://t.me/c/4325133626/733",
+      "notionUrl": "https://app.notion.com/p/High-Resolution-Relationship-Intimacy-Playbook-40bb60bdd61f81ddbf55cf86769398de"
+    },
+    {
+      "id": "reel_lIku0GeX51fftAbBl1qa",
+      "type": "reel",
+      "label": "Zero-Funding Startup Tools & Resources",
+      "description": "Leverage existing free founder programs and open-source infrastructure before seeking outside equity or capital.",
+      "weight": 1.8,
+      "quadrant": "Funds",
+      "category": "tool",
+      "tags": [],
+      "author": "heyujjwal",
+      "actionableTakeaway": "Leverage existing free founder programs and open-source infrastructure before seeking outside equity or capital.",
+      "telegramStreamUrl": "https://t.me/c/4325133626/781",
+      "notionUrl": "https://app.notion.com/p/Zero-Funding-Startup-Tools-Resources-40bb60bdd61f8175bd9bcc04a0d6e1dc"
+    },
+    {
+      "id": "reel_2SOWdMgQA086yI7LsGO7",
+      "type": "reel",
+      "label": "Four Pillars of the Flow State Blueprint",
+      "description": "Design a strict pre-work ritual combining clear checklists, zero distractions, and an immediate feedback loop.",
+      "weight": 1.8,
+      "quadrant": "Focus",
+      "category": "strategy",
+      "tags": [],
+      "author": "allthefigsivegiven",
+      "actionableTakeaway": "Design a strict pre-work ritual combining clear checklists, zero distractions, and an immediate feedback loop.",
+      "telegramStreamUrl": "https://t.me/c/4325133626/847",
+      "notionUrl": "https://app.notion.com/p/Four-Pillars-of-the-Flow-State-Blueprint-40bb60bdd61f81b8a7c4e26196359305"
+    },
+    {
+      "id": "reel_UZgQLBBiGcx8NX1cQhhd",
+      "type": "reel",
+      "label": "Cinematic Athletic Drive and Grit",
+      "description": "Channel high-energy visceral cues into your next high-intensity training session to push past perceived limits.",
+      "weight": 1.8,
+      "quadrant": "Funds",
+      "category": "insight",
+      "tags": [],
+      "author": "peakcinemaaa",
+      "actionableTakeaway": "Channel high-energy visceral cues into your next high-intensity training session to push past perceived limits.",
+      "telegramStreamUrl": "https://t.me/c/4325133626/876",
+      "notionUrl": "https://app.notion.com/p/Cinematic-Athletic-Drive-and-Grit-40bb60bdd61f81a48c0dc09c310f29d2"
+    },
+    {
+      "id": "reel_7ve3ZgWE4UVe5z8v1J38",
+      "type": "reel",
+      "label": "Circadian Adjustment via Strategic Nutrition",
+      "description": "Use light, local late-night meals as a psychological and metabolic anchor when crossing multiple time zones to reset circadian rhythms.",
+      "weight": 1.8,
+      "quadrant": "Funds",
+      "category": "strategy",
+      "tags": [],
+      "author": "drewfromladue",
+      "actionableTakeaway": "Use light, local late-night meals as a psychological and metabolic anchor when crossing multiple time zones to reset circadian rhythms.",
+      "telegramStreamUrl": "https://t.me/c/4325133626/891",
+      "notionUrl": "https://app.notion.com/p/Circadian-Adjustment-via-Strategic-Nutrition-40bb60bdd61f81f88786fff7617507ae"
+    },
+    {
+      "id": "reel_CgHHkliEsRcug8WpUE0U",
+      "type": "reel",
+      "label": "Mechanics of Ledge Grabs in Game Design",
+      "description": "When designing interactive systems, use invisible collision volumes and generous tolerance margins to improve user experience.",
+      "weight": 1.8,
+      "quadrant": "Facts",
+      "category": "insight",
+      "tags": [],
+      "author": "koalasymphony",
+      "actionableTakeaway": "When designing interactive systems, use invisible collision volumes and generous tolerance margins to improve user experience.",
+      "telegramStreamUrl": "https://t.me/c/4325133626/1011",
+      "notionUrl": "https://app.notion.com/p/Mechanics-of-Ledge-Grabs-in-Game-Design-40bb60bdd61f813aab9ff26f59a337f9"
+    },
+    {
+      "id": "reel_nkJhKgdjFRYm8i1QsLPk",
+      "type": "reel",
+      "label": "Behind-the-Scenes Production Realism",
+      "description": "Analyze your favorite cinematic shots to reverse-engineer their practical lighting or rigging setups.",
+      "weight": 1.8,
+      "quadrant": "Facts",
+      "category": "insight",
+      "tags": [],
+      "author": "bleachfilm",
+      "actionableTakeaway": "Analyze your favorite cinematic shots to reverse-engineer their practical lighting or rigging setups.",
+      "telegramStreamUrl": "https://t.me/c/4325133626/1030",
+      "notionUrl": "https://app.notion.com/p/Behind-the-Scenes-Production-Realism-40bb60bdd61f816da54ce666acb1ad0b"
+    },
+    {
+      "id": "reel_k2ZkYmZENq4M6a2ylGd2",
+      "type": "reel",
+      "label": "Radical Acceptance and Emotional Equanimity",
+      "description": "Apply the Doctrine of the Mean: pause and acknowledge current baseline reality before reacting emotionally to external friction.",
+      "weight": 1,
+      "quadrant": "Feedback",
+      "category": "insight",
+      "tags": [],
+      "author": "heavenly.eren",
+      "actionableTakeaway": "Apply the Doctrine of the Mean: pause and acknowledge current baseline reality before reacting emotionally to external friction.",
+      "telegramStreamUrl": "",
+      "notionUrl": "https://app.notion.com/p/Radical-Acceptance-and-Emotional-Equanimity-40bb60bdd61f81a09c20d6db20832fee"
+    }
+  ],
+  "edges": [
+    {
+      "source": "concept_dopamine_optimization",
+      "target": "dim_focus",
+      "relation": "applies_to",
+      "weight": 2
+    },
+    {
+      "source": "concept_plyometric_tendon_elasticity",
+      "target": "dim_funds",
+      "relation": "applies_to",
+      "weight": 2
+    },
+    {
+      "source": "concept_cinematic_color_grading",
+      "target": "dim_facts",
+      "relation": "applies_to",
+      "weight": 2
+    },
+    {
+      "source": "concept_neurodivergent_hyperfocus",
+      "target": "dim_focus",
+      "relation": "applies_to",
+      "weight": 2
+    },
+    {
+      "source": "concept_game_feel_mechanics",
+      "target": "dim_facts",
+      "relation": "applies_to",
+      "weight": 2
+    },
+    {
+      "source": "concept_biomechanical_joint_alignment",
+      "target": "dim_funds",
+      "relation": "applies_to",
+      "weight": 2
+    },
+    {
+      "source": "concept_relational_psychological_mirrors",
+      "target": "dim_feedback",
+      "relation": "applies_to",
+      "weight": 2
+    },
+    {
+      "source": "concept_emotional_exhaustion_departure",
+      "target": "dim_feedback",
+      "relation": "applies_to",
+      "weight": 2
+    },
+    {
+      "source": "concept_autonomous_ai_agents",
+      "target": "dim_facts",
+      "relation": "applies_to",
+      "weight": 2
+    },
+    {
+      "source": "concept_deep_work_flow_state",
+      "target": "dim_focus",
+      "relation": "applies_to",
+      "weight": 2
+    },
+    {
+      "source": "concept_cellular_vitality_circadian",
+      "target": "dim_funds",
+      "relation": "applies_to",
+      "weight": 2
+    },
+    {
+      "source": "concept_asymmetric_capital_allocation",
+      "target": "dim_funds",
+      "relation": "applies_to",
+      "weight": 2
+    },
+    {
+      "source": "concept_stoic_mean_equanimity",
+      "target": "dim_feedback",
+      "relation": "applies_to",
+      "weight": 2
+    },
+    {
+      "source": "concept_3d_procedural_motion",
+      "target": "dim_facts",
+      "relation": "applies_to",
+      "weight": 2
+    },
+    {
+      "source": "concept_ergonomic_hardware_edc",
+      "target": "dim_facts",
+      "relation": "applies_to",
+      "weight": 2
+    },
+    {
+      "source": "concept_audio_sound_engineering",
+      "target": "dim_facts",
+      "relation": "applies_to",
+      "weight": 2
+    },
+    {
+      "source": "concept_frictionless_execution_habits",
+      "target": "dim_focus",
+      "relation": "applies_to",
+      "weight": 2
+    },
+    {
+      "source": "concept_high_agency_communication",
+      "target": "dim_feedback",
+      "relation": "applies_to",
+      "weight": 2
+    },
+    {
+      "source": "concept_narrative_rhetoric_storytelling",
+      "target": "dim_facts",
+      "relation": "applies_to",
+      "weight": 2
+    },
+    {
+      "source": "concept_hypertrophy_kinetic_chain",
+      "target": "dim_funds",
+      "relation": "applies_to",
+      "weight": 2
+    },
+    {
+      "source": "heuristic_dopamine_trough",
+      "target": "concept_dopamine_optimization",
+      "relation": "synthesizes",
+      "weight": 2.5
+    },
+    {
+      "source": "heuristic_dopamine_trough",
+      "target": "dim_focus",
+      "relation": "applies_to",
+      "weight": 1.5
+    },
+    {
+      "source": "heuristic_tendon_elasticity",
+      "target": "concept_plyometric_tendon_elasticity",
+      "relation": "synthesizes",
+      "weight": 2.5
+    },
+    {
+      "source": "heuristic_tendon_elasticity",
+      "target": "dim_funds",
+      "relation": "applies_to",
+      "weight": 1.5
+    },
+    {
+      "source": "heuristic_game_feel_juice",
+      "target": "concept_game_feel_mechanics",
+      "relation": "synthesizes",
+      "weight": 2.5
+    },
+    {
+      "source": "heuristic_game_feel_juice",
+      "target": "dim_facts",
+      "relation": "applies_to",
+      "weight": 1.5
+    },
+    {
+      "source": "heuristic_relational_mirror",
+      "target": "concept_relational_psychological_mirrors",
+      "relation": "synthesizes",
+      "weight": 2.5
+    },
+    {
+      "source": "heuristic_relational_mirror",
+      "target": "dim_feedback",
+      "relation": "applies_to",
+      "weight": 1.5
+    },
+    {
+      "source": "heuristic_activation_energy",
+      "target": "concept_frictionless_execution_habits",
+      "relation": "synthesizes",
+      "weight": 2.5
+    },
+    {
+      "source": "heuristic_activation_energy",
+      "target": "dim_focus",
+      "relation": "applies_to",
+      "weight": 1.5
+    },
+    {
+      "source": "heuristic_color_restraint",
+      "target": "concept_cinematic_color_grading",
+      "relation": "synthesizes",
+      "weight": 2.5
+    },
+    {
+      "source": "heuristic_color_restraint",
+      "target": "dim_facts",
+      "relation": "applies_to",
+      "weight": 1.5
+    },
+    {
+      "source": "heuristic_agentic_boundaries",
+      "target": "concept_autonomous_ai_agents",
+      "relation": "synthesizes",
+      "weight": 2.5
+    },
+    {
+      "source": "heuristic_agentic_boundaries",
+      "target": "dim_facts",
+      "relation": "applies_to",
+      "weight": 1.5
+    },
+    {
+      "source": "heuristic_circadian_anchor",
+      "target": "concept_cellular_vitality_circadian",
+      "relation": "synthesizes",
+      "weight": 2.5
+    },
+    {
+      "source": "heuristic_circadian_anchor",
+      "target": "dim_funds",
+      "relation": "applies_to",
+      "weight": 1.5
+    },
+    {
+      "source": "heuristic_golden_mean",
+      "target": "concept_stoic_mean_equanimity",
+      "relation": "synthesizes",
+      "weight": 2.5
+    },
+    {
+      "source": "heuristic_golden_mean",
+      "target": "dim_feedback",
+      "relation": "applies_to",
+      "weight": 1.5
+    },
+    {
+      "source": "heuristic_asymmetric_convexity",
+      "target": "concept_asymmetric_capital_allocation",
+      "relation": "synthesizes",
+      "weight": 2.5
+    },
+    {
+      "source": "heuristic_asymmetric_convexity",
+      "target": "dim_funds",
+      "relation": "applies_to",
+      "weight": 1.5
+    },
+    {
+      "source": "heuristic_ergonomic_friction",
+      "target": "concept_ergonomic_hardware_edc",
+      "relation": "synthesizes",
+      "weight": 2.5
+    },
+    {
+      "source": "heuristic_ergonomic_friction",
+      "target": "dim_facts",
+      "relation": "applies_to",
+      "weight": 1.5
+    },
+    {
+      "source": "heuristic_boundary_departure",
+      "target": "concept_emotional_exhaustion_departure",
+      "relation": "synthesizes",
+      "weight": 2.5
+    },
+    {
+      "source": "heuristic_boundary_departure",
+      "target": "dim_feedback",
+      "relation": "applies_to",
+      "weight": 1.5
+    },
+    {
+      "source": "reel_3Dky1YAPnYRaUhS83tWi",
+      "target": "dim_facts",
+      "relation": "applies_to",
+      "weight": 1
+    },
+    {
+      "source": "reel_3Dky1YAPnYRaUhS83tWi",
+      "target": "concept_relational_psychological_mirrors",
+      "relation": "explains",
+      "weight": 2
+    },
+    {
+      "source": "concept_relational_psychological_mirrors",
+      "target": "reel_3Dky1YAPnYRaUhS83tWi",
+      "relation": "reinforces",
+      "weight": 2
+    },
+    {
+      "source": "reel_fLfTvlsS1uwQJe0Kru16",
+      "target": "dim_facts",
+      "relation": "applies_to",
+      "weight": 1
+    },
+    {
+      "source": "reel_fLfTvlsS1uwQJe0Kru16",
+      "target": "concept_emotional_exhaustion_departure",
+      "relation": "explains",
+      "weight": 2
+    },
+    {
+      "source": "concept_emotional_exhaustion_departure",
+      "target": "reel_fLfTvlsS1uwQJe0Kru16",
+      "relation": "reinforces",
+      "weight": 2
+    },
+    {
+      "source": "reel_6vOSR7DQsmCWI3kzy1qP",
+      "target": "dim_facts",
+      "relation": "applies_to",
+      "weight": 1
+    },
+    {
+      "source": "reel_WCpCU25gnHzu2dERpK5Z",
+      "target": "dim_facts",
+      "relation": "applies_to",
+      "weight": 1
+    },
+    {
+      "source": "reel_WCpCU25gnHzu2dERpK5Z",
+      "target": "concept_game_feel_mechanics",
+      "relation": "explains",
+      "weight": 3
+    },
+    {
+      "source": "concept_game_feel_mechanics",
+      "target": "reel_WCpCU25gnHzu2dERpK5Z",
+      "relation": "reinforces",
+      "weight": 3
+    },
+    {
+      "source": "reel_y3X4z3KwS99HCLC4pIhK",
+      "target": "dim_facts",
+      "relation": "applies_to",
+      "weight": 1
+    },
+    {
+      "source": "reel_iaeiSv8IjNshL8IRQqpb",
+      "target": "dim_facts",
+      "relation": "applies_to",
+      "weight": 1
+    },
+    {
+      "source": "reel_cS60r4DqlMf3cu7GHsxq",
+      "target": "dim_facts",
+      "relation": "applies_to",
+      "weight": 1
+    },
+    {
+      "source": "reel_Ybkn33Hgl1GjnYHiSI27",
+      "target": "dim_facts",
+      "relation": "applies_to",
+      "weight": 1
+    },
+    {
+      "source": "reel_Ybkn33Hgl1GjnYHiSI27",
+      "target": "concept_autonomous_ai_agents",
+      "relation": "explains",
+      "weight": 2
+    },
+    {
+      "source": "concept_autonomous_ai_agents",
+      "target": "reel_Ybkn33Hgl1GjnYHiSI27",
+      "relation": "reinforces",
+      "weight": 2
+    },
+    {
+      "source": "reel_RDwjdmQ1BQ1UMJLyS9HJ",
+      "target": "dim_facts",
+      "relation": "applies_to",
+      "weight": 1
+    },
+    {
+      "source": "reel_RDwjdmQ1BQ1UMJLyS9HJ",
+      "target": "concept_autonomous_ai_agents",
+      "relation": "explains",
+      "weight": 2
+    },
+    {
+      "source": "concept_autonomous_ai_agents",
+      "target": "reel_RDwjdmQ1BQ1UMJLyS9HJ",
+      "relation": "reinforces",
+      "weight": 2
+    },
+    {
+      "source": "reel_vlB1vyU1jaUoby0pykGu",
+      "target": "dim_funds",
+      "relation": "applies_to",
+      "weight": 1
+    },
+    {
+      "source": "reel_eGyAaln1VMch9zZ8Gmmu",
+      "target": "dim_feedback",
+      "relation": "applies_to",
+      "weight": 1
+    },
+    {
+      "source": "reel_bE80nj0Vl1OtLVJWkwy4",
+      "target": "dim_feedback",
+      "relation": "applies_to",
+      "weight": 1
+    },
+    {
+      "source": "reel_J74JjMHwlYk3gEU2zQhn",
+      "target": "dim_feedback",
+      "relation": "applies_to",
+      "weight": 1
+    },
+    {
+      "source": "reel_NdNRsfGOAHJqoa2vOaFq",
+      "target": "dim_focus",
+      "relation": "applies_to",
+      "weight": 1
+    },
+    {
+      "source": "reel_JEe8au83E626YsEpMBk5",
+      "target": "dim_focus",
+      "relation": "applies_to",
+      "weight": 1
+    },
+    {
+      "source": "reel_JEe8au83E626YsEpMBk5",
+      "target": "concept_neurodivergent_hyperfocus",
+      "relation": "explains",
+      "weight": 2
+    },
+    {
+      "source": "concept_neurodivergent_hyperfocus",
+      "target": "reel_JEe8au83E626YsEpMBk5",
+      "relation": "reinforces",
+      "weight": 2
+    },
+    {
+      "source": "reel_HjUXXw9fpom0dYwOyl3K",
+      "target": "dim_funds",
+      "relation": "applies_to",
+      "weight": 1
+    },
+    {
+      "source": "reel_1VEOZjHgyaaxHSwsMXL0",
+      "target": "dim_funds",
+      "relation": "applies_to",
+      "weight": 1
+    },
+    {
+      "source": "reel_qUZT4sUx88Lb6jEPCPNj",
+      "target": "dim_focus",
+      "relation": "applies_to",
+      "weight": 1
+    },
+    {
+      "source": "reel_qUZT4sUx88Lb6jEPCPNj",
+      "target": "concept_frictionless_execution_habits",
+      "relation": "explains",
+      "weight": 2
+    },
+    {
+      "source": "concept_frictionless_execution_habits",
+      "target": "reel_qUZT4sUx88Lb6jEPCPNj",
+      "relation": "reinforces",
+      "weight": 2
+    },
+    {
+      "source": "reel_U5yNQFGYlOMHUUnMsA9e",
+      "target": "dim_focus",
+      "relation": "applies_to",
+      "weight": 1
+    },
+    {
+      "source": "reel_N1suCcqlij5Toq1WyvfE",
+      "target": "dim_funds",
+      "relation": "applies_to",
+      "weight": 1
+    },
+    {
+      "source": "reel_N1suCcqlij5Toq1WyvfE",
+      "target": "concept_autonomous_ai_agents",
+      "relation": "explains",
+      "weight": 2
+    },
+    {
+      "source": "concept_autonomous_ai_agents",
+      "target": "reel_N1suCcqlij5Toq1WyvfE",
+      "relation": "reinforces",
+      "weight": 2
+    },
+    {
+      "source": "reel_t4F0PEPYjl3RG4GVta94",
+      "target": "dim_focus",
+      "relation": "applies_to",
+      "weight": 1
+    },
+    {
+      "source": "reel_QP1IwXvQU6ofKc4exikq",
+      "target": "dim_focus",
+      "relation": "applies_to",
+      "weight": 1
+    },
+    {
+      "source": "reel_QP1IwXvQU6ofKc4exikq",
+      "target": "concept_deep_work_flow_state",
+      "relation": "explains",
+      "weight": 2
+    },
+    {
+      "source": "concept_deep_work_flow_state",
+      "target": "reel_QP1IwXvQU6ofKc4exikq",
+      "relation": "reinforces",
+      "weight": 2
+    },
+    {
+      "source": "reel_VlwikBiKK7KrhobSsR3C",
+      "target": "dim_funds",
+      "relation": "applies_to",
+      "weight": 1
+    },
+    {
+      "source": "reel_0zckrgaUx6DEZpswutMe",
+      "target": "dim_facts",
+      "relation": "applies_to",
+      "weight": 1
+    },
+    {
+      "source": "reel_0zckrgaUx6DEZpswutMe",
+      "target": "concept_autonomous_ai_agents",
+      "relation": "explains",
+      "weight": 2
+    },
+    {
+      "source": "concept_autonomous_ai_agents",
+      "target": "reel_0zckrgaUx6DEZpswutMe",
+      "relation": "reinforces",
+      "weight": 2
+    },
+    {
+      "source": "reel_bL4n5P8d0lDIeXYnDlN8",
+      "target": "dim_facts",
+      "relation": "applies_to",
+      "weight": 1
+    },
+    {
+      "source": "reel_bL4n5P8d0lDIeXYnDlN8",
+      "target": "concept_asymmetric_capital_allocation",
+      "relation": "explains",
+      "weight": 2
+    },
+    {
+      "source": "concept_asymmetric_capital_allocation",
+      "target": "reel_bL4n5P8d0lDIeXYnDlN8",
+      "relation": "reinforces",
+      "weight": 2
+    },
+    {
+      "source": "reel_bo3vzD5zpLxlNXHxTi6q",
+      "target": "dim_feedback",
+      "relation": "applies_to",
+      "weight": 1
+    },
+    {
+      "source": "reel_bo3vzD5zpLxlNXHxTi6q",
+      "target": "concept_high_agency_communication",
+      "relation": "explains",
+      "weight": 2
+    },
+    {
+      "source": "concept_high_agency_communication",
+      "target": "reel_bo3vzD5zpLxlNXHxTi6q",
+      "relation": "reinforces",
+      "weight": 2
+    },
+    {
+      "source": "reel_RmnHfOtT6u9cjWWEP2E5",
+      "target": "dim_facts",
+      "relation": "applies_to",
+      "weight": 1
+    },
+    {
+      "source": "reel_RmnHfOtT6u9cjWWEP2E5",
+      "target": "concept_game_feel_mechanics",
+      "relation": "explains",
+      "weight": 2
+    },
+    {
+      "source": "concept_game_feel_mechanics",
+      "target": "reel_RmnHfOtT6u9cjWWEP2E5",
+      "relation": "reinforces",
+      "weight": 2
+    },
+    {
+      "source": "reel_GsvyFvVJGJ2BLyWVB2s5",
+      "target": "dim_facts",
+      "relation": "applies_to",
+      "weight": 1
+    },
+    {
+      "source": "reel_GsvyFvVJGJ2BLyWVB2s5",
+      "target": "concept_autonomous_ai_agents",
+      "relation": "explains",
+      "weight": 2
+    },
+    {
+      "source": "concept_autonomous_ai_agents",
+      "target": "reel_GsvyFvVJGJ2BLyWVB2s5",
+      "relation": "reinforces",
+      "weight": 2
+    },
+    {
+      "source": "reel_GsvyFvVJGJ2BLyWVB2s5",
+      "target": "concept_ergonomic_hardware_edc",
+      "relation": "explains",
+      "weight": 2
+    },
+    {
+      "source": "concept_ergonomic_hardware_edc",
+      "target": "reel_GsvyFvVJGJ2BLyWVB2s5",
+      "relation": "reinforces",
+      "weight": 2
+    },
+    {
+      "source": "reel_JurNEG2PytBXzgtYfF38",
+      "target": "dim_focus",
+      "relation": "applies_to",
+      "weight": 1
+    },
+    {
+      "source": "reel_JurNEG2PytBXzgtYfF38",
+      "target": "concept_ergonomic_hardware_edc",
+      "relation": "explains",
+      "weight": 2
+    },
+    {
+      "source": "concept_ergonomic_hardware_edc",
+      "target": "reel_JurNEG2PytBXzgtYfF38",
+      "relation": "reinforces",
+      "weight": 2
+    },
+    {
+      "source": "reel_hJHCQwdMXVR48bsgYjGC",
+      "target": "dim_focus",
+      "relation": "applies_to",
+      "weight": 1
+    },
+    {
+      "source": "reel_hJHCQwdMXVR48bsgYjGC",
+      "target": "concept_deep_work_flow_state",
+      "relation": "explains",
+      "weight": 2
+    },
+    {
+      "source": "concept_deep_work_flow_state",
+      "target": "reel_hJHCQwdMXVR48bsgYjGC",
+      "relation": "reinforces",
+      "weight": 2
+    },
+    {
+      "source": "reel_wqUgMWPThwolJFo78VFK",
+      "target": "dim_focus",
+      "relation": "applies_to",
+      "weight": 1
+    },
+    {
+      "source": "reel_wqUgMWPThwolJFo78VFK",
+      "target": "concept_ergonomic_hardware_edc",
+      "relation": "explains",
+      "weight": 2
+    },
+    {
+      "source": "concept_ergonomic_hardware_edc",
+      "target": "reel_wqUgMWPThwolJFo78VFK",
+      "relation": "reinforces",
+      "weight": 2
+    },
+    {
+      "source": "reel_hEdd29HYddxB2I4RP6JC",
+      "target": "dim_funds",
+      "relation": "applies_to",
+      "weight": 1
+    },
+    {
+      "source": "reel_hEdd29HYddxB2I4RP6JC",
+      "target": "concept_biomechanical_joint_alignment",
+      "relation": "explains",
+      "weight": 4
+    },
+    {
+      "source": "concept_biomechanical_joint_alignment",
+      "target": "reel_hEdd29HYddxB2I4RP6JC",
+      "relation": "reinforces",
+      "weight": 4
+    },
+    {
+      "source": "reel_KzZI1tn45I6WBowWio9v",
+      "target": "dim_funds",
+      "relation": "applies_to",
+      "weight": 1
+    },
+    {
+      "source": "reel_KzZI1tn45I6WBowWio9v",
+      "target": "concept_biomechanical_joint_alignment",
+      "relation": "explains",
+      "weight": 2
+    },
+    {
+      "source": "concept_biomechanical_joint_alignment",
+      "target": "reel_KzZI1tn45I6WBowWio9v",
+      "relation": "reinforces",
+      "weight": 2
+    },
+    {
+      "source": "reel_yba1yiZw81H9yye07BHl",
+      "target": "dim_funds",
+      "relation": "applies_to",
+      "weight": 1
+    },
+    {
+      "source": "reel_yba1yiZw81H9yye07BHl",
+      "target": "concept_biomechanical_joint_alignment",
+      "relation": "explains",
+      "weight": 2
+    },
+    {
+      "source": "concept_biomechanical_joint_alignment",
+      "target": "reel_yba1yiZw81H9yye07BHl",
+      "relation": "reinforces",
+      "weight": 2
+    },
+    {
+      "source": "reel_pAalJALon2ZKGBmzTjbL",
+      "target": "dim_facts",
+      "relation": "applies_to",
+      "weight": 1
+    },
+    {
+      "source": "reel_pAalJALon2ZKGBmzTjbL",
+      "target": "concept_ergonomic_hardware_edc",
+      "relation": "explains",
+      "weight": 2
+    },
+    {
+      "source": "concept_ergonomic_hardware_edc",
+      "target": "reel_pAalJALon2ZKGBmzTjbL",
+      "relation": "reinforces",
+      "weight": 2
+    },
+    {
+      "source": "reel_SK0ZR0HszykWuykjoFFB",
+      "target": "dim_funds",
+      "relation": "applies_to",
+      "weight": 1
+    },
+    {
+      "source": "reel_SK0ZR0HszykWuykjoFFB",
+      "target": "concept_biomechanical_joint_alignment",
+      "relation": "explains",
+      "weight": 2
+    },
+    {
+      "source": "concept_biomechanical_joint_alignment",
+      "target": "reel_SK0ZR0HszykWuykjoFFB",
+      "relation": "reinforces",
+      "weight": 2
+    },
+    {
+      "source": "reel_83c8k6CEBWZxAyTVeSNG",
+      "target": "dim_facts",
+      "relation": "applies_to",
+      "weight": 1
+    },
+    {
+      "source": "reel_83c8k6CEBWZxAyTVeSNG",
+      "target": "concept_3d_procedural_motion",
+      "relation": "explains",
+      "weight": 2
+    },
+    {
+      "source": "concept_3d_procedural_motion",
+      "target": "reel_83c8k6CEBWZxAyTVeSNG",
+      "relation": "reinforces",
+      "weight": 2
+    },
+    {
+      "source": "reel_BxpDbhWlgoBg3egpC5K6",
+      "target": "dim_focus",
+      "relation": "applies_to",
+      "weight": 1
+    },
+    {
+      "source": "reel_BxpDbhWlgoBg3egpC5K6",
+      "target": "concept_audio_sound_engineering",
+      "relation": "explains",
+      "weight": 2
+    },
+    {
+      "source": "concept_audio_sound_engineering",
+      "target": "reel_BxpDbhWlgoBg3egpC5K6",
+      "relation": "reinforces",
+      "weight": 2
+    },
+    {
+      "source": "reel_AwDTS5aN4UP56XnFDBD7",
+      "target": "dim_facts",
+      "relation": "applies_to",
+      "weight": 1
+    },
+    {
+      "source": "reel_AwDTS5aN4UP56XnFDBD7",
+      "target": "concept_autonomous_ai_agents",
+      "relation": "explains",
+      "weight": 2
+    },
+    {
+      "source": "concept_autonomous_ai_agents",
+      "target": "reel_AwDTS5aN4UP56XnFDBD7",
+      "relation": "reinforces",
+      "weight": 2
+    },
+    {
+      "source": "reel_AwDTS5aN4UP56XnFDBD7",
+      "target": "concept_narrative_rhetoric_storytelling",
+      "relation": "explains",
+      "weight": 2
+    },
+    {
+      "source": "concept_narrative_rhetoric_storytelling",
+      "target": "reel_AwDTS5aN4UP56XnFDBD7",
+      "relation": "reinforces",
+      "weight": 2
+    },
+    {
+      "source": "reel_MrpcGFAUyhkbDkhyUMcX",
+      "target": "dim_focus",
+      "relation": "applies_to",
+      "weight": 1
+    },
+    {
+      "source": "reel_MrpcGFAUyhkbDkhyUMcX",
+      "target": "concept_narrative_rhetoric_storytelling",
+      "relation": "explains",
+      "weight": 2
+    },
+    {
+      "source": "concept_narrative_rhetoric_storytelling",
+      "target": "reel_MrpcGFAUyhkbDkhyUMcX",
+      "relation": "reinforces",
+      "weight": 2
+    },
+    {
+      "source": "reel_B6sMg0da3qZETebPnIZh",
+      "target": "dim_facts",
+      "relation": "applies_to",
+      "weight": 1
+    },
+    {
+      "source": "reel_B6sMg0da3qZETebPnIZh",
+      "target": "concept_audio_sound_engineering",
+      "relation": "explains",
+      "weight": 2
+    },
+    {
+      "source": "concept_audio_sound_engineering",
+      "target": "reel_B6sMg0da3qZETebPnIZh",
+      "relation": "reinforces",
+      "weight": 2
+    },
+    {
+      "source": "reel_EVsCP4cQfPPW7eaVpgEX",
+      "target": "dim_focus",
+      "relation": "applies_to",
+      "weight": 1
+    },
+    {
+      "source": "reel_EVsCP4cQfPPW7eaVpgEX",
+      "target": "concept_deep_work_flow_state",
+      "relation": "explains",
+      "weight": 2
+    },
+    {
+      "source": "concept_deep_work_flow_state",
+      "target": "reel_EVsCP4cQfPPW7eaVpgEX",
+      "relation": "reinforces",
+      "weight": 2
+    },
+    {
+      "source": "reel_szDEb5SabUW9EMoM34PC",
+      "target": "dim_facts",
+      "relation": "applies_to",
+      "weight": 1
+    },
+    {
+      "source": "reel_szDEb5SabUW9EMoM34PC",
+      "target": "concept_audio_sound_engineering",
+      "relation": "explains",
+      "weight": 2
+    },
+    {
+      "source": "concept_audio_sound_engineering",
+      "target": "reel_szDEb5SabUW9EMoM34PC",
+      "relation": "reinforces",
+      "weight": 2
+    },
+    {
+      "source": "reel_s32q2aNhZkFMpZYImRjE",
+      "target": "dim_feedback",
+      "relation": "applies_to",
+      "weight": 1
+    },
+    {
+      "source": "reel_s32q2aNhZkFMpZYImRjE",
+      "target": "concept_high_agency_communication",
+      "relation": "explains",
+      "weight": 2
+    },
+    {
+      "source": "concept_high_agency_communication",
+      "target": "reel_s32q2aNhZkFMpZYImRjE",
+      "relation": "reinforces",
+      "weight": 2
+    },
+    {
+      "source": "reel_NnXa43ehPam1IGlCZhzf",
+      "target": "dim_facts",
+      "relation": "applies_to",
+      "weight": 1
+    },
+    {
+      "source": "reel_NnXa43ehPam1IGlCZhzf",
+      "target": "concept_3d_procedural_motion",
+      "relation": "explains",
+      "weight": 2
+    },
+    {
+      "source": "concept_3d_procedural_motion",
+      "target": "reel_NnXa43ehPam1IGlCZhzf",
+      "relation": "reinforces",
+      "weight": 2
+    },
+    {
+      "source": "reel_jvixCMuY1RbcvMej323y",
+      "target": "dim_facts",
+      "relation": "applies_to",
+      "weight": 1
+    },
+    {
+      "source": "reel_jvixCMuY1RbcvMej323y",
+      "target": "concept_autonomous_ai_agents",
+      "relation": "explains",
+      "weight": 3
+    },
+    {
+      "source": "concept_autonomous_ai_agents",
+      "target": "reel_jvixCMuY1RbcvMej323y",
+      "relation": "reinforces",
+      "weight": 3
+    },
+    {
+      "source": "reel_jvixCMuY1RbcvMej323y",
+      "target": "concept_3d_procedural_motion",
+      "relation": "explains",
+      "weight": 2
+    },
+    {
+      "source": "concept_3d_procedural_motion",
+      "target": "reel_jvixCMuY1RbcvMej323y",
+      "relation": "reinforces",
+      "weight": 2
+    },
+    {
+      "source": "reel_j0DaUrtSqC2lKcXe9pyU",
+      "target": "dim_facts",
+      "relation": "applies_to",
+      "weight": 1
+    },
+    {
+      "source": "reel_j0DaUrtSqC2lKcXe9pyU",
+      "target": "concept_autonomous_ai_agents",
+      "relation": "explains",
+      "weight": 2
+    },
+    {
+      "source": "concept_autonomous_ai_agents",
+      "target": "reel_j0DaUrtSqC2lKcXe9pyU",
+      "relation": "reinforces",
+      "weight": 2
+    },
+    {
+      "source": "reel_j0DaUrtSqC2lKcXe9pyU",
+      "target": "concept_narrative_rhetoric_storytelling",
+      "relation": "explains",
+      "weight": 2
+    },
+    {
+      "source": "concept_narrative_rhetoric_storytelling",
+      "target": "reel_j0DaUrtSqC2lKcXe9pyU",
+      "relation": "reinforces",
+      "weight": 2
+    },
+    {
+      "source": "reel_lgiWg6lTbN69KhrOFf6X",
+      "target": "dim_facts",
+      "relation": "applies_to",
+      "weight": 1
+    },
+    {
+      "source": "reel_lgiWg6lTbN69KhrOFf6X",
+      "target": "concept_autonomous_ai_agents",
+      "relation": "explains",
+      "weight": 2
+    },
+    {
+      "source": "concept_autonomous_ai_agents",
+      "target": "reel_lgiWg6lTbN69KhrOFf6X",
+      "relation": "reinforces",
+      "weight": 2
+    },
+    {
+      "source": "reel_lgiWg6lTbN69KhrOFf6X",
+      "target": "concept_3d_procedural_motion",
+      "relation": "explains",
+      "weight": 2
+    },
+    {
+      "source": "concept_3d_procedural_motion",
+      "target": "reel_lgiWg6lTbN69KhrOFf6X",
+      "relation": "reinforces",
+      "weight": 2
+    },
+    {
+      "source": "reel_mRo6oujeG1lQ4MpiCmZw",
+      "target": "dim_facts",
+      "relation": "applies_to",
+      "weight": 1
+    },
+    {
+      "source": "reel_mRo6oujeG1lQ4MpiCmZw",
+      "target": "concept_narrative_rhetoric_storytelling",
+      "relation": "explains",
+      "weight": 3
+    },
+    {
+      "source": "concept_narrative_rhetoric_storytelling",
+      "target": "reel_mRo6oujeG1lQ4MpiCmZw",
+      "relation": "reinforces",
+      "weight": 3
+    },
+    {
+      "source": "reel_6uOVSU4z5L9gyziywLzy",
+      "target": "dim_focus",
+      "relation": "applies_to",
+      "weight": 1
+    },
+    {
+      "source": "reel_6uOVSU4z5L9gyziywLzy",
+      "target": "concept_deep_work_flow_state",
+      "relation": "explains",
+      "weight": 2
+    },
+    {
+      "source": "concept_deep_work_flow_state",
+      "target": "reel_6uOVSU4z5L9gyziywLzy",
+      "relation": "reinforces",
+      "weight": 2
+    },
+    {
+      "source": "reel_sx6l8JsegrfkA99LLi13",
+      "target": "dim_facts",
+      "relation": "applies_to",
+      "weight": 1
+    },
+    {
+      "source": "reel_sx6l8JsegrfkA99LLi13",
+      "target": "concept_audio_sound_engineering",
+      "relation": "explains",
+      "weight": 2
+    },
+    {
+      "source": "concept_audio_sound_engineering",
+      "target": "reel_sx6l8JsegrfkA99LLi13",
+      "relation": "reinforces",
+      "weight": 2
+    },
+    {
+      "source": "reel_go1x2QfZAB1J6qPxUbct",
+      "target": "dim_feedback",
+      "relation": "applies_to",
+      "weight": 1
+    },
+    {
+      "source": "reel_go1x2QfZAB1J6qPxUbct",
+      "target": "concept_cinematic_color_grading",
+      "relation": "explains",
+      "weight": 2
+    },
+    {
+      "source": "concept_cinematic_color_grading",
+      "target": "reel_go1x2QfZAB1J6qPxUbct",
+      "relation": "reinforces",
+      "weight": 2
+    },
+    {
+      "source": "reel_go1x2QfZAB1J6qPxUbct",
+      "target": "concept_frictionless_execution_habits",
+      "relation": "explains",
+      "weight": 2
+    },
+    {
+      "source": "concept_frictionless_execution_habits",
+      "target": "reel_go1x2QfZAB1J6qPxUbct",
+      "relation": "reinforces",
+      "weight": 2
+    },
+    {
+      "source": "reel_bp7U1Dqlwq1lX8WOAFn3",
+      "target": "dim_focus",
+      "relation": "applies_to",
+      "weight": 1
+    },
+    {
+      "source": "reel_bp7U1Dqlwq1lX8WOAFn3",
+      "target": "concept_asymmetric_capital_allocation",
+      "relation": "explains",
+      "weight": 2
+    },
+    {
+      "source": "concept_asymmetric_capital_allocation",
+      "target": "reel_bp7U1Dqlwq1lX8WOAFn3",
+      "relation": "reinforces",
+      "weight": 2
+    },
+    {
+      "source": "reel_RNhPhG1E5l8T6fNa7Lmw",
+      "target": "dim_feedback",
+      "relation": "applies_to",
+      "weight": 1
+    },
+    {
+      "source": "reel_RNhPhG1E5l8T6fNa7Lmw",
+      "target": "concept_asymmetric_capital_allocation",
+      "relation": "explains",
+      "weight": 2
+    },
+    {
+      "source": "concept_asymmetric_capital_allocation",
+      "target": "reel_RNhPhG1E5l8T6fNa7Lmw",
+      "relation": "reinforces",
+      "weight": 2
+    },
+    {
+      "source": "reel_lIku0GeX51fftAbBl1qa",
+      "target": "dim_funds",
+      "relation": "applies_to",
+      "weight": 1
+    },
+    {
+      "source": "reel_lIku0GeX51fftAbBl1qa",
+      "target": "concept_asymmetric_capital_allocation",
+      "relation": "explains",
+      "weight": 3
+    },
+    {
+      "source": "concept_asymmetric_capital_allocation",
+      "target": "reel_lIku0GeX51fftAbBl1qa",
+      "relation": "reinforces",
+      "weight": 3
+    },
+    {
+      "source": "reel_2SOWdMgQA086yI7LsGO7",
+      "target": "dim_focus",
+      "relation": "applies_to",
+      "weight": 1
+    },
+    {
+      "source": "reel_2SOWdMgQA086yI7LsGO7",
+      "target": "concept_neurodivergent_hyperfocus",
+      "relation": "explains",
+      "weight": 2
+    },
+    {
+      "source": "concept_neurodivergent_hyperfocus",
+      "target": "reel_2SOWdMgQA086yI7LsGO7",
+      "relation": "reinforces",
+      "weight": 2
+    },
+    {
+      "source": "reel_2SOWdMgQA086yI7LsGO7",
+      "target": "concept_deep_work_flow_state",
+      "relation": "explains",
+      "weight": 2
+    },
+    {
+      "source": "concept_deep_work_flow_state",
+      "target": "reel_2SOWdMgQA086yI7LsGO7",
+      "relation": "reinforces",
+      "weight": 2
+    },
+    {
+      "source": "reel_UZgQLBBiGcx8NX1cQhhd",
+      "target": "dim_funds",
+      "relation": "applies_to",
+      "weight": 1
+    },
+    {
+      "source": "reel_UZgQLBBiGcx8NX1cQhhd",
+      "target": "concept_cinematic_color_grading",
+      "relation": "explains",
+      "weight": 2
+    },
+    {
+      "source": "concept_cinematic_color_grading",
+      "target": "reel_UZgQLBBiGcx8NX1cQhhd",
+      "relation": "reinforces",
+      "weight": 2
+    },
+    {
+      "source": "reel_7ve3ZgWE4UVe5z8v1J38",
+      "target": "dim_funds",
+      "relation": "applies_to",
+      "weight": 1
+    },
+    {
+      "source": "reel_7ve3ZgWE4UVe5z8v1J38",
+      "target": "concept_cellular_vitality_circadian",
+      "relation": "explains",
+      "weight": 2
+    },
+    {
+      "source": "concept_cellular_vitality_circadian",
+      "target": "reel_7ve3ZgWE4UVe5z8v1J38",
+      "relation": "reinforces",
+      "weight": 2
+    },
+    {
+      "source": "reel_CgHHkliEsRcug8WpUE0U",
+      "target": "dim_facts",
+      "relation": "applies_to",
+      "weight": 1
+    },
+    {
+      "source": "reel_CgHHkliEsRcug8WpUE0U",
+      "target": "concept_game_feel_mechanics",
+      "relation": "explains",
+      "weight": 2
+    },
+    {
+      "source": "concept_game_feel_mechanics",
+      "target": "reel_CgHHkliEsRcug8WpUE0U",
+      "relation": "reinforces",
+      "weight": 2
+    },
+    {
+      "source": "reel_nkJhKgdjFRYm8i1QsLPk",
+      "target": "dim_facts",
+      "relation": "applies_to",
+      "weight": 1
+    },
+    {
+      "source": "reel_nkJhKgdjFRYm8i1QsLPk",
+      "target": "concept_cinematic_color_grading",
+      "relation": "explains",
+      "weight": 3
+    },
+    {
+      "source": "concept_cinematic_color_grading",
+      "target": "reel_nkJhKgdjFRYm8i1QsLPk",
+      "relation": "reinforces",
+      "weight": 3
+    },
+    {
+      "source": "reel_k2ZkYmZENq4M6a2ylGd2",
+      "target": "dim_feedback",
+      "relation": "applies_to",
+      "weight": 1
+    },
+    {
+      "source": "reel_k2ZkYmZENq4M6a2ylGd2",
+      "target": "concept_stoic_mean_equanimity",
+      "relation": "explains",
+      "weight": 2
+    },
+    {
+      "source": "concept_stoic_mean_equanimity",
+      "target": "reel_k2ZkYmZENq4M6a2ylGd2",
+      "relation": "reinforces",
+      "weight": 2
+    }
+  ],
+  "clusters": [
+    {
+      "id": "cluster_dopamine_cognitive_flow",
+      "label": "Dopamine Optimization & Deep Cognitive Flow",
+      "coreTheme": "Neurochemical regulation of attention, mitigation of digital overstimulation, and sustained states of deep work.",
+      "masterSynthesis": "Attention is a fragile neurochemical resource governed by baseline dopamine. Sustained flow requires radical friction against impulse consumption and ruthless protection of cognitive entry conditions.",
+      "topTags": [
+        "dopamine",
+        "focus",
+        "attention",
+        "habits",
+        "flow"
+      ],
+      "nodeIds": [
+        "concept_dopamine_optimization",
+        "heuristic_dopamine_trough",
+        "concept_deep_work_flow_state",
+        "reel_QP1IwXvQU6ofKc4exikq",
+        "reel_hJHCQwdMXVR48bsgYjGC",
+        "reel_EVsCP4cQfPPW7eaVpgEX",
+        "reel_6uOVSU4z5L9gyziywLzy",
+        "reel_2SOWdMgQA086yI7LsGO7"
+      ],
+      "totalReels": 26
+    },
+    {
+      "id": "cluster_execution_velocity_habits",
+      "label": "Execution Velocity & Atomic Habits",
+      "coreTheme": "Scaffolding zero-friction routines, accelerating feedback loops, and cultivating relentless daily momentum.",
+      "masterSynthesis": "Execution velocity outpaces raw planning. By lowering activation energy to near-zero and treating consistency as the only non-negotiable metric, output compounds exponentially.",
+      "topTags": [
+        "habits",
+        "productivity",
+        "execution",
+        "discipline",
+        "workflow"
+      ],
+      "nodeIds": [
+        "concept_frictionless_execution_habits",
+        "heuristic_activation_energy",
+        "reel_qUZT4sUx88Lb6jEPCPNj",
+        "reel_go1x2QfZAB1J6qPxUbct",
+        "reel_NdNRsfGOAHJqoa2vOaFq",
+        "reel_U5yNQFGYlOMHUUnMsA9e",
+        "reel_t4F0PEPYjl3RG4GVta94"
+      ],
+      "totalReels": 732
+    },
+    {
+      "id": "cluster_neurodivergent_creative_focus",
+      "label": "Neurodivergent Attentional Dynamics & Hyperfocus",
+      "coreTheme": "Leveraging non-linear cognitive processing, ADHD hyperfocus, and sensory environment optimization.",
+      "masterSynthesis": "Divergent attention is not a defect but an asynchronous cognitive specialization. When channelled into self-selected obsessive domains with optimal sensory stimulation, output reaches transcendent levels.",
+      "topTags": [
+        "hyperfocus",
+        "adhd",
+        "creativity",
+        "mindset",
+        "focus"
+      ],
+      "nodeIds": [
+        "concept_neurodivergent_hyperfocus",
+        "reel_JEe8au83E626YsEpMBk5",
+        "reel_2SOWdMgQA086yI7LsGO7"
+      ],
+      "totalReels": 5
+    },
+    {
+      "id": "cluster_ai_autonomous_systems",
+      "label": "Autonomous AI Agents & Intelligent Mesh",
+      "coreTheme": "Engineering recursive LLM agents, memory graphs, automated pipelines, and human-agent co-piloting.",
+      "masterSynthesis": "The cognitive leverage of the individual is magnified thousandfold by autonomous agent meshes. Software is shifting from deterministic code to resilient goal-directed dynamic networks.",
+      "topTags": [
+        "ai",
+        "automation",
+        "engineering",
+        "software",
+        "agents"
+      ],
+      "nodeIds": [
+        "concept_autonomous_ai_agents",
+        "heuristic_agentic_boundaries",
+        "reel_Ybkn33Hgl1GjnYHiSI27",
+        "reel_RDwjdmQ1BQ1UMJLyS9HJ",
+        "reel_N1suCcqlij5Toq1WyvfE",
+        "reel_0zckrgaUx6DEZpswutMe",
+        "reel_GsvyFvVJGJ2BLyWVB2s5",
+        "reel_AwDTS5aN4UP56XnFDBD7",
+        "reel_jvixCMuY1RbcvMej323y",
+        "reel_j0DaUrtSqC2lKcXe9pyU",
+        "reel_lgiWg6lTbN69KhrOFf6X"
+      ],
+      "totalReels": 186
+    },
+    {
+      "id": "cluster_software_developer_ergonomics",
+      "label": "Software Systems & Developer Ergonomics",
+      "coreTheme": "Robust software architecture, reactive UI patterns, type systems, and frictionless local developer loops.",
+      "masterSynthesis": "Superior software emerges from developer environments that minimize cognitive friction. Strict typing, deterministic builds, and modular domain modeling eliminate entire categories of systemic failure.",
+      "topTags": [
+        "software",
+        "engineering",
+        "typescript",
+        "architecture",
+        "code"
+      ],
+      "nodeIds": [
+        "concept_autonomous_ai_agents",
+        "heuristic_agentic_boundaries",
+        "reel_Ybkn33Hgl1GjnYHiSI27",
+        "reel_RDwjdmQ1BQ1UMJLyS9HJ",
+        "reel_N1suCcqlij5Toq1WyvfE",
+        "reel_0zckrgaUx6DEZpswutMe",
+        "reel_GsvyFvVJGJ2BLyWVB2s5",
+        "reel_AwDTS5aN4UP56XnFDBD7",
+        "reel_jvixCMuY1RbcvMej323y",
+        "reel_j0DaUrtSqC2lKcXe9pyU",
+        "reel_lgiWg6lTbN69KhrOFf6X",
+        "reel_6vOSR7DQsmCWI3kzy1qP",
+        "reel_y3X4z3KwS99HCLC4pIhK",
+        "reel_iaeiSv8IjNshL8IRQqpb",
+        "reel_cS60r4DqlMf3cu7GHsxq"
+      ],
+      "totalReels": 1065
+    },
+    {
+      "id": "cluster_game_feel_mechanics",
+      "label": "Game Feel, Combat Systems & Tactile Mechanics",
+      "coreTheme": "Designing visceral micro-feedback, parry timings, kinetic reactions, and frame-accurate player interaction.",
+      "masterSynthesis": "Game feel is tactile psychology encoded into state changes. Instant visual freeze-frames, frame-perfect auditory impact, and elastic recovery transform sterile inputs into intoxicating physical reality.",
+      "topTags": [
+        "game-feel",
+        "game-design",
+        "animation",
+        "mechanics",
+        "tactile"
+      ],
+      "nodeIds": [
+        "concept_game_feel_mechanics",
+        "heuristic_game_feel_juice",
+        "reel_WCpCU25gnHzu2dERpK5Z",
+        "reel_RmnHfOtT6u9cjWWEP2E5",
+        "reel_CgHHkliEsRcug8WpUE0U"
+      ],
+      "totalReels": 10
+    },
+    {
+      "id": "cluster_cinematography_visual_craft",
+      "label": "Cinematography, Color Science & Visual Direction",
+      "coreTheme": "Curating optical depth, filmic color grading, lighting dynamics, and atmospheric visual composition.",
+      "masterSynthesis": "Cinematic impact is fundamentally about tonal contrast and deliberate restraint in color palettes. Every visual frame must direct the viewer's subconscious emotional baseline.",
+      "topTags": [
+        "cinematography",
+        "color-grading",
+        "lighting",
+        "visual",
+        "art"
+      ],
+      "nodeIds": [
+        "concept_cinematic_color_grading",
+        "heuristic_color_restraint",
+        "reel_go1x2QfZAB1J6qPxUbct",
+        "reel_UZgQLBBiGcx8NX1cQhhd",
+        "reel_nkJhKgdjFRYm8i1QsLPk"
+      ],
+      "totalReels": 61
+    },
+    {
+      "id": "cluster_3d_animation_vfx",
+      "label": "3D Animation, Procedural Simulation & Motion",
+      "coreTheme": "Spatial graphics pipelines, Blender geometry nodes, physics simulations, and organic character animation.",
+      "masterSynthesis": "Compelling motion derives from biological weight, anticipatory squash-and-stretch, and smooth easing transitions. Procedural pipelines multiply artistic range without sacrificing tactile believability.",
+      "topTags": [
+        "animation",
+        "3d",
+        "motion",
+        "blender",
+        "design"
+      ],
+      "nodeIds": [
+        "concept_3d_procedural_motion",
+        "reel_83c8k6CEBWZxAyTVeSNG",
+        "reel_NnXa43ehPam1IGlCZhzf",
+        "reel_jvixCMuY1RbcvMej323y",
+        "reel_lgiWg6lTbN69KhrOFf6X"
+      ],
+      "totalReels": 45
+    },
+    {
+      "id": "cluster_hardware_ergonomics_edc",
+      "label": "Minimalist Hardware & Tactical Workspace Ergonomics",
+      "coreTheme": "Engineering the physical operating environment, ergonomic mechanical tools, and frictionless everyday-carry gear.",
+      "masterSynthesis": "Physical ergonomics dictates intellectual stamina. Eliminating micro-strains from repetitive physical interactions preserves vital cognitive bandwidth for creative synthesis.",
+      "topTags": [
+        "hardware",
+        "ergonomics",
+        "everyday-carry",
+        "desk",
+        "engineering"
+      ],
+      "nodeIds": [
+        "concept_ergonomic_hardware_edc",
+        "heuristic_ergonomic_friction",
+        "reel_GsvyFvVJGJ2BLyWVB2s5",
+        "reel_JurNEG2PytBXzgtYfF38",
+        "reel_wqUgMWPThwolJFo78VFK",
+        "reel_pAalJALon2ZKGBmzTjbL"
+      ],
+      "totalReels": 24
+    },
+    {
+      "id": "cluster_audio_sound_engineering",
+      "label": "Psychoacoustics, Sound Design & Audio Production",
+      "coreTheme": "Sculpting immersive audio frequencies, spatial positioning, foley impact, and musical resonance.",
+      "masterSynthesis": "Sound bypasses conscious cognition to trigger immediate visceral emotion. Precise sonic transients and low-end frequency management anchor perceptual realism.",
+      "topTags": [
+        "sound-design",
+        "music",
+        "audio",
+        "foley",
+        "media"
+      ],
+      "nodeIds": [
+        "concept_audio_sound_engineering",
+        "reel_BxpDbhWlgoBg3egpC5K6",
+        "reel_B6sMg0da3qZETebPnIZh",
+        "reel_szDEb5SabUW9EMoM34PC",
+        "reel_sx6l8JsegrfkA99LLi13"
+      ],
+      "totalReels": 28
+    },
+    {
+      "id": "cluster_narrative_storytelling_framing",
+      "label": "Narrative Architecture & Persuasive Framing",
+      "coreTheme": "Constructing gripping storytelling hooks, philosophical allegories, and persuasive message distribution.",
+      "masterSynthesis": "Facts inform, but visceral narrative transforms identity. The narrative arc that articulates unexpressed human struggles commands supreme authority.",
+      "topTags": [
+        "storytelling",
+        "writing",
+        "media",
+        "persuasion",
+        "culture"
+      ],
+      "nodeIds": [
+        "concept_narrative_rhetoric_storytelling",
+        "reel_AwDTS5aN4UP56XnFDBD7",
+        "reel_MrpcGFAUyhkbDkhyUMcX",
+        "reel_j0DaUrtSqC2lKcXe9pyU",
+        "reel_mRo6oujeG1lQ4MpiCmZw"
+      ],
+      "totalReels": 58
+    },
+    {
+      "id": "cluster_biomechanics_tendon_elasticity",
+      "label": "Plyometric Tendon Elasticity & Kinetic Mechanics",
+      "coreTheme": "Loading fascial springs, knee-over-toe conditioning, tendon stiffness, and reactive kinetic power.",
+      "masterSynthesis": "Human athleticism is driven by fascial elastic recoil rather than pure muscular contraction. High-velocity tendon loading creates unbreakable joint resilience and superhuman explosiveness.",
+      "topTags": [
+        "plyometrics",
+        "tendon",
+        "biomechanics",
+        "fascia",
+        "mobility"
+      ],
+      "nodeIds": [
+        "concept_plyometric_tendon_elasticity",
+        "heuristic_tendon_elasticity",
+        "concept_biomechanical_joint_alignment",
+        "reel_hEdd29HYddxB2I4RP6JC",
+        "reel_KzZI1tn45I6WBowWio9v",
+        "reel_yba1yiZw81H9yye07BHl",
+        "reel_SK0ZR0HszykWuykjoFFB"
+      ],
+      "totalReels": 52
+    },
+    {
+      "id": "cluster_strength_hypertrophy_longevity",
+      "label": "Progressive Hypertrophy & Joint Longevity",
+      "coreTheme": "Full-range mechanical tension, posterior chain integration, spine stabilization, and orthopedic health.",
+      "masterSynthesis": "True strength is loaded joint mobility across complete physiological ranges. Cultivating structural symmetry protects against degenerative aging while optimizing anabolic signaling.",
+      "topTags": [
+        "fitness",
+        "strength",
+        "hypertrophy",
+        "posture",
+        "vitality"
+      ],
+      "nodeIds": [
+        "concept_hypertrophy_kinetic_chain",
+        "concept_biomechanical_joint_alignment",
+        "reel_hEdd29HYddxB2I4RP6JC",
+        "reel_KzZI1tn45I6WBowWio9v",
+        "reel_yba1yiZw81H9yye07BHl",
+        "reel_SK0ZR0HszykWuykjoFFB",
+        "reel_vlB1vyU1jaUoby0pykGu",
+        "reel_HjUXXw9fpom0dYwOyl3K",
+        "reel_1VEOZjHgyaaxHSwsMXL0",
+        "reel_VlwikBiKK7KrhobSsR3C"
+      ],
+      "totalReels": 720
+    },
+    {
+      "id": "cluster_cellular_vitality_circadian",
+      "label": "Circadian Architecture, Sleep & Cellular Vitality",
+      "coreTheme": "Syncing circadian biology, morning photons, sleep architecture, metabolic resilience, and deep mitochondrial recovery.",
+      "masterSynthesis": "Physical vitality is the foundational fuel of all intellectual creation. Sleep architecture and circadian light exposure are non-negotiable levers governing baseline mitochondrial output.",
+      "topTags": [
+        "vitality",
+        "sleep",
+        "nutrition",
+        "health",
+        "longevity"
+      ],
+      "nodeIds": [
+        "concept_cellular_vitality_circadian",
+        "heuristic_circadian_anchor",
+        "reel_7ve3ZgWE4UVe5z8v1J38"
+      ],
+      "totalReels": 15
+    },
+    {
+      "id": "cluster_capital_asymmetric_wealth",
+      "label": "Asymmetric Wealth & Financial Leverage",
+      "coreTheme": "Constructing asymmetric cash-flow systems, acquiring equity, and insulating personal sovereignty through capital allocation.",
+      "masterSynthesis": "Capital is distilled agency. True financial power is achieved not by linear hourly labor, but by owning scalable digital assets and positioning for high-convexity opportunities.",
+      "topTags": [
+        "funds",
+        "wealth",
+        "finance",
+        "strategy",
+        "capital"
+      ],
+      "nodeIds": [
+        "concept_asymmetric_capital_allocation",
+        "heuristic_asymmetric_convexity",
+        "reel_bL4n5P8d0lDIeXYnDlN8",
+        "reel_bp7U1Dqlwq1lX8WOAFn3",
+        "reel_RNhPhG1E5l8T6fNa7Lmw",
+        "reel_lIku0GeX51fftAbBl1qa"
+      ],
+      "totalReels": 23
+    },
+    {
+      "id": "cluster_relational_psychology_mirrors",
+      "label": "Relational Psychology & The Mirror Principle",
+      "coreTheme": "Understanding interpersonal projection, emotional attachment styles, and treating relational conflict as self-reflection.",
+      "masterSynthesis": "Other people do not provoke emotional reactions in us; they reveal unprocessed wounds already present. Every interpersonal friction point is an unblemished mirror of the self.",
+      "topTags": [
+        "relationships",
+        "psychology",
+        "reflection",
+        "feedback",
+        "mindset"
+      ],
+      "nodeIds": [
+        "concept_relational_psychological_mirrors",
+        "heuristic_relational_mirror",
+        "reel_3Dky1YAPnYRaUhS83tWi",
+        "reel_eGyAaln1VMch9zZ8Gmmu",
+        "reel_bE80nj0Vl1OtLVJWkwy4",
+        "reel_J74JjMHwlYk3gEU2zQhn"
+      ],
+      "totalReels": 1062
+    },
+    {
+      "id": "cluster_emotional_exhaustion_boundaries",
+      "label": "Emotional Sovereign Boundaries & Detachment",
+      "coreTheme": "Recognizing subtle emotional drain, practicing radical detachment from non-reciprocal dynamics, and maintaining energetic sovereignty.",
+      "masterSynthesis": "Boundaries are not barriers erected to punish others; they are structural enclosures that preserve personal integrity. Walking away from depleting dynamics is the ultimate act of self-honor.",
+      "topTags": [
+        "boundaries",
+        "communication",
+        "psychology",
+        "detachment",
+        "resilience"
+      ],
+      "nodeIds": [
+        "concept_emotional_exhaustion_departure",
+        "heuristic_boundary_departure",
+        "reel_fLfTvlsS1uwQJe0Kru16"
+      ],
+      "totalReels": 11
+    },
+    {
+      "id": "cluster_stoic_equanimity_mean",
+      "label": "Stoic Equanimity & The Doctrine of the Mean",
+      "coreTheme": "Navigating life between deficiency and excess, cultivating unwavering inner calm, and mastering Aristotle's Golden Mean.",
+      "masterSynthesis": "Excellence lies at the golden harmonic center between reactive extremes. By disidentifying from transient emotional storms, one cultivates invincible tranquil agency.",
+      "topTags": [
+        "stoicism",
+        "mindset",
+        "resilience",
+        "philosophy",
+        "balance"
+      ],
+      "nodeIds": [
+        "concept_stoic_mean_equanimity",
+        "heuristic_golden_mean",
+        "reel_k2ZkYmZENq4M6a2ylGd2"
+      ],
+      "totalReels": 3
+    },
+    {
+      "id": "cluster_social_dynamics_leadership",
+      "label": "High-Agency Social Dynamics & Leadership",
+      "coreTheme": "Charismatic clarity, assertive communication, high-trust team leadership, and empathetic influence.",
+      "masterSynthesis": "Leadership is the quiet transmission of certainty in an ambiguous world. Communicating with unfiltered clarity and genuine empathy commands natural loyalty and collaborative momentum.",
+      "topTags": [
+        "communication",
+        "leadership",
+        "social",
+        "influence",
+        "growth"
+      ],
+      "nodeIds": [
+        "concept_high_agency_communication",
+        "reel_bo3vzD5zpLxlNXHxTi6q",
+        "reel_s32q2aNhZkFMpZYImRjE"
+      ],
+      "totalReels": 12
+    },
+    {
+      "id": "cluster_existential_taste_curation",
+      "label": "Aesthetic Discernment, Taste & Personal Philosophy",
+      "coreTheme": "Developing sharp aesthetic curation, elevating cultural appreciation, and refining a distinct personal worldview.",
+      "masterSynthesis": "Taste is the ultimate competitive moat in an age of automated abundance. Curating high-signal inputs and defining a transcendent aesthetic identity makes work inimitable.",
+      "topTags": [
+        "culture",
+        "art",
+        "taste",
+        "philosophy",
+        "curation"
+      ],
+      "nodeIds": [
+        "concept_narrative_rhetoric_storytelling",
+        "reel_AwDTS5aN4UP56XnFDBD7",
+        "reel_MrpcGFAUyhkbDkhyUMcX",
+        "reel_j0DaUrtSqC2lKcXe9pyU",
+        "reel_mRo6oujeG1lQ4MpiCmZw"
+      ],
+      "totalReels": 58
+    }
+  ],
+  "metadata": {
+    "totalNodes": 97,
+    "totalEdges": 213,
+    "clustersCount": 20,
+    "builtAt": "2026-11-02T18:07:10.901Z"
+  }
+}

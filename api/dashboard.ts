@@ -1879,11 +1879,11 @@ export default async function handler(
       if (!gctx) return;
 
       const NODE_STYLES = {
-        concept: { color: '#06b6d4', radius: 11, label: 'Concept', badgeBg: 'bg-cyan-500/10 text-cyan-400 border-cyan-500/30' },
-        reel: { color: '#a855f7', radius: 8, label: 'Reel', badgeBg: 'bg-purple-500/10 text-purple-400 border-purple-500/30' },
-        heuristic: { color: '#10b981', radius: 10, label: 'Heuristic', badgeBg: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30' },
-        dimension: { color: '#f59e0b', radius: 16, label: 'Dimension', badgeBg: 'bg-amber-500/10 text-amber-400 border-amber-500/30' },
-        verdict: { color: '#f43f5e', radius: 11, label: 'User Verdict', badgeBg: 'bg-rose-500/10 text-rose-400 border-rose-500/30' },
+        concept: { color: '#06b6d4', radius: 8, label: 'Concept', badgeBg: 'bg-cyan-500/10 text-cyan-400 border-cyan-500/30' },
+        reel: { color: '#a855f7', radius: 6, label: 'Reel', badgeBg: 'bg-purple-500/10 text-purple-400 border-purple-500/30' },
+        heuristic: { color: '#10b981', radius: 7, label: 'Heuristic', badgeBg: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30' },
+        dimension: { color: '#f59e0b', radius: 12, label: 'Dimension', badgeBg: 'bg-amber-500/10 text-amber-400 border-amber-500/30' },
+        verdict: { color: '#f43f5e', radius: 8, label: 'User Verdict', badgeBg: 'bg-rose-500/10 text-rose-400 border-rose-500/30' },
       };
 
       const QUADRANT_OFFSETS = {
@@ -1905,7 +1905,7 @@ export default async function handler(
       let hoveredNode = null;
 
       const isMobile = window.innerWidth < 640;
-      const camera = { panX: 0, panY: 0, zoom: isMobile ? 0.9 : 1.05 };
+      const camera = { panX: 0, panY: 0, zoom: isMobile ? 0.72 : 0.82 };
       let dpr = window.devicePixelRatio || 1;
       let width = 0;
       let height = 0;
@@ -2178,24 +2178,24 @@ export default async function handler(
             gctx.fill();
           }
 
-          const shouldDrawLabel = isSelected || isHovered || n.type === 'dimension' || n.type === 'concept' || camera.zoom > 1.35;
+          const shouldDrawLabel = isSelected || isHovered || n.type === 'dimension' || n.type === 'concept' || camera.zoom > 1.2;
           if (shouldDrawLabel && nodeAlpha > 0.3) {
-            const text = truncateText(n.label, isSelected ? 30 : 20);
-            gctx.font = isSelected ? 'bold 11px JetBrains Mono, monospace' : '10px Plus Jakarta Sans, sans-serif';
+            const text = truncateText(n.label, isSelected ? 24 : 16);
+            gctx.font = isSelected ? 'bold 10px JetBrains Mono, monospace' : '9px Plus Jakarta Sans, sans-serif';
             const metrics = gctx.measureText(text);
             const textWidth = metrics.width;
-            const textY = n.y + n.radius + 12;
+            const textY = n.y + n.radius + 10;
 
-            gctx.fillStyle = 'rgba(12, 12, 17, 0.85)';
-            gctx.fillRect(n.x - textWidth / 2 - 4, textY - 9, textWidth + 8, 14);
-            gctx.strokeStyle = isSelected ? n.color : 'rgba(255, 255, 255, 0.15)';
-            gctx.lineWidth = 0.8;
-            gctx.strokeRect(n.x - textWidth / 2 - 4, textY - 9, textWidth + 8, 14);
+            gctx.fillStyle = 'rgba(12, 12, 17, 0.88)';
+            gctx.fillRect(n.x - textWidth / 2 - 3, textY - 7, textWidth + 6, 13);
+            gctx.strokeStyle = isSelected ? n.color : 'rgba(255, 255, 255, 0.2)';
+            gctx.lineWidth = isSelected ? 1.2 : 0.6;
+            gctx.strokeRect(n.x - textWidth / 2 - 3, textY - 7, textWidth + 6, 13);
 
-            gctx.fillStyle = isSelected ? '#ffffff' : '#d4d4d8';
+            gctx.fillStyle = isSelected ? '#ffffff' : '#e4e4e7';
             gctx.textAlign = 'center';
             gctx.textBaseline = 'middle';
-            gctx.fillText(text, n.x, textY - 2);
+            gctx.fillText(text, n.x, textY - 1);
           }
         }
 
@@ -2434,7 +2434,7 @@ export default async function handler(
         triggerHaptic('light');
         camera.panX = 0;
         camera.panY = 0;
-        camera.zoom = window.innerWidth < 640 ? 0.9 : 1.05;
+        camera.zoom = window.innerWidth < 640 ? 0.72 : 0.82;
         reheatSimulation(0.4);
       };
 

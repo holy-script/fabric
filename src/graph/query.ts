@@ -17,6 +17,7 @@ import type {
 } from "./types.js";
 
 const LOCAL_GRAPH_CACHE = path.resolve(process.cwd(), "data/knowledge_graph.json");
+const LOCAL_SUMMARY_CACHE = path.resolve(process.cwd(), "data/graph_summary.json");
 
 let memoryGraph: KnowledgeGraph | null = null;
 
@@ -540,6 +541,19 @@ let cachedSummary: GraphSummaryData | null = null;
 export async function getGraphSummary(forceRefresh = false): Promise<GraphSummaryData> {
   if (cachedSummary && !forceRefresh) {
     return cachedSummary;
+  }
+
+  // Fast pre-baked summary cache to ensure zero-cold-start performance on Vercel
+  if (!forceRefresh && fs.existsSync(LOCAL_SUMMARY_CACHE)) {
+    try {
+      const data = fs.readFileSync(LOCAL_SUMMARY_CACHE, "utf-8");
+      cachedSummary = JSON.parse(data);
+      if (cachedSummary && cachedSummary.nodes?.length) {
+        return cachedSummary;
+      }
+    } catch (e) {
+      console.warn("⚠️ Failed reading pre-baked graph summary cache:", e);
+    }
   }
 
   const g = await getOrLoadGraph(forceRefresh);

@@ -27,3 +27,4 @@ describe("Multi-Engine Web Search QC Suite", () => {
     expect(res.engineUsed).toBe("none");
   });
 });
+
