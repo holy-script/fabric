@@ -88,3 +88,4 @@ describe("Universal A2A Protocol QC Suite", () => {
     expect(Array.isArray(body.result?.content)).toBe(true);
   });
 });
+

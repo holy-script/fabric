@@ -13,7 +13,7 @@ import type { Trade, UserState, GoalItem, AristotelianScores } from "../db/types
 
 const genAI = new GoogleGenerativeAI(config.geminiApiKey);
 const model = genAI.getGenerativeModel({
-  model: "gemini-3.5-flash-lite",
+  model: "gemini-3.5-flash",
 });
 
 export type DimensionKey =

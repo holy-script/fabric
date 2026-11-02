@@ -32,3 +32,4 @@ describe("NotebookLM Integration QC Suite", () => {
     expect(content).toContain("Fabric Master Heuristics & Axioms");
   });
 });
+

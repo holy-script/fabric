@@ -8,7 +8,7 @@ import type { UserState, Trade } from "../db/types.js";
 
 const genAI = new GoogleGenerativeAI(config.geminiApiKey);
 const model = genAI.getGenerativeModel({
-  model: "gemini-3.5-flash-lite",
+  model: "gemini-3.5-flash",
 });
 
 export interface ConversationTurnResult {
@@ -173,12 +173,35 @@ Instructions:
 
   const userPrompt = `User Query: "${query}"`;
 
-  const response = await model.generateContent([
-    { text: systemPrompt },
-    { text: userPrompt },
-  ]);
+  let replyText = "";
+  try {
+    const aiPromise = model.generateContent([
+      { text: systemPrompt },
+      { text: userPrompt },
+    ]);
 
-  const replyText = response.response.text().trim();
+    // 3.8-second timeout race to prevent Vercel serverless function abortion
+    const timeoutPromise = new Promise<never>((_, reject) =>
+      setTimeout(() => reject(new Error("LLM generation timeout")), 3800)
+    );
+
+    const response = await Promise.race([aiPromise, timeoutPromise]);
+    replyText = response.response.text().trim();
+  } catch (err) {
+    console.warn("[Conversation] LLM call failed or timed out, generating deterministic fallback:", err);
+
+    if (citedNodes.length > 0) {
+      replyText = `### 🧠 Fabric Knowledge Base Findings\n\nFound **${citedNodes.length} relevant items** in your saved Vault regarding your query:\n\n` +
+        citedNodes
+          .map((n) => `• **${n.title}** (${n.type.toUpperCase()})\n${n.takeaway ? `  ↳ _Heuristic:_ "${n.takeaway}"\n` : ""}${n.url ? `  ↳ _Vault Clip:_ [Watch on Telegram](${n.url})\n` : ""}`)
+          .join("\n");
+    } else if (webCitations.length > 0) {
+      replyText = `### 🌐 Web Findings\n\n` +
+        webCitations.map((w) => `• [${w.title}](${w.url})`).join("\n");
+    } else {
+      replyText = `I searched your Knowledge Base and saved Vault for *"${query}"*, but didn't find any direct matches yet. Try another keyword or save a new reel to populate this topic!`;
+    }
+  }
 
   return {
     text: replyText,

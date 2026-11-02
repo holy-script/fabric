@@ -267,7 +267,7 @@ function cleanJsonOutput(text: string): string {
  * Calls Gemini Flash with resilient model fallback (gemini-2.5-flash -> gemini-3.5-flash -> gemini-3.8-flash).
  */
 async function generateGeminiContent(promptParts: any[] | string) {
-  const models = ["gemini-3.5-flash-lite", "gemini-3.8-flash", "gemini-flash-latest"];
+  const models = ["gemini-3.5-flash", "gemini-3.8-flash", "gemini-flash-latest"];
   let lastError: any = null;
 
   for (const modelName of models) {

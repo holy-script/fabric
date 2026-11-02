@@ -59,3 +59,4 @@ describe("Hardware Telemetry & Wearables QC Suite", () => {
     expect(lowScale).toBeGreaterThanOrEqual(-5);
   });
 });
+

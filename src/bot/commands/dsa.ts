@@ -4,7 +4,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import { config } from "../../config/env.js";
 
 const genAI = new GoogleGenerativeAI(config.geminiApiKey);
-const model = genAI.getGenerativeModel({ model: "gemini-3.5-flash-lite" });
+const model = genAI.getGenerativeModel({ model: "gemini-3.5-flash" });
 
 export const CORE_DSA_PATTERNS = [
   "Two Pointers & Opposite Direction Convergence",

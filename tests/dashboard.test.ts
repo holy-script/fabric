@@ -95,3 +95,4 @@ describe("Visual HUD & Dashboard QC Suite", () => {
     expect(html.includes("window.resizeGraphCanvas = resizeGraphCanvas;")).toBe(true);
   });
 });
+

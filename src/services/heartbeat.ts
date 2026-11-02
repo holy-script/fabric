@@ -20,7 +20,7 @@ import { DEFAULT_SIDEQUESTS, sidequestsCollection, type SidequestItem } from "..
 import type { Trade } from "../db/types.js";
 
 const genAI = new GoogleGenerativeAI(config.geminiApiKey);
-const model = genAI.getGenerativeModel({ model: "gemini-3.5-flash-lite" });
+const model = genAI.getGenerativeModel({ model: "gemini-3.5-flash" });
 
 const TIMEZONE = process.env.TIMEZONE || "Asia/Kolkata";
 

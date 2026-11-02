@@ -5,7 +5,7 @@ import { config } from "../../config/env.js";
 import { db, createTrade } from "../../db/firestore.js";
 
 const genAI = new GoogleGenerativeAI(config.geminiApiKey);
-const model = genAI.getGenerativeModel({ model: "gemini-3.5-flash-lite" });
+const model = genAI.getGenerativeModel({ model: "gemini-3.5-flash" });
 
 export async function handleVitality(ctx: Context) {
   const keyboard = new InlineKeyboard()

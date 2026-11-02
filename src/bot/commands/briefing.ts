@@ -11,7 +11,7 @@ import {
 import { getUserActivePlugins } from "../../plugins/manager.js";
 
 const genAI = new GoogleGenerativeAI(config.geminiApiKey);
-const model = genAI.getGenerativeModel({ model: "gemini-3.5-flash-lite" });
+const model = genAI.getGenerativeModel({ model: "gemini-3.5-flash" });
 
 export const MORNING_BRIEFING_PROMPT = `
 You are the Morning Recon Briefing Agent for "The Fabric: 4F Meta-OS".

@@ -8,7 +8,7 @@ import type { Trade, UserState } from "../db/types.js";
 const genAI = new GoogleGenerativeAI(config.geminiApiKey);
 
 const model = genAI.getGenerativeModel({
-  model: "gemini-3.5-flash-lite",
+  model: "gemini-3.5-flash",
   generationConfig: {
     responseMimeType: "application/json",
   },
