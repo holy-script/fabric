@@ -3,6 +3,7 @@ import path from "path";
 import admin from "firebase-admin";
 import { graphsCollection, knowledgeCollection } from "../db/firestore.js";
 import { buildKnowledgeGraph } from "./builder.js";
+import bundledSummaryJson from "../../data/graph_summary.json";
 import type {
   KnowledgeGraph,
   GraphNode,
@@ -532,6 +533,8 @@ export interface GraphSummaryData {
   };
 }
 
+const BUNDLED_SUMMARY: GraphSummaryData = bundledSummaryJson as unknown as GraphSummaryData;
+
 let cachedSummary: GraphSummaryData | null = null;
 
 /**
@@ -544,100 +547,125 @@ export async function getGraphSummary(forceRefresh = false): Promise<GraphSummar
   }
 
   // Fast pre-baked summary cache to ensure zero-cold-start performance on Vercel
-  if (!forceRefresh && fs.existsSync(LOCAL_SUMMARY_CACHE)) {
-    try {
-      const data = fs.readFileSync(LOCAL_SUMMARY_CACHE, "utf-8");
-      cachedSummary = JSON.parse(data);
-      if (cachedSummary && cachedSummary.nodes?.length) {
-        return cachedSummary;
-      }
-    } catch (e) {
-      console.warn("⚠️ Failed reading pre-baked graph summary cache:", e);
-    }
-  }
+  if (!forceRefresh) {
+    const candidatePaths = [
+      LOCAL_SUMMARY_CACHE,
+      path.resolve(__dirname, "../../data/graph_summary.json"),
+      path.resolve(__dirname, "../../../data/graph_summary.json"),
+    ];
 
-  const g = await getOrLoadGraph(forceRefresh);
-
-  // 1. All structural nodes: dimensions, concepts, heuristics, verdicts
-  const structuralNodes = g.nodes.filter((n) => n.type !== "reel");
-
-  // 2. All reels that have a direct telegram stream/view URL
-  const tgReels = g.nodes.filter(
-    (n) => n.type === "reel" && (n.properties.telegramStreamUrl || n.properties.telegramUrl || n.properties.streamUrl)
-  );
-
-  const selectedNodeIds = new Set<string>([
-    ...structuralNodes.map((n) => n.id),
-    ...tgReels.map((n) => n.id),
-  ]);
-
-  // 3. For each cluster, ensure representative reels are included
-  for (const cluster of g.clusters) {
-    let count = cluster.nodeIds.filter((id) => selectedNodeIds.has(id)).length;
-    if (count < 3) {
-      for (const id of cluster.nodeIds) {
-        if (count >= 3) break;
-        if (!selectedNodeIds.has(id)) {
-          selectedNodeIds.add(id);
-          count++;
+    for (const cachePath of candidatePaths) {
+      if (fs.existsSync(cachePath)) {
+        try {
+          const data = fs.readFileSync(cachePath, "utf-8");
+          const parsed = JSON.parse(data);
+          if (parsed && Array.isArray(parsed.nodes) && parsed.nodes.length > 5) {
+            cachedSummary = parsed as GraphSummaryData;
+            return cachedSummary;
+          }
+        } catch (e) {
+          console.warn("⚠️ Failed reading pre-baked graph summary cache at", cachePath, e);
         }
       }
     }
+
+    if (BUNDLED_SUMMARY && BUNDLED_SUMMARY.nodes && BUNDLED_SUMMARY.nodes.length > 5) {
+      cachedSummary = BUNDLED_SUMMARY;
+      return cachedSummary;
+    }
   }
 
-  const nodeMap = new Map(g.nodes.map((n) => [n.id, n]));
-  const nodes: GraphSummaryNode[] = [];
+  try {
+    const g = await getOrLoadGraph(forceRefresh);
 
-  for (const id of selectedNodeIds) {
-    const n = nodeMap.get(id);
-    if (!n) continue;
-    nodes.push({
-      id: n.id,
-      type: n.type,
-      label: n.label,
-      description: n.description || "",
-      weight: n.weight || 1,
-      quadrant: (n.properties.quadrant as string) || "",
-      category: (n.properties.category as string) || "",
-      tags: ((n.properties.tags as string[]) || []).slice(0, 5),
-      author: (n.properties.author as string) || "",
-      actionableTakeaway: (n.properties.actionableTakeaway as string) || "",
-      telegramStreamUrl: (n.properties.telegramStreamUrl || n.properties.telegramUrl || n.properties.streamUrl || "") as string,
-      notionUrl: (n.properties.notionUrl || "") as string,
-    });
-  }
+    // 1. All structural nodes: dimensions, concepts, heuristics, verdicts
+    const structuralNodes = g.nodes.filter((n) => n.type !== "reel");
 
-  const validNodeIds = new Set(nodes.map((n) => n.id));
-  const edges: GraphSummaryEdge[] = g.edges
-    .filter((e) => validNodeIds.has(e.source) && validNodeIds.has(e.target))
-    .map((e) => ({
-      source: e.source,
-      target: e.target,
-      relation: e.relation,
-      weight: e.weight || 1,
+    // 2. All reels that have a direct telegram stream/view URL
+    const tgReels = g.nodes.filter(
+      (n) => n.type === "reel" && (n.properties.telegramStreamUrl || n.properties.telegramUrl || n.properties.streamUrl)
+    );
+
+    const selectedNodeIds = new Set<string>([
+      ...structuralNodes.map((n) => n.id),
+      ...tgReels.map((n) => n.id),
+    ]);
+
+    // 3. For each cluster, ensure representative reels are included
+    for (const cluster of g.clusters) {
+      let count = cluster.nodeIds.filter((id) => selectedNodeIds.has(id)).length;
+      if (count < 3) {
+        for (const id of cluster.nodeIds) {
+          if (count >= 3) break;
+          if (!selectedNodeIds.has(id)) {
+            selectedNodeIds.add(id);
+            count++;
+          }
+        }
+      }
+    }
+
+    const nodeMap = new Map(g.nodes.map((n) => [n.id, n]));
+    const nodes: GraphSummaryNode[] = [];
+
+    for (const id of selectedNodeIds) {
+      const n = nodeMap.get(id);
+      if (!n) continue;
+      nodes.push({
+        id: n.id,
+        type: n.type,
+        label: n.label,
+        description: n.description || "",
+        weight: n.weight || 1,
+        quadrant: (n.properties.quadrant as string) || "",
+        category: (n.properties.category as string) || "",
+        tags: ((n.properties.tags as string[]) || []).slice(0, 5),
+        author: (n.properties.author as string) || "",
+        actionableTakeaway: (n.properties.actionableTakeaway as string) || "",
+        telegramStreamUrl: (n.properties.telegramStreamUrl || n.properties.telegramUrl || n.properties.streamUrl || "") as string,
+        notionUrl: (n.properties.notionUrl || "") as string,
+      });
+    }
+
+    const validNodeIds = new Set(nodes.map((n) => n.id));
+    const edges: GraphSummaryEdge[] = g.edges
+      .filter((e) => validNodeIds.has(e.source) && validNodeIds.has(e.target))
+      .map((e) => ({
+        source: e.source,
+        target: e.target,
+        relation: e.relation,
+        weight: e.weight || 1,
+      }));
+
+    const clusters: GraphSummaryCluster[] = g.clusters.map((c) => ({
+      id: c.id,
+      label: c.label,
+      coreTheme: c.coreTheme,
+      masterSynthesis: c.masterSynthesis || "",
+      topTags: c.topTags || [],
+      nodeIds: c.nodeIds.filter((id) => validNodeIds.has(id)),
+      totalReels: c.nodeIds.length,
     }));
 
-  const clusters: GraphSummaryCluster[] = g.clusters.map((c) => ({
-    id: c.id,
-    label: c.label,
-    coreTheme: c.coreTheme,
-    masterSynthesis: c.masterSynthesis || "",
-    topTags: c.topTags || [],
-    nodeIds: c.nodeIds.filter((id) => validNodeIds.has(id)),
-    totalReels: c.nodeIds.length,
-  }));
+    cachedSummary = {
+      nodes,
+      edges,
+      clusters,
+      metadata: {
+        totalNodes: g.metadata.totalNodes,
+        totalEdges: g.metadata.totalEdges,
+        clustersCount: g.clusters.length,
+        builtAt: g.metadata.builtAt,
+      },
+    };
 
-  cachedSummary = {
-    nodes,
-    edges,
-    clusters,
-    metadata: {
-      totalNodes: g.metadata.totalNodes,
-      totalEdges: g.metadata.totalEdges,
-      clustersCount: g.clusters.length,
-      builtAt: g.metadata.builtAt,
-    },
-  };
-
-  return cachedSummary;
+    return cachedSummary;
+  } catch (err) {
+    console.warn("⚠️ Failed building live graph summary, using robust bundled fallback:", err);
+    if (BUNDLED_SUMMARY && BUNDLED_SUMMARY.nodes && BUNDLED_SUMMARY.nodes.length > 5) {
+      cachedSummary = BUNDLED_SUMMARY;
+      return cachedSummary;
+    }
+    throw err;
+  }
 }

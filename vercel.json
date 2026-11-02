@@ -3,6 +3,11 @@
   "buildCommand": "tsc",
   "outputDirectory": "dist",
   "cleanUrls": true,
+  "functions": {
+    "api/**/*.ts": {
+      "includeFiles": "data/**"
+    }
+  },
   "rewrites": [
     { "source": "/", "destination": "/api/dashboard" },
     { "source": "/dashboard", "destination": "/api/dashboard" },

@@ -26,6 +26,9 @@ data/notebooklm_sources/*
 !data/notebooklm_sources/IITM_*
 !data/notebooklm_sources/iitm_*
 
+__pycache__/
+*.pyc
+
 .telegram_vault_tracker.json
 .ambient_state.json
 data/ambient_context.json

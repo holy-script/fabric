@@ -2,7 +2,17 @@ import type { Context } from "grammy";
 import { InlineKeyboard, InputFile } from "grammy";
 import { exportClusterToNotebookLM, exportMasterHeuristicsToNotebookLM, getIITMGrokkingBundles } from "../../integrations/notebooklm/exporter.js";
 import { getOrLoadGraph } from "../../graph/query.js";
-import { loadQuestionBank, formatQuestionCard, handlePrep } from "../commands/prep.js";
+import {
+  loadQuestionBank,
+  formatQuestionCard,
+  handlePrep,
+  recordPrepAnswer,
+  getUserScore,
+  resetUserScore,
+  formatScoreMessage,
+  handlePrepNotebookLMUpload,
+  checkAnswer,
+} from "../commands/prep.js";
 import { handleBalance } from "../commands/balance.js";
 import { handleSettle } from "../commands/settle.js";
 import { handlePlugins } from "../commands/plugins.js";
@@ -581,6 +591,29 @@ export async function handleCallbackQuery(ctx: Context) {
     await ctx.reply(list, { parse_mode: "Markdown" });
   } else if (data === "prep:menu") {
     await handlePrep(ctx);
+  } else if (data === "prep:score") {
+    const userId = ctx.from?.id ? String(ctx.from.id) : "operator";
+    const scoreMsg = formatScoreMessage(userId);
+    const keyboard = new InlineKeyboard()
+      .text("📘 Computer Networks", "prep:q:Computer_Networks:random")
+      .row()
+      .text("⚡ Systems Design", "prep:q:Computer_Systems_Design:random")
+      .row()
+      .text("🧬 Biological Networks", "prep:q:BDBN:random")
+      .row()
+      .text("🔄 Reset Score", "prep:reset")
+      .text("🏠 Academic Hub", "prep:menu");
+    await ctx.reply(scoreMsg, { parse_mode: "Markdown", reply_markup: keyboard });
+  } else if (data === "prep:reset") {
+    const userId = ctx.from?.id ? String(ctx.from.id) : "operator";
+    resetUserScore(userId);
+    await ctx.reply("🔄 *Quiz Score Reset!* Your session performance has been cleared.", {
+      parse_mode: "Markdown",
+      reply_markup: new InlineKeyboard().text("🎯 Start Fresh Quiz", "prep:menu"),
+    });
+  } else if (data.startsWith("prep:nlm:")) {
+    const alias = data.replace("prep:nlm:", "");
+    await handlePrepNotebookLMUpload(ctx, alias);
   } else if (data === "prep:export_menu") {
     const keyboard = new InlineKeyboard()
       .text("📘 Export Computer Networks", "nlm:export:cn")
@@ -604,6 +637,7 @@ export async function handleCallbackQuery(ctx: Context) {
     const parts = data.split(":");
     let subjectKey = parts[2];
     const requestedIdx = parts[3];
+    const userId = ctx.from?.id ? String(ctx.from.id) : "operator";
 
     const bank = loadQuestionBank();
     const subjectKeys = Object.keys(bank);
@@ -624,7 +658,7 @@ export async function handleCallbackQuery(ctx: Context) {
         : Number(requestedIdx) % list.length;
 
     const q = list[qIdx];
-    const { text: msg, keyboard } = formatQuestionCard(subjectKey, qIdx, q);
+    const { text: msg, keyboard } = formatQuestionCard(subjectKey, qIdx, q, userId);
     await ctx.reply(msg, { parse_mode: "Markdown", reply_markup: keyboard });
   } else if (data.startsWith("prep_ans:")) {
     // format: prep_ans:<subjectKey>:<qIdx>:<optIdx>
@@ -634,25 +668,27 @@ export async function handleCallbackQuery(ctx: Context) {
     const qIdx = Number(qIdxStr);
     const optIdx = Number(optIdxStr);
     const q = qList[qIdx];
+    const userId = ctx.from?.id ? String(ctx.from.id) : "operator";
 
     if (!q) {
       await ctx.reply("⚠️ Question no longer available.");
       return;
     }
 
-    const chosenOpt = q.options[optIdx] || "";
-    const isCorrect = chosenOpt.includes("✓ Correct") || (q.correct && q.correct.some((c) => c.includes(chosenOpt.trim())));
-
-    const correctOpt = q.options.find((o) => o.includes("✓ Correct")) || q.answer || "See explanation";
-    const cleanCorrect = correctOpt.replace("✓ Correct", "").trim();
+    const { isCorrect, chosenOptionText, correctOptionText } = checkAnswer(q, optIdx);
+    const marks = Number(q.marks) || 1;
+    const score = recordPrepAnswer(userId, subjectKey, isCorrect, marks);
+    const acc = score.total > 0 ? Math.round((score.correct / score.total) * 100) : 0;
 
     let reply = "";
     if (isCorrect) {
-      reply += `🎯 *CORRECT! (+${q.marks} Marks)*\n\n`;
+      reply += `🎯 *CORRECT! (+${marks} Marks)*\n`;
+      reply += `🔥 *Streak: ${score.streak}* | 🏆 *Score: ${score.correct}/${score.total} (${acc}%)*\n\n`;
     } else {
-      reply += `❌ *INCORRECT*\n\n`;
-      reply += `• Your choice: *${chosenOpt.replace("✓ Correct", "").trim()}*\n`;
-      reply += `• Verified Answer: *${cleanCorrect}*\n\n`;
+      reply += `❌ *INCORRECT*\n`;
+      reply += `🏆 *Score: ${score.correct}/${score.total} (${acc}%)*\n\n`;
+      reply += `• Your choice: *${chosenOptionText}*\n`;
+      reply += `• Verified Answer: *${correctOptionText}*\n\n`;
     }
 
     reply += `🧠 *Grokking First-Principles & Invariants:*\n`;
@@ -662,7 +698,10 @@ export async function handleCallbackQuery(ctx: Context) {
     const keyboard = new InlineKeyboard()
       .text("➡️ Next Question", `prep:q:${subjectKey}:random`)
       .row()
+      .text("💡 Reveal Solution", `prep_sol:${subjectKey}:${qIdx}`)
       .text("🎲 Mix Subject", "prep:q:random:random")
+      .row()
+      .text("🏆 My Score", "prep:score")
       .text("🏠 Academic Hub", "prep:menu");
 
     await ctx.reply(reply, { parse_mode: "Markdown", reply_markup: keyboard });

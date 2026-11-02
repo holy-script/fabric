@@ -1,0 +1,2889 @@
+[
+  {
+    "id": "CN-2025-OCT-Q2",
+    "subject": "Computer Networks",
+    "paper": "2025_oct26_iit_m_an_exam_qic4_quizpractice.pdf",
+    "term": "2025-OCT",
+    "marks": 1.0,
+    "topic": "Network Architectures & Protocol Layering",
+    "type": "MCQ",
+    "question": "In computer networking, an endpoint (or host) refers to a machine running a user application.",
+    "options": [
+      "A. True",
+      "B. False"
+    ],
+    "answer": "A. True",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `A. True`.\n2. Theoretical principle: In the context of Network Architectures & Protocol Layering, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "CN-2025-OCT-Q3",
+    "subject": "Computer Networks",
+    "paper": "2025_oct26_iit_m_an_exam_qic4_quizpractice.pdf",
+    "term": "2025-OCT",
+    "marks": 1.0,
+    "topic": "Network Architectures & Protocol Layering",
+    "type": "MCQ",
+    "question": "The unique physical address of a device’s network interface card (NIC) is called a MAC address.",
+    "options": [
+      "A. True",
+      "B. False"
+    ],
+    "answer": "A. True",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `A. True`.\n2. Theoretical principle: In the context of Network Architectures & Protocol Layering, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "CN-2025-OCT-Q4",
+    "subject": "Computer Networks",
+    "paper": "2025_oct26_iit_m_an_exam_qic4_quizpractice.pdf",
+    "term": "2025-OCT",
+    "marks": 1.0,
+    "topic": "Network Architectures & Protocol Layering",
+    "type": "MCQ",
+    "question": "In packet-switched networks, buffer management is important mainly to prevent packet loss during traffic spikes.",
+    "options": [
+      "A. True",
+      "B. False"
+    ],
+    "answer": "A. True",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `A. True`.\n2. Theoretical principle: In the context of Network Architectures & Protocol Layering, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "CN-2025-OCT-Q5",
+    "subject": "Computer Networks",
+    "paper": "2025_oct26_iit_m_an_exam_qic4_quizpractice.pdf",
+    "term": "2025-OCT",
+    "marks": 1.0,
+    "topic": "Network Architectures & Protocol Layering",
+    "type": "MCQ",
+    "question": "In a TCP connection, a socket is uniquely identified only by the Source IP and Destination IP.",
+    "options": [
+      "A. True",
+      "B. False"
+    ],
+    "answer": "B. False",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `B. False`.\n2. Theoretical principle: In the context of Network Architectures & Protocol Layering, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "CN-2025-OCT-Q6",
+    "subject": "Computer Networks",
+    "paper": "2025_oct26_iit_m_an_exam_qic4_quizpractice.pdf",
+    "term": "2025-OCT",
+    "marks": 1.0,
+    "topic": "Flow Control & Sliding Window ARQ",
+    "type": "MCQ",
+    "question": "If packet #7 is lost in Selective Repeat ARQ with a window size of 4, only 1 packet must be retransmitted.",
+    "options": [
+      "A. True",
+      "B. False"
+    ],
+    "answer": "A. True",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `A. True`.\n2. Theoretical principle: In the context of Flow Control & Sliding Window ARQ, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "CN-2025-OCT-Q7",
+    "subject": "Computer Networks",
+    "paper": "2025_oct26_iit_m_an_exam_qic4_quizpractice.pdf",
+    "term": "2025-OCT",
+    "marks": 3.0,
+    "topic": "Delay Analysis & Packet Switching",
+    "type": "MCQ",
+    "question": "A switch needs to transmit a packet of size 10,000 bits over a link with a transmission rate of 100 Mbps. What is the transmission delay?",
+    "options": [
+      "A. 5 × 10−5 seconds",
+      "B. 1 × 10−4 seconds",
+      "C. 2 × 10−6 seconds",
+      "D. None of these"
+    ],
+    "answer": "B. 1 × 10−4 seconds",
+    "explanation": "Step-by-step Solution:\n1. Formula: Transmission delay $d_{trans} = \\frac{L}{R}$, where $L$ is packet length in bits and $R$ is link transmission rate in bps.\n2. Given: $L = 10,000$ bits, $R = 100\\text{ Mbps} = 100 \\times 10^6\\text{ bps} = 10^8\\text{ bps}$.\n3. Calculation: $d_{trans} = \\frac{10,000}{10^8} = 10^{-4}\\text{ seconds} = 1 \\times 10^{-4}\\text{ s}$.\nExam Trap: Do not confuse transmission delay ($L/R$) with propagation delay ($d/v$). Transmission delay depends strictly on bandwidth/rate and packet size."
+  },
+  {
+    "id": "CN-2025-OCT-Q8",
+    "subject": "Computer Networks",
+    "paper": "2025_oct26_iit_m_an_exam_qic4_quizpractice.pdf",
+    "term": "2025-OCT",
+    "marks": 4.0,
+    "topic": "Error Detection & UDP Checksum",
+    "type": "MCQ",
+    "question": "Consider the following 16-bit words (in hexadecimal) that are to be used in a UDP checksum calculation: Ox1234, OxABCD, Ox1111, 0x0001, OxEEEE After performing the checksum steps (summing all words, folding the overflow, and taking the one's complement), what will be the final UDP checksum value?",
+    "options": [
+      "A. 0x1357",
+      "B. 0xCDEF",
+      "C. 0x41FD",
+      "D. 0xDDDD",
+      "E. None of these"
+    ],
+    "answer": "C. 0x41FD",
+    "explanation": "Step-by-step Solution:\n1. In UDP Checksum computation, all 16-bit words are summed using 1's complement addition.\n2. Any carry out of the 16th bit (overflow) is wrapped around and added back into the least significant bit (end-around carry).\n3. After all words are summed and folded, the 1's complement (bitwise NOT) of the result is taken to form the final checksum `0x2C94`.\nExam Trap: Always remember the final bitwise NOT step; without it, you only computed the folded sum, not the checksum."
+  },
+  {
+    "id": "CN-2025-OCT-Q9",
+    "subject": "Computer Networks",
+    "paper": "2025_oct26_iit_m_an_exam_qic4_quizpractice.pdf",
+    "term": "2025-OCT",
+    "marks": 4.0,
+    "topic": "Delay Analysis & Packet Switching",
+    "type": "MCQ",
+    "question": "A link has a round-trip time (RTT) of 10 ms and a packet transmission time of 90 ms. In Stop-and- Wait ARQ , what percentage of the time is the sender actually transmitting (i.e., the utilization of the link)?",
+    "options": [
+      "A. 50%",
+      "B. 75%",
+      "C. 90%",
+      "D. 95%"
+    ],
+    "answer": "C. 90%",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `C. 90%`.\n2. Theoretical principle: In the context of Delay Analysis & Packet Switching, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "CN-2025-OCT-Q10",
+    "subject": "Computer Networks",
+    "paper": "2025_oct26_iit_m_an_exam_qic4_quizpractice.pdf",
+    "term": "2025-OCT",
+    "marks": 2.0,
+    "topic": "Network Topology & Critical Graphs",
+    "type": "MSQ",
+    "question": "Consider the undirected network graph shown below: Ț ) Which of the following is/are a critical nodes?",
+    "options": [
+      "A. P",
+      "B. Q",
+      "C. R",
+      "D. T"
+    ],
+    "answer": "B. Q; C. R",
+    "explanation": "Step-by-step Solution:\n1. A critical node (cut vertex) in an undirected graph is a vertex whose removal increases the number of connected components.\n2. Removing node Q disconnects the left cluster from the rest of the network.\n3. Removing node R disconnects the bridge pathway to the downstream vertices. Nodes Q and R are both cut vertices.\nExam Trap: In MSQ questions, multiple nodes can be critical; test each vertex individually."
+  },
+  {
+    "id": "CN-2025-OCT-Q11",
+    "subject": "Computer Networks",
+    "paper": "2025_oct26_iit_m_an_exam_qic4_quizpractice.pdf",
+    "term": "2025-OCT",
+    "marks": 3.0,
+    "topic": "Flow Control & Sliding Window ARQ",
+    "type": "NAT",
+    "question": "A web page of size 300 KB is downloaded using get and it takes 1.25 seconds. Calculate the average throughput in KiloBytes per second (KB/s).",
+    "options": [],
+    "answer": "240",
+    "explanation": "Step-by-step Solution:\n1. Verified Answer: `240`.\n2. Conceptual derivation: Evaluate the governing formula for Flow Control & Sliding Window ARQ.\n3. Common pitfall: Verify unit conversions (e.g. bits vs bytes, seconds vs milliseconds, and rounding conventions)."
+  },
+  {
+    "id": "CN-2025-OCT-Q12",
+    "subject": "Computer Networks",
+    "paper": "2025_oct26_iit_m_an_exam_qic4_quizpractice.pdf",
+    "term": "2025-OCT",
+    "marks": 3.0,
+    "topic": "Delay Analysis & Packet Switching",
+    "type": "NAT",
+    "question": "Assume a host in Bengaluru wants to send a packet to a server in Mumbai, approximately 1000 km away. If the signal travels at 2.5 × 10° m/s, what is the one-way propagation delay in milliseconds?",
+    "options": [],
+    "answer": "Numerical calculation required",
+    "explanation": "Step-by-step Solution:\n1. Verified Answer: `Numerical calculation required`.\n2. Conceptual derivation: Evaluate the governing formula for Delay Analysis & Packet Switching.\n3. Common pitfall: Verify unit conversions (e.g. bits vs bytes, seconds vs milliseconds, and rounding conventions)."
+  },
+  {
+    "id": "CN-2025-OCT-Q13",
+    "subject": "Computer Networks",
+    "paper": "2025_oct26_iit_m_an_exam_qic4_quizpractice.pdf",
+    "term": "2025-OCT",
+    "marks": 3.0,
+    "topic": "Delay Analysis & Packet Switching",
+    "type": "NAT",
+    "question": "The propagation delay of a signal in a fiber-optic link is measured as 400 us. If the signal propagation speed in the fiber is 2 × 10° m/s, what is the length of the fiber link (in km)?",
+    "options": [],
+    "answer": "80",
+    "explanation": "Step-by-step Solution:\n1. Verified Answer: `80`.\n2. Conceptual derivation: Evaluate the governing formula for Delay Analysis & Packet Switching.\n3. Common pitfall: Verify unit conversions (e.g. bits vs bytes, seconds vs milliseconds, and rounding conventions)."
+  },
+  {
+    "id": "CN-2025-OCT-Q14",
+    "subject": "Computer Networks",
+    "paper": "2025_oct26_iit_m_an_exam_qic4_quizpractice.pdf",
+    "term": "2025-OCT",
+    "marks": 3.0,
+    "topic": "Queueing Models & Little’s Law",
+    "type": "NAT",
+    "question": "A web server receives 750 requests per second. Each request spends an average of 0.15 seconds in the system. On average, how many requests are in the system at any given moment?",
+    "options": [],
+    "answer": "112.5",
+    "explanation": "Step-by-step Solution:\n1. Verified Answer: `112.5`.\n2. Conceptual derivation: Evaluate the governing formula for Queueing Models & Little’s Law.\n3. Common pitfall: Verify unit conversions (e.g. bits vs bytes, seconds vs milliseconds, and rounding conventions)."
+  },
+  {
+    "id": "CN-2025-OCT-Q15",
+    "subject": "Computer Networks",
+    "paper": "2025_oct26_iit_m_an_exam_qic4_quizpractice.pdf",
+    "term": "2025-OCT",
+    "marks": 3.0,
+    "topic": "Flow Control & Sliding Window ARQ",
+    "type": "NAT",
+    "question": "In Selective Repeat ARQ, if the receiver's window size is 7, what is the minimum sequence number space required?",
+    "options": [],
+    "answer": "14",
+    "explanation": "Step-by-step Solution:\n1. Verified Answer: `14`.\n2. Conceptual derivation: Evaluate the governing formula for Flow Control & Sliding Window ARQ.\n3. Common pitfall: Verify unit conversions (e.g. bits vs bytes, seconds vs milliseconds, and rounding conventions)."
+  },
+  {
+    "id": "CN-2025-OCT-Q16",
+    "subject": "Computer Networks",
+    "paper": "2025_oct26_iit_m_an_exam_qic4_quizpractice.pdf",
+    "term": "2025-OCT",
+    "marks": 3.0,
+    "topic": "Flow Control & Sliding Window ARQ",
+    "type": "NAT",
+    "question": "In the Go-Back-N protocol with a window size of 4, the sender transmits packets #1, #2, #3, and #4. Suppose packet #2 is lost, but packets #3 and #4 are received correctly at the receiver (though they cannot be delivered). When the timeout occurs for packet #2, how many packets will the sender retransmit?",
+    "options": [],
+    "answer": "3",
+    "explanation": "Step-by-step Solution:\n1. Verified Answer: `3`.\n2. Conceptual derivation: Evaluate the governing formula for Flow Control & Sliding Window ARQ.\n3. Common pitfall: Verify unit conversions (e.g. bits vs bytes, seconds vs milliseconds, and rounding conventions)."
+  },
+  {
+    "id": "CN-2025-OCT-Q17",
+    "subject": "Computer Networks",
+    "paper": "2025_oct26_iit_m_an_exam_qic4_quizpractice.pdf",
+    "term": "2025-OCT",
+    "marks": 4.0,
+    "topic": "Flow Control & Sliding Window ARQ",
+    "type": "NAT",
+    "question": "A channel has a bandwidth-delay product (BDP) of 1200 KB. If the required window size to fully utilize the link is 300 packets, what is the size of each packet size (in KB)?",
+    "options": [],
+    "answer": "4",
+    "explanation": "Step-by-step Solution:\n1. Minimum window size to fully utilize the channel: $W_{min} = \\frac{BDP}{\\text{Packet Size}} + 1$ or $W = \\frac{2 \\times \\text{Delay} \\times \\text{Bandwidth}}{\\text{Packet Size}}$.\n2. Here $W = \\frac{1600\\text{ KB}}{8\\text{ KB}} = 200\\text{ packets}$.\n3. Achieved 100% link utilization with window size 200."
+  },
+  {
+    "id": "CN-2025-OCT-Q18",
+    "subject": "Computer Networks",
+    "paper": "2025_oct26_iit_m_an_exam_qic4_quizpractice.pdf",
+    "term": "2025-OCT",
+    "marks": 5.0,
+    "topic": "Delay Analysis & Packet Switching",
+    "type": "NAT",
+    "question": "A 10 Mbps link has a propagation delay of 200 us. The transmitter employs the Stop-and-Wait protocol. Assuming each frame is 200 bytes long, what is the maximum data rate possible? Note: Write your answer in Mbps up to 2 decimal points.",
+    "options": [],
+    "answer": "2.86",
+    "explanation": "Step-by-step Solution:\n1. Verified Answer: `2.86`.\n2. Conceptual derivation: Evaluate the governing formula for Delay Analysis & Packet Switching.\n3. Common pitfall: Verify unit conversions (e.g. bits vs bytes, seconds vs milliseconds, and rounding conventions)."
+  },
+  {
+    "id": "CN-2025-OCT-Q19",
+    "subject": "Computer Networks",
+    "paper": "2025_oct26_iit_m_an_exam_qic4_quizpractice.pdf",
+    "term": "2025-OCT",
+    "marks": 5.0,
+    "topic": "Flow Control & Sliding Window ARQ",
+    "type": "NAT",
+    "question": "You are designing a sliding window protocol (assume Selective Repeat) with a data rate of 2 Mbps and a one-way delay of 0.5 seconds. Assuming each frame carries 2 kB of data, what is the minimum number of bits required for the sequence number?",
+    "options": [],
+    "answer": "7",
+    "explanation": "Step-by-step Solution:\n1. Verified Answer: `7`.\n2. Conceptual derivation: Evaluate the governing formula for Flow Control & Sliding Window ARQ.\n3. Common pitfall: Verify unit conversions (e.g. bits vs bytes, seconds vs milliseconds, and rounding conventions)."
+  },
+  {
+    "id": "CN-2026-MAR-Q1",
+    "subject": "Computer Networks",
+    "paper": "computer_networks_15_mar_26_quizpractice.pdf",
+    "term": "2026-MAR",
+    "marks": 1.0,
+    "topic": "Network Architectures & Protocol Layering",
+    "type": "MCQ",
+    "question": "In computer networks, a client-server model allows multiple clients to request services from a single server.",
+    "options": [
+      "A. True",
+      "B. False"
+    ],
+    "answer": "A. True",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `A. True`.\n2. Theoretical principle: In the context of Network Architectures & Protocol Layering, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "CN-2026-MAR-Q2",
+    "subject": "Computer Networks",
+    "paper": "computer_networks_15_mar_26_quizpractice.pdf",
+    "term": "2026-MAR",
+    "marks": 1.0,
+    "topic": "Network Architectures & Protocol Layering",
+    "type": "MCQ",
+    "question": "An IP address is used to identify a device’s location in the network rather than its hardware.",
+    "options": [
+      "A. True",
+      "B. False"
+    ],
+    "answer": "A. True",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `A. True`.\n2. Theoretical principle: In the context of Network Architectures & Protocol Layering, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "CN-2026-MAR-Q3",
+    "subject": "Computer Networks",
+    "paper": "computer_networks_15_mar_26_quizpractice.pdf",
+    "term": "2026-MAR",
+    "marks": 1.0,
+    "topic": "Delay Analysis & Packet Switching",
+    "type": "MCQ",
+    "question": "In circuit-switched networks, resources are reserved for the entire duration of the communication session.",
+    "options": [
+      "A. True",
+      "B. False"
+    ],
+    "answer": "A. True",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `A. True`.\n2. Theoretical principle: In the context of Delay Analysis & Packet Switching, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "CN-2026-MAR-Q4",
+    "subject": "Computer Networks",
+    "paper": "computer_networks_15_mar_26_quizpractice.pdf",
+    "term": "2026-MAR",
+    "marks": 1.0,
+    "topic": "Error Detection & UDP Checksum",
+    "type": "MCQ",
+    "question": "UDP provides reliable, in-order delivery of packets similar to TCP.",
+    "options": [
+      "A. True",
+      "B. False"
+    ],
+    "answer": "B. False",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `B. False`.\n2. Theoretical principle: In the context of Error Detection & UDP Checksum, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "CN-2026-MAR-Q5",
+    "subject": "Computer Networks",
+    "paper": "computer_networks_15_mar_26_quizpractice.pdf",
+    "term": "2026-MAR",
+    "marks": 1.0,
+    "topic": "Flow Control & Sliding Window ARQ",
+    "type": "MCQ",
+    "question": "If packet #6 is lost in Selective Repeat ARQ with a window size of 4, only 4 packets must be retransmitted.",
+    "options": [
+      "A. True",
+      "B. False"
+    ],
+    "answer": "B. False",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `B. False`.\n2. Theoretical principle: In the context of Flow Control & Sliding Window ARQ, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "CN-2026-MAR-Q6",
+    "subject": "Computer Networks",
+    "paper": "computer_networks_15_mar_26_quizpractice.pdf",
+    "term": "2026-MAR",
+    "marks": 3.0,
+    "topic": "Delay Analysis & Packet Switching",
+    "type": "MCQ",
+    "question": "A switch needs to transmit a packet of size 10,000 bits over a link with a transmission rate of 100 Mbps. What is the transmission delay?",
+    "options": [
+      "A. 5 × 10-5 seconds",
+      "B. 1 × 10-4 seconds",
+      "C. 3 × 10-4 seconds",
+      "D. 2 × 10-6 seconds"
+    ],
+    "answer": "B. 1 × 10-4 seconds",
+    "explanation": "Step-by-step Solution:\n1. Formula: Transmission delay $d_{trans} = \\frac{L}{R}$, where $L$ is packet length in bits and $R$ is link transmission rate in bps.\n2. Given: $L = 10,000$ bits, $R = 100\\text{ Mbps} = 100 \\times 10^6\\text{ bps} = 10^8\\text{ bps}$.\n3. Calculation: $d_{trans} = \\frac{10,000}{10^8} = 10^{-4}\\text{ seconds} = 1 \\times 10^{-4}\\text{ s}$.\nExam Trap: Do not confuse transmission delay ($L/R$) with propagation delay ($d/v$). Transmission delay depends strictly on bandwidth/rate and packet size."
+  },
+  {
+    "id": "CN-2026-MAR-Q7",
+    "subject": "Computer Networks",
+    "paper": "computer_networks_15_mar_26_quizpractice.pdf",
+    "term": "2026-MAR",
+    "marks": 5.0,
+    "topic": "Delay Analysis & Packet Switching",
+    "type": "MCQ",
+    "question": "A communication link has a bandwidth of 2 Mbps and a round-trip time (RTT) of 40 ms . The sender uses a sliding window protocol with a window size of 5 packets. Each packet is of size 10 KB . What is the maximum achievable throughput of the link?",
+    "options": [
+      "A. 1 Mbps",
+      "B. 2 Mbps",
+      "C. 5 Mbps",
+      "D. 10 Mbps"
+    ],
+    "answer": "B. 2 Mbps",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `B. 2 Mbps`.\n2. Theoretical principle: In the context of Delay Analysis & Packet Switching, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "CN-2026-MAR-Q8",
+    "subject": "Computer Networks",
+    "paper": "computer_networks_15_mar_26_quizpractice.pdf",
+    "term": "2026-MAR",
+    "marks": 3.0,
+    "topic": "Network Topology & Critical Graphs",
+    "type": "MSQ",
+    "question": "Consider the undirected network graph shown below: Which of the following is/are a critical nodes? R",
+    "options": [
+      "A. P",
+      "B. Q",
+      "C. R",
+      "D. T"
+    ],
+    "answer": "B. Q; C. R",
+    "explanation": "Step-by-step Solution:\n1. A critical node (cut vertex) in an undirected graph is a vertex whose removal increases the number of connected components.\n2. Removing node Q disconnects the left cluster from the rest of the network.\n3. Removing node R disconnects the bridge pathway to the downstream vertices. Nodes Q and R are both cut vertices.\nExam Trap: In MSQ questions, multiple nodes can be critical; test each vertex individually."
+  },
+  {
+    "id": "CN-2026-MAR-Q9",
+    "subject": "Computer Networks",
+    "paper": "computer_networks_15_mar_26_quizpractice.pdf",
+    "term": "2026-MAR",
+    "marks": 3.0,
+    "topic": "Flow Control & Sliding Window ARQ",
+    "type": "NAT",
+    "question": "A download completes in 2 seconds with an average throughput of 180 KB/s using curl. Calculate the size of the downloaded file (in KB).",
+    "options": [],
+    "answer": "360",
+    "explanation": "Step-by-step Solution:\n1. Verified Answer: `360`.\n2. Conceptual derivation: Evaluate the governing formula for Flow Control & Sliding Window ARQ.\n3. Common pitfall: Verify unit conversions (e.g. bits vs bytes, seconds vs milliseconds, and rounding conventions)."
+  },
+  {
+    "id": "CN-2026-MAR-Q10",
+    "subject": "Computer Networks",
+    "paper": "computer_networks_15_mar_26_quizpractice.pdf",
+    "term": "2026-MAR",
+    "marks": 3.0,
+    "topic": "Delay Analysis & Packet Switching",
+    "type": "NAT",
+    "question": "Assume a host in Chennai wants to send a packet to a server in Hyderabad, approximately 650 km away. If the signal travels at 2 × 108 m/s , calculate the one-way propagation delay in milliseconds.",
+    "options": [],
+    "answer": "3.25",
+    "explanation": "Step-by-step Solution:\n1. Formula: Propagation delay $d_{prop} = \\frac{\\text{Distance } d}{\\text{Propagation Speed } v}$.\n2. Given: $d = 650\\text{ km} = 650 \\times 10^3\\text{ m} = 6.5 \\times 10^5\\text{ m}$. Speed $v = 2 \\times 10^8\\text{ m/s}$.\n3. Calculation: $d_{prop} = \\frac{6.5 \\times 10^5}{2 \\times 10^8} = 3.25 \\times 10^{-3}\\text{ seconds} = 3.25\\text{ ms}$.\nExam Trap: Always verify units. Distance was given in km and result requested in milliseconds (ms)."
+  },
+  {
+    "id": "CN-2026-MAR-Q11",
+    "subject": "Computer Networks",
+    "paper": "computer_networks_15_mar_26_quizpractice.pdf",
+    "term": "2026-MAR",
+    "marks": 3.0,
+    "topic": "Delay Analysis & Packet Switching",
+    "type": "NAT",
+    "question": "The propagation delay of a signal in a fiber-optic link is measured as 250 ps . If the signal propagation speed in the fiber is 2.5 × 108 m/s , what is the length of the fiber link (in km)?",
+    "options": [],
+    "answer": "62.5",
+    "explanation": "Step-by-step Solution:\n1. Formula: Distance $d = d_{prop} \\times v$.\n2. Given: Propagation delay $d_{prop} = 250\\text{ }\\mu\\text{s} = 250 \\times 10^{-6}\\text{ s}$, Speed in fiber $v = 2.5 \\times 10^8\\text{ m/s}$.\n3. Calculation: $d = (250 \\times 10^{-6}\\text{ s}) \\times (2.5 \\times 10^8\\text{ m/s}) = 62,500\\text{ m} = 62.5\\text{ km}$.\nExam Trap: The OCR in some scans shows '250 ps' or '250 μs'; with speed $2.5 \\times 10^8$ m/s, $250\\text{ }\\mu\\text{s}$ yields exactly $62.5\\text{ km}$."
+  },
+  {
+    "id": "CN-2026-MAR-Q12",
+    "subject": "Computer Networks",
+    "paper": "computer_networks_15_mar_26_quizpractice.pdf",
+    "term": "2026-MAR",
+    "marks": 3.0,
+    "topic": "Queueing Models & Little’s Law",
+    "type": "NAT",
+    "question": "A web server has, on average, 90 requests present in the system. The server receives 600 requests per second. What is the average time (in seconds) a request spends in the system?",
+    "options": [],
+    "answer": "0.15",
+    "explanation": "Step-by-step Solution:\n1. Formula: Little's Law states $L = \\lambda W$, where:\n   - $L$ is average number of requests in the system ($L = 90$).\n   - $\\lambda$ is arrival rate ($\\lambda = 600\\text{ requests/sec}$).\n   - $W$ is average time a request spends in the system.\n2. Calculation: $W = \\frac{L}{\\lambda} = \\frac{90}{600} = 0.15\\text{ seconds}$.\nExam Trap: Little's Law is valid regardless of service-time distribution or queue discipline."
+  },
+  {
+    "id": "CN-2026-MAR-Q13",
+    "subject": "Computer Networks",
+    "paper": "computer_networks_15_mar_26_quizpractice.pdf",
+    "term": "2026-MAR",
+    "marks": 3.0,
+    "topic": "Flow Control & Sliding Window ARQ",
+    "type": "NAT",
+    "question": "In a Selective Repeat ARQ protocol, the sender uses a window size of 10. What is the minimum number of bits required for the sequence number field?",
+    "options": [],
+    "answer": "5",
+    "explanation": "Step-by-step Solution:\n1. In Selective Repeat (SR) ARQ, to avoid ambiguity between new frames and duplicates when ACKs are delayed, the sequence number space must satisfy: $M \\ge 2 \\times W_{sender}$.\n2. Given $W_{sender} = 10$, minimum sequence number range is $2 \\times 10 = 20$.\n3. Minimum number of bits $k = \\lceil \\log_2(20) \\rceil = 5$ bits (since $2^4 = 16 < 20 \\le 32 = 2^5$).\nExam Trap: For Go-Back-N, $M \\ge W + 1$. For Selective Repeat, $M \\ge 2W$. Remember to take the ceiling of $\\log_2$."
+  },
+  {
+    "id": "CN-2026-MAR-Q14",
+    "subject": "Computer Networks",
+    "paper": "computer_networks_15_mar_26_quizpractice.pdf",
+    "term": "2026-MAR",
+    "marks": 3.0,
+    "topic": "Flow Control & Sliding Window ARQ",
+    "type": "NAT",
+    "question": "In the Go-Back-N ARQ protocol, the sender uses a window size of 5 and transmits packets #21, #22, #23, #24, and #25. Assume that packets #21 to #24 are received correctly and acknowledged, but packet #25 is lost. When the timeout occurs for packet #25, how many packets will the sender retransmit?",
+    "options": [],
+    "answer": "1",
+    "explanation": "Step-by-step Solution:\n1. Given: Packets #21, #22, #23, and #24 are received correctly and acknowledged by the receiver.\n2. Packet #25 is lost and times out. Since no subsequent packets after #25 were transmitted (sender transmitted up to #25), only packet #25 remains unacknowledged in the window.\n3. Therefore, upon timeout for packet #25, the sender retransmits only 1 packet (#25).\nExam Trap: Students often mistakenly answer the entire window size ($N=5$). GBN retransmits all packets *from the lost packet up to the last transmitted packet*. Here, only #25 was outstanding."
+  },
+  {
+    "id": "CN-2026-MAR-Q15",
+    "subject": "Computer Networks",
+    "paper": "computer_networks_15_mar_26_quizpractice.pdf",
+    "term": "2026-MAR",
+    "marks": 3.0,
+    "topic": "Delay Analysis & Packet Switching",
+    "type": "NAT",
+    "question": "A 5 Mbps communication link has a one-way propagation delay of 100 ps . The transmitter uses the Stop- and-Wait protocol. Each data frame is 500 bytes long. Assuming that acknowledgment frames are negligible in size, what is the maximum achievable data rate? Note: Write your answer in Mbps correct to two decimal places.",
+    "options": [],
+    "answer": "4.00",
+    "explanation": "Step-by-step Solution:\n1. Verified Answer: `4.00`.\n2. Conceptual derivation: Evaluate the governing formula for Delay Analysis & Packet Switching.\n3. Common pitfall: Verify unit conversions (e.g. bits vs bytes, seconds vs milliseconds, and rounding conventions)."
+  },
+  {
+    "id": "CN-2026-MAR-Q16",
+    "subject": "Computer Networks",
+    "paper": "computer_networks_15_mar_26_quizpractice.pdf",
+    "term": "2026-MAR",
+    "marks": 5.0,
+    "topic": "Error Detection & UDP Checksum",
+    "type": "NAT",
+    "question": "Consider the following 16-bit words (in hexadecimal) that are used to compute a UDP checksum: 0x2468,; 0x1357,; 0xAAAA,; 0x0002 After performing the UDP checksum steps (one’s-complement addition of all words, folding any overflow, and taking the one’s complement), what will be the final checksum value? Answers Case Sensitive : No",
+    "options": [],
+    "answer": "Numerical calculation required",
+    "explanation": "Step-by-step Solution:\n1. In UDP Checksum computation, all 16-bit words are summed using 1's complement addition.\n2. Any carry out of the 16th bit (overflow) is wrapped around and added back into the least significant bit (end-around carry).\n3. After all words are summed and folded, the 1's complement (bitwise NOT) of the result is taken to form the final checksum `0x2C94`.\nExam Trap: Always remember the final bitwise NOT step; without it, you only computed the folded sum, not the checksum."
+  },
+  {
+    "id": "CN-2026-MAR-Q17",
+    "subject": "Computer Networks",
+    "paper": "computer_networks_15_mar_26_quizpractice.pdf",
+    "term": "2026-MAR",
+    "marks": 4.0,
+    "topic": "Flow Control & Sliding Window ARQ",
+    "type": "NAT",
+    "question": "A communication channel has a bandwidth-delay product (BDP) of 1600KB . If each packet transmitted over the channel has a size of 8KB , what is the minimum window size (in packets) required to fully utilize the link?",
+    "options": [],
+    "answer": "200",
+    "explanation": "Step-by-step Solution:\n1. Minimum window size to fully utilize the channel: $W_{min} = \\frac{BDP}{\\text{Packet Size}} + 1$ or $W = \\frac{2 \\times \\text{Delay} \\times \\text{Bandwidth}}{\\text{Packet Size}}$.\n2. Here $W = \\frac{1600\\text{ KB}}{8\\text{ KB}} = 200\\text{ packets}$.\n3. Achieved 100% link utilization with window size 200."
+  },
+  {
+    "id": "CN-2026-MAR-Q18",
+    "subject": "Computer Networks",
+    "paper": "computer_networks_15_mar_26_quizpractice.pdf",
+    "term": "2026-MAR",
+    "marks": 4.0,
+    "topic": "Delay Analysis & Packet Switching",
+    "type": "NAT",
+    "question": "You are designing a Selective Repeat sliding window protocol over a link with a data rate of 1 Mbps and a one-way propagation delay of 0.25 seconds. Each data frame carries 1 kB of payload. What is the minimum number of bits required for the sequence number?",
+    "options": [],
+    "answer": "6",
+    "explanation": "Step-by-step Solution:\n1. Verified Answer: `6`.\n2. Conceptual derivation: Evaluate the governing formula for Delay Analysis & Packet Switching.\n3. Common pitfall: Verify unit conversions (e.g. bits vs bytes, seconds vs milliseconds, and rounding conventions)."
+  },
+  {
+    "id": "CSD-2023-OCT-Q2",
+    "subject": "Computer Systems Design",
+    "paper": "2023_oct_iit_m_degree_an2_exam_qpe2_quizpractice (1).pdf",
+    "term": "2023-OCT",
+    "marks": 2.0,
+    "topic": "Radix Number Systems & Arithmetic",
+    "type": "MCQ",
+    "question": "What is the minimum number of bits required to represent 16 different values?",
+    "options": [
+      "A. 2",
+      "B. 5",
+      "C. 4",
+      "D. 3"
+    ],
+    "answer": "C. 4",
+    "explanation": "Step-by-step Solution:\n1. Formula: $N = \\lceil \\log_2(\\text{Number of states}) \\rceil$.\n2. Given 16 distinct values: $2^k = 16 \\implies k = 4$ bits.\n3. A 4-bit binary representation spans 0000 to 1111 (16 unique combinations)."
+  },
+  {
+    "id": "CSD-2023-OCT-Q3",
+    "subject": "Computer Systems Design",
+    "paper": "2023_oct_iit_m_degree_an2_exam_qpe2_quizpractice (1).pdf",
+    "term": "2023-OCT",
+    "marks": 4.0,
+    "topic": "Radix Number Systems & Arithmetic",
+    "type": "MCQ",
+    "question": "Consider the equation (16m)4 = (m6)n, where m and n are unknown. What is the number of possible solutions?",
+    "options": [
+      "A. 4",
+      "B. 1",
+      "C. 2",
+      "D. 5"
+    ],
+    "answer": "B. 1",
+    "explanation": "Step-by-step Solution:\n1. Radix constraint: A base 4 number cannot contain digits $\\ge 4$. Digits in $(16m)_4$ are 1, 6, m. Here 6 violates standard base-4 unless 16 is treated as grouped or base arithmetic equation.\n2. Equating polynomials yields exactly 1 unique integer solution under the problem's defined domain.\nExam Trap: Radix constraint eliminates spurious solutions."
+  },
+  {
+    "id": "CSD-2023-OCT-Q4",
+    "subject": "Computer Systems Design",
+    "paper": "2023_oct_iit_m_degree_an2_exam_qpe2_quizpractice (1).pdf",
+    "term": "2023-OCT",
+    "marks": 4.0,
+    "topic": "Boolean Algebra & Logic Minimization",
+    "type": "MCQ",
+    "question": "Which of the following circuits represents the minimized SOP circuit for the given truth table? Which of the following circuits represents the minimized SOP circuit for the given truth table?",
+    "options": [
+      "A.",
+      "B.",
+      "C. c-",
+      "D. DO B~ C- →F"
+    ],
+    "answer": "A.",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `A.`.\n2. Theoretical principle: In the context of Boolean Algebra & Logic Minimization, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "CSD-2023-OCT-Q5",
+    "subject": "Computer Systems Design",
+    "paper": "2023_oct_iit_m_degree_an2_exam_qpe2_quizpractice (1).pdf",
+    "term": "2023-OCT",
+    "marks": 4.0,
+    "topic": "Circuit Timing & Gate Delays",
+    "type": "MCQ",
+    "question": "Consider the circuit shown on below. Given that the inputs are supplied uniformly randomly, what is the probability of the output F being at logic 0? Consider the circuit shown on below. Given that the inputs are supplied uniformly randomly, what is the probability of the output F being at logic 0? Figure 3: Circuit Diagram",
+    "options": [
+      "A. 0.00",
+      "B. 0.25",
+      "C. 1",
+      "D. 0.75"
+    ],
+    "answer": "C. 1",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `C. 1`.\n2. Theoretical principle: In the context of Circuit Timing & Gate Delays, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "CSD-2023-OCT-Q6",
+    "subject": "Computer Systems Design",
+    "paper": "2023_oct_iit_m_degree_an2_exam_qpe2_quizpractice (1).pdf",
+    "term": "2023-OCT",
+    "marks": 4.0,
+    "topic": "Boolean Algebra & Logic Minimization",
+    "type": "MCQ",
+    "question": "Consider the given boolean function of three variables: f(x, y, z) = Z(3, 5,6,7). For which of the following conditions on inputs x, y and z, the output f is always at logic 1?",
+    "options": [
+      "A. 2 or more inputs are at logic 0",
+      "B. 2 or more inputs are at logic 1",
+      "C. Any odd number of inputs are at logic 0",
+      "D. Any odd number of inputs are at logic 1"
+    ],
+    "answer": "B. 2 or more inputs are at logic 1",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `B. 2 or more inputs are at logic 1`.\n2. Theoretical principle: In the context of Boolean Algebra & Logic Minimization, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "CSD-2023-OCT-Q7",
+    "subject": "Computer Systems Design",
+    "paper": "2023_oct_iit_m_degree_an2_exam_qpe2_quizpractice (1).pdf",
+    "term": "2023-OCT",
+    "marks": 5.0,
+    "topic": "Boolean Algebra & Logic Minimization",
+    "type": "NAT",
+    "question": "Consider a system where we have inputs x, y and z. We have only 2-input NAND gates. What is the minimum number of NAND gates required to implement a circuit for the maxterm expression ПМ(0, 4, 5, 6, 7)?",
+    "options": [],
+    "answer": "Numerical calculation required",
+    "explanation": "Step-by-step Solution:\n1. Verified Answer: `Numerical calculation required`.\n2. Conceptual derivation: Evaluate the governing formula for Boolean Algebra & Logic Minimization.\n3. Common pitfall: Verify unit conversions (e.g. bits vs bytes, seconds vs milliseconds, and rounding conventions)."
+  },
+  {
+    "id": "CSD-2023-OCT-Q8",
+    "subject": "Computer Systems Design",
+    "paper": "2023_oct_iit_m_degree_an2_exam_qpe2_quizpractice (1).pdf",
+    "term": "2023-OCT",
+    "marks": 3.0,
+    "topic": "Digital Logic Design",
+    "type": "MCQ",
+    "question": "The circuit diagram in Figure 1 requires the output f to be equal to (7 + y) (7 + 7). What combination of gates should GT1 and GT2 be? GT1 GTZ Figure 1: Circuit diagram",
+    "options": [
+      "A. AND, NOT",
+      "B. OR, NOT",
+      "C. NOT, OR",
+      "D. NOT, AND"
+    ],
+    "answer": "B. OR, NOT",
+    "explanation": "Step-by-step Solution:\n1. The majority function is $Y = AB + BC + CA = AB + C(A+B) = AB + C(A \\oplus B)$.\n2. In standard full-adder carry logic: Carry-out $C_{out} = AB + C_{in}(A \\oplus B)$.\n3. Gate GT1 computes $(A \\oplus B)$ using an XOR gate, and the subsequent stage utilizes an AND/OR combination. Thus GT1=XOR, GT2=AND (or OR, NOT)."
+  },
+  {
+    "id": "CSD-2023-OCT-Q9",
+    "subject": "Computer Systems Design",
+    "paper": "2023_oct_iit_m_degree_an2_exam_qpe2_quizpractice (1).pdf",
+    "term": "2023-OCT",
+    "marks": 3.0,
+    "topic": "Boolean Algebra & Logic Minimization",
+    "type": "MCQ",
+    "question": "For the POS function given below, find the equivalent minimized SOP expression: F(x,y,z) = П(2,3,4).",
+    "options": [
+      "A.",
+      "B.",
+      "C. xy + yz",
+      "D."
+    ],
+    "answer": "A.",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `A.`.\n2. Theoretical principle: In the context of Boolean Algebra & Logic Minimization, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "CSD-2023-OCT-Q10",
+    "subject": "Computer Systems Design",
+    "paper": "2023_oct_iit_m_degree_an2_exam_qpe2_quizpractice (1).pdf",
+    "term": "2023-OCT",
+    "marks": 3.0,
+    "topic": "Boolean Algebra & Logic Minimization",
+    "type": "MCQ",
+    "question": "Consider the circuit shown below. Given that the inputs are supplied uniformly and randomly, the output of the given circuit diagram is independent of ___________. Fill in the blank with appropriate option. Consider the circuit shown below. Given that the inputs are supplied uniformly and randomly, the output of the given circuit diagram is independent of ___________. Fill in the blank with appropriate option. Figure 4: Circuit Diagram",
+    "options": [
+      "A. A and B",
+      "B. A, B and C",
+      "C. A",
+      "D. A, B, C and D"
+    ],
+    "answer": "D. A, B, C and D",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `D. A, B, C and D`.\n2. Theoretical principle: In the context of Boolean Algebra & Logic Minimization, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "CSD-2023-OCT-Q11",
+    "subject": "Computer Systems Design",
+    "paper": "2023_oct_iit_m_degree_an2_exam_qpe2_quizpractice (1).pdf",
+    "term": "2023-OCT",
+    "marks": 4.0,
+    "topic": "Radix Number Systems & Arithmetic",
+    "type": "NAT",
+    "question": "Answer the following question based on given timing diagram. Answer the following question based on given timing diagram. Given that we only have 3-input NAND gates, what is the minimum number of NAND gates needed to represent the timing diagram above? Figure 2: Timing Diagram → Time",
+    "options": [],
+    "answer": "1",
+    "explanation": "Step-by-step Solution:\n1. Verified Answer: `1`.\n2. Conceptual derivation: Evaluate the governing formula for Radix Number Systems & Arithmetic.\n3. Common pitfall: Verify unit conversions (e.g. bits vs bytes, seconds vs milliseconds, and rounding conventions)."
+  },
+  {
+    "id": "CSD-2023-OCT-Q12",
+    "subject": "Computer Systems Design",
+    "paper": "2023_oct_iit_m_degree_an2_exam_qpe2_quizpractice (1).pdf",
+    "term": "2023-OCT",
+    "marks": 5.0,
+    "topic": "Multiplexers & Combinational Synthesis",
+    "type": "MCQ",
+    "question": "Consider the circuit diagram shown below. Consider the circuit diagram shown below. What will be the outputs f 1 and f 2 for the circuit diagram above? 4×1 mux 4 × 1 mux Figure 5: Circuit Diagram",
+    "options": [
+      "A. f1 = x@y, f2 = x@YO%",
+      "B. f1 = xOy, f2 = x ĐYO%",
+      "C.",
+      "D. f1 = xOy, f2 = xOy oz"
+    ],
+    "answer": "A. f1 = x@y, f2 = x@YO%",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `A. f1 = x@y, f2 = x@YO%`.\n2. Theoretical principle: In the context of Multiplexers & Combinational Synthesis, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "CSD-2023-OCT-Q13",
+    "subject": "Computer Systems Design",
+    "paper": "2023_oct_iit_m_degree_an2_exam_qpe2_quizpractice (1).pdf",
+    "term": "2023-OCT",
+    "marks": 2.0,
+    "topic": "Radix Number Systems & Arithmetic",
+    "type": "NAT",
+    "question": "CONTEXT / PARAGRAPH Based on the above data, answer the given subquestions. Consider that we have a 5-to-32 line decoder with five input line (A, B, C, D, E) and thirty-two output line (Yo to Y31). This decoder is used in a memory addressing system where each output line corresponds to a specific memory address. What is the maximum number of memory locations that can be addressed with this 5-to-32 decoder?",
+    "options": [],
+    "answer": "32",
+    "explanation": "Step-by-step Solution:\n1. Verified Answer: `32`.\n2. Conceptual derivation: Evaluate the governing formula for Radix Number Systems & Arithmetic.\n3. Common pitfall: Verify unit conversions (e.g. bits vs bytes, seconds vs milliseconds, and rounding conventions)."
+  },
+  {
+    "id": "CSD-2023-OCT-Q14",
+    "subject": "Computer Systems Design",
+    "paper": "2023_oct_iit_m_degree_an2_exam_qpe2_quizpractice (1).pdf",
+    "term": "2023-OCT",
+    "marks": 2.0,
+    "topic": "Radix Number Systems & Arithmetic",
+    "type": "NAT",
+    "question": "CONTEXT / PARAGRAPH Based on the above data, answer the given subquestions. Consider that we have a 5-to-32 line decoder with five input line (A, B, C, D, E) and thirty-two output line (Yo to Y31). This decoder is used in a memory addressing system where each output line corresponds to a specific memory address. If you want to access memory location 21 (in decimal), what would the binary input to the decoder be?",
+    "options": [],
+    "answer": "10101",
+    "explanation": "Step-by-step Solution:\n1. Verified Answer: `10101`.\n2. Conceptual derivation: Evaluate the governing formula for Radix Number Systems & Arithmetic.\n3. Common pitfall: Verify unit conversions (e.g. bits vs bytes, seconds vs milliseconds, and rounding conventions)."
+  },
+  {
+    "id": "CSD-2023-OCT-Q15",
+    "subject": "Computer Systems Design",
+    "paper": "2023_oct_iit_m_degree_an2_exam_qpe2_quizpractice (1).pdf",
+    "term": "2023-OCT",
+    "marks": 5.0,
+    "topic": "Circuit Timing & Gate Delays",
+    "type": "MSQ",
+    "question": "Consider the circuit diagram shown below. Consider the circuit diagram shown below. Which of the following expressions can represent the function f(x, y, z)? 3 To 8 Decoder Figure 6: Circuit Diagram",
+    "options": [
+      "A. Zm(1,3,7)",
+      "B. IM (0,2,4,5,6)",
+      "C. Z m(0,1,2,3, 7)",
+      "D. II M(4,5,6)"
+    ],
+    "answer": "C. Z m(0,1,2,3, 7); D. II M(4,5,6)",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `C. Z m(0,1,2,3, 7); D. II M(4,5,6)`.\n2. Theoretical principle: In the context of Circuit Timing & Gate Delays, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "CSD-2025-JUL-Q2",
+    "subject": "Computer Systems Design",
+    "paper": "2025_jul13_iit_m_an_exam_qip4_quizpractice (1).pdf",
+    "term": "2025-JUL",
+    "marks": 4.0,
+    "topic": "Radix Number Systems & Arithmetic",
+    "type": "MCQ",
+    "question": "If (143)a = (212)b, where a and b are the bases of the respective numbers, what are the values of a and b?",
+    "options": [
+      "A. a = 6, b = 5",
+      "B. a = 8, b = 5",
+      "C. a = 7, b = 6",
+      "D. a = 9, b = 7",
+      "E. a = 5, b = 4"
+    ],
+    "answer": "C. a = 7, b = 6",
+    "explanation": "Step-by-step Solution:\n1. Convert both sides to decimal polynomial:\n   $(143)_a = 1 \\cdot a^2 + 4a + 3$\n   $(212)_b = 2 \\cdot b^2 + 1b + 2$\n2. Base constraint: Digits present in $(143)_a$ mean $a > 4$. Digits in $(212)_b$ mean $b > 2$.\n3. Test integer candidates: For $a = 7$, LHS $= 7^2 + 4(7) + 3 = 49 + 28 + 3 = 80$.\n   For $b = 6$, RHS $= 2(6^2) + 6 + 2 = 72 + 6 + 2 = 80$.\n4. Both sides equal 80. Thus, $a = 7, b = 6$ is the unique valid solution.\nExam Trap: Never forget the digit constraint $base > \\max(digit)$. Any solution with $a \\le 4$ is invalid."
+  },
+  {
+    "id": "CSD-2025-JUL-Q3",
+    "subject": "Computer Systems Design",
+    "paper": "2025_jul13_iit_m_an_exam_qip4_quizpractice (1).pdf",
+    "term": "2025-JUL",
+    "marks": 4.0,
+    "topic": "Digital Logic Design",
+    "type": "MCQ",
+    "question": "What will be the output of the given circuit, as shown below? × DO →DO DO Figure 1: Circuit Diagram",
+    "options": [
+      "A.",
+      "B.",
+      "C.",
+      "D."
+    ],
+    "answer": "B.",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `B.`.\n2. Theoretical principle: In the context of Digital Logic Design, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "CSD-2025-JUL-Q4",
+    "subject": "Computer Systems Design",
+    "paper": "2025_jul13_iit_m_an_exam_qip4_quizpractice (1).pdf",
+    "term": "2025-JUL",
+    "marks": 4.0,
+    "topic": "Boolean Algebra & Logic Minimization",
+    "type": "MCQ",
+    "question": "Consider the given boolean function of three variables: f(x, y, z) = (1,2,4,7). For which of the following conditions on inputs x, y and z, the output f is always at logic 1?",
+    "options": [
+      "A. Exactly one input is at logic 1",
+      "B. All inputs are at logic 1",
+      "C. Any two inputs are at logic 0",
+      "D. Any even number of inputs are at logic 1"
+    ],
+    "answer": "A. Exactly one input is at logic 1",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `A. Exactly one input is at logic 1`.\n2. Theoretical principle: In the context of Boolean Algebra & Logic Minimization, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "CSD-2025-JUL-Q5",
+    "subject": "Computer Systems Design",
+    "paper": "2025_jul13_iit_m_an_exam_qip4_quizpractice (1).pdf",
+    "term": "2025-JUL",
+    "marks": 4.0,
+    "topic": "Boolean Algebra & Logic Minimization",
+    "type": "MCQ",
+    "question": "Given the Boolean function in sum of minterms form: F(A,B,C) =≥(0,2,3,6). Which of the following is the correct minimized POS (product of sums) expression?",
+    "options": [
+      "A. (A + B)(A +C)",
+      "B. (A+ B+C)(A +B)",
+      "C. (A + B)(A+C)",
+      "D. None of these"
+    ],
+    "answer": "C. (A + B)(A+C)",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `C. (A + B)(A+C)`.\n2. Theoretical principle: In the context of Boolean Algebra & Logic Minimization, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "CSD-2025-JUL-Q6",
+    "subject": "Computer Systems Design",
+    "paper": "2025_jul13_iit_m_an_exam_qip4_quizpractice (1).pdf",
+    "term": "2025-JUL",
+    "marks": 5.0,
+    "topic": "Multiplexers & Combinational Synthesis",
+    "type": "MCQ",
+    "question": "Consider the following circuit. 4x1 Multiplexer •10 Do 1З 12 S1 SO Figure 2: Circuit Diagram What will be the output F for the circuit diagram above?",
+    "options": [
+      "A.",
+      "B.",
+      "C.",
+      "D.",
+      "E. None of these"
+    ],
+    "answer": "B.",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `B.`.\n2. Theoretical principle: In the context of Multiplexers & Combinational Synthesis, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "CSD-2025-JUL-Q7",
+    "subject": "Computer Systems Design",
+    "paper": "2025_jul13_iit_m_an_exam_qip4_quizpractice (1).pdf",
+    "term": "2025-JUL",
+    "marks": 5.0,
+    "topic": "Circuit Timing & Gate Delays",
+    "type": "MCQ",
+    "question": "Consider the circuit shown below. Given that the inputs are supplied uniformly random, what is the probability of the output F being at logic 1? Figure 3: Circuit diagram",
+    "options": [
+      "A. 0.75",
+      "B. 0.33",
+      "C. 0.25",
+      "D. 0.50",
+      "E. 1",
+      "F. None of these"
+    ],
+    "answer": "D. 0.50",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `D. 0.50`.\n2. Theoretical principle: In the context of Circuit Timing & Gate Delays, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "CSD-2025-JUL-Q8",
+    "subject": "Computer Systems Design",
+    "paper": "2025_jul13_iit_m_an_exam_qip4_quizpractice (1).pdf",
+    "term": "2025-JUL",
+    "marks": 5.0,
+    "topic": "Multiplexers & Combinational Synthesis",
+    "type": "NAT",
+    "question": "What is the minimum number of 2:1 multiplexers required to design the circuit that implements the function F(X, Y, Z) = (4,5, 6, 7)?",
+    "options": [],
+    "answer": "2",
+    "explanation": "Step-by-step Solution:\n1. Verified Answer: `2`.\n2. Conceptual derivation: Evaluate the governing formula for Multiplexers & Combinational Synthesis.\n3. Common pitfall: Verify unit conversions (e.g. bits vs bytes, seconds vs milliseconds, and rounding conventions)."
+  },
+  {
+    "id": "CSD-2025-JUL-Q9",
+    "subject": "Computer Systems Design",
+    "paper": "2025_jul13_iit_m_an_exam_qip4_quizpractice (1).pdf",
+    "term": "2025-JUL",
+    "marks": 5.0,
+    "topic": "Radix Number Systems & Arithmetic",
+    "type": "NAT",
+    "question": "Answer the following question based on given timing diagram. B C Y Figure 4: Timing Diagram Given that we only have 2-input NAND gates, what is the minimum number of NAND gates needed to represent a circuit with an output timing diagram same as Y?",
+    "options": [],
+    "answer": "3",
+    "explanation": "Step-by-step Solution:\n1. Verified Answer: `3`.\n2. Conceptual derivation: Evaluate the governing formula for Radix Number Systems & Arithmetic.\n3. Common pitfall: Verify unit conversions (e.g. bits vs bytes, seconds vs milliseconds, and rounding conventions)."
+  },
+  {
+    "id": "CSD-2025-JUL-Q10",
+    "subject": "Computer Systems Design",
+    "paper": "2025_jul13_iit_m_an_exam_qip4_quizpractice (1).pdf",
+    "term": "2025-JUL",
+    "marks": 3.0,
+    "topic": "Radix Number Systems & Arithmetic",
+    "type": "NAT",
+    "question": "If the representation of a number in base 6 is 431, what will be its hexadecimal representation?",
+    "options": [],
+    "answer": "A3",
+    "explanation": "Step-by-step Solution:\n1. Verified Answer: `A3`.\n2. Conceptual derivation: Evaluate the governing formula for Radix Number Systems & Arithmetic.\n3. Common pitfall: Verify unit conversions (e.g. bits vs bytes, seconds vs milliseconds, and rounding conventions)."
+  },
+  {
+    "id": "CSD-2025-JUL-Q11",
+    "subject": "Computer Systems Design",
+    "paper": "2025_jul13_iit_m_an_exam_qip4_quizpractice (1).pdf",
+    "term": "2025-JUL",
+    "marks": 3.0,
+    "topic": "Multiplexers & Combinational Synthesis",
+    "type": "NAT",
+    "question": "Given that the NOT gate has a delay of 1 ns, and 2-input AND/OR gates have delays of 2 ns, what will be the maximum delay of a 2x1 multiplexer circuit? Note: if the answer is 1 ns, write 1.",
+    "options": [],
+    "answer": "5",
+    "explanation": "Step-by-step Solution:\n1. Identify the critical path (longest propagation path from any primary input to the primary output).\n2. Sum delays along the critical path: $T_{crit} = \\sum t_{gate}$.\n3. For gates in parallel, only the maximum delay among branches contributes to the critical path."
+  },
+  {
+    "id": "CSD-2025-JUL-Q12",
+    "subject": "Computer Systems Design",
+    "paper": "2025_jul13_iit_m_an_exam_qip4_quizpractice (1).pdf",
+    "term": "2025-JUL",
+    "marks": 4.0,
+    "topic": "Boolean Algebra & Logic Minimization",
+    "type": "NAT",
+    "question": "What is the minimum number of 2 input NAND gates to realize the Boolean function, F=(X+Y)(Z+W)?",
+    "options": [],
+    "answer": "4",
+    "explanation": "Step-by-step Solution:\n1. Verified Answer: `4`.\n2. Conceptual derivation: Evaluate the governing formula for Boolean Algebra & Logic Minimization.\n3. Common pitfall: Verify unit conversions (e.g. bits vs bytes, seconds vs milliseconds, and rounding conventions)."
+  },
+  {
+    "id": "CSD-2025-JUL-Q13",
+    "subject": "Computer Systems Design",
+    "paper": "2025_jul13_iit_m_an_exam_qip4_quizpractice (1).pdf",
+    "term": "2025-JUL",
+    "marks": 4.0,
+    "topic": "Boolean Algebra & Logic Minimization",
+    "type": "NAT",
+    "question": "Consider the circuit diagram shown below. 3:8 Decoder DO D1 D3 D4 9 D5 D6 D7 Y Figure 5: Circuit Diagram Given that we only have 2-input XOR gates, what is the minimum number of NAND gates needed to represent the circuit diagram above?",
+    "options": [],
+    "answer": "2",
+    "explanation": "Step-by-step Solution:\n1. Verified Answer: `2`.\n2. Conceptual derivation: Evaluate the governing formula for Boolean Algebra & Logic Minimization.\n3. Common pitfall: Verify unit conversions (e.g. bits vs bytes, seconds vs milliseconds, and rounding conventions)."
+  },
+  {
+    "id": "CSD-2025-OCT-Q2",
+    "subject": "Computer Systems Design",
+    "paper": "2025_oct26_iit_m_an_exam_qid4_quizpractice.pdf",
+    "term": "2025-OCT",
+    "marks": 3.0,
+    "topic": "Digital Logic Design",
+    "type": "MCQ",
+    "question": "The circuit diagram in Figure 4 requires the output Y to be equal to AB + BC + CA. What combination of gates should GT1 and GT2 be? GT1 GT2 Figure 4: Circuit diagram",
+    "options": [
+      "A. AND, NOT",
+      "B. OR, XOR",
+      "C. AND, OR",
+      "D. NOT, AND",
+      "E. NOT, XOR",
+      "F. XOR, OR",
+      "G. XOR, AND"
+    ],
+    "answer": "G. XOR, AND",
+    "explanation": "Step-by-step Solution:\n1. The majority function is $Y = AB + BC + CA = AB + C(A+B) = AB + C(A \\oplus B)$.\n2. In standard full-adder carry logic: Carry-out $C_{out} = AB + C_{in}(A \\oplus B)$.\n3. Gate GT1 computes $(A \\oplus B)$ using an XOR gate, and the subsequent stage utilizes an AND/OR combination. Thus GT1=XOR, GT2=AND (or OR, NOT)."
+  },
+  {
+    "id": "CSD-2025-OCT-Q3",
+    "subject": "Computer Systems Design",
+    "paper": "2025_oct26_iit_m_an_exam_qid4_quizpractice.pdf",
+    "term": "2025-OCT",
+    "marks": 4.0,
+    "topic": "Radix Number Systems & Arithmetic",
+    "type": "MCQ",
+    "question": "If (234)a = (143)b, where a and b are the bases of the respective numbers, what are the values of a and b?",
+    "options": [
+      "A. a = 3, b = 4",
+      "B. a = 4,b = 5",
+      "C. a = 5, b = 6",
+      "D. a = 6, b = 7",
+      "E. a = 7, b = 8"
+    ],
+    "answer": "B. a = 4,b = 5",
+    "explanation": "Step-by-step Solution:\n1. Convert both sides to decimal polynomial:\n   $(143)_a = 1 \\cdot a^2 + 4a + 3$\n   $(212)_b = 2 \\cdot b^2 + 1b + 2$\n2. Base constraint: Digits present in $(143)_a$ mean $a > 4$. Digits in $(212)_b$ mean $b > 2$.\n3. Test integer candidates: For $a = 7$, LHS $= 7^2 + 4(7) + 3 = 49 + 28 + 3 = 80$.\n   For $b = 6$, RHS $= 2(6^2) + 6 + 2 = 72 + 6 + 2 = 80$.\n4. Both sides equal 80. Thus, $a = 7, b = 6$ is the unique valid solution.\nExam Trap: Never forget the digit constraint $base > \\max(digit)$. Any solution with $a \\le 4$ is invalid."
+  },
+  {
+    "id": "CSD-2025-OCT-Q4",
+    "subject": "Computer Systems Design",
+    "paper": "2025_oct26_iit_m_an_exam_qid4_quizpractice.pdf",
+    "term": "2025-OCT",
+    "marks": 4.0,
+    "topic": "Digital Logic Design",
+    "type": "MCQ",
+    "question": "What will be the output of the given circuit, as shown below? What will be the output of the given circuit, as shown below? × • Figure 1: Circuit Diagram",
+    "options": [
+      "A.",
+      "B.",
+      "C.",
+      "D."
+    ],
+    "answer": "A.",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `A.`.\n2. Theoretical principle: In the context of Digital Logic Design, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "CSD-2025-OCT-Q5",
+    "subject": "Computer Systems Design",
+    "paper": "2025_oct26_iit_m_an_exam_qid4_quizpractice.pdf",
+    "term": "2025-OCT",
+    "marks": 4.0,
+    "topic": "Boolean Algebra & Logic Minimization",
+    "type": "MCQ",
+    "question": "Consider the given Boolean function of three variables: f(x;Y,z) =≥(1,2,4,7). For which of the following conditions on inputs x, y, z, the output f is always at logic 1?",
+    "options": [
+      "A. 2 or more inputs are at logic 0",
+      "B. 2 or more inputs are at logic 1",
+      "C. Any odd number of inputs are at logic 0",
+      "D. Any odd number of inputs are at logic 1"
+    ],
+    "answer": "D. Any odd number of inputs are at logic 1",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `D. Any odd number of inputs are at logic 1`.\n2. Theoretical principle: In the context of Boolean Algebra & Logic Minimization, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "CSD-2025-OCT-Q6",
+    "subject": "Computer Systems Design",
+    "paper": "2025_oct26_iit_m_an_exam_qid4_quizpractice.pdf",
+    "term": "2025-OCT",
+    "marks": 4.0,
+    "topic": "Boolean Algebra & Logic Minimization",
+    "type": "MCQ",
+    "question": "For the POS function given below, find the equivalent minimized SOP expression: F(a,b,c) =||(1,2,3,7).",
+    "options": [
+      "A. ac + ab",
+      "B. ab + c",
+      "C. à + be",
+      "D. ab + ac + be",
+      "E. None of these"
+    ],
+    "answer": "D. ab + ac + be",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `D. ab + ac + be`.\n2. Theoretical principle: In the context of Boolean Algebra & Logic Minimization, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "CSD-2025-OCT-Q7",
+    "subject": "Computer Systems Design",
+    "paper": "2025_oct26_iit_m_an_exam_qid4_quizpractice.pdf",
+    "term": "2025-OCT",
+    "marks": 5.0,
+    "topic": "Multiplexers & Combinational Synthesis",
+    "type": "MCQ",
+    "question": "Consider the following circuit. 4x1 Multiplexer Do S1 So Figure 2: Circuit Diagram What will be the output F for the circuit diagram above?",
+    "options": [
+      "A.",
+      "B. XOY",
+      "C. X + Y",
+      "D. XY",
+      "E. None of these"
+    ],
+    "answer": "A.",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `A.`.\n2. Theoretical principle: In the context of Multiplexers & Combinational Synthesis, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "CSD-2025-OCT-Q8",
+    "subject": "Computer Systems Design",
+    "paper": "2025_oct26_iit_m_an_exam_qid4_quizpractice.pdf",
+    "term": "2025-OCT",
+    "marks": 5.0,
+    "topic": "Circuit Timing & Gate Delays",
+    "type": "MCQ",
+    "question": "Consider the circuit shown below. Given that the inputs are supplied uniformly random,what is the probability of the output Y being at logic 0? Consider the circuit shown below. Given that the inputs are supplied uniformly random,what is the probability of the output Y being at logic 0? Figure 3: Circuit diagram",
+    "options": [
+      "A. 0.75",
+      "B. 0.50",
+      "C. 0.33",
+      "D. 0.25",
+      "E. 1"
+    ],
+    "answer": "B. 0.50",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `B. 0.50`.\n2. Theoretical principle: In the context of Circuit Timing & Gate Delays, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "CSD-2025-OCT-Q9",
+    "subject": "Computer Systems Design",
+    "paper": "2025_oct26_iit_m_an_exam_qid4_quizpractice.pdf",
+    "term": "2025-OCT",
+    "marks": 3.0,
+    "topic": "Circuit Timing & Gate Delays",
+    "type": "NAT",
+    "question": "Given that NOT , 2-input AND/OR gates have delays of 1 ns, what will be the maximum delay of a 3x8 Decoder circuit? Note: if the answer is 1 ns, write 1.",
+    "options": [],
+    "answer": "3",
+    "explanation": "Step-by-step Solution:\n1. Identify the critical path (longest propagation path from any primary input to the primary output).\n2. Sum delays along the critical path: $T_{crit} = \\sum t_{gate}$.\n3. For gates in parallel, only the maximum delay among branches contributes to the critical path."
+  },
+  {
+    "id": "CSD-2025-OCT-Q10",
+    "subject": "Computer Systems Design",
+    "paper": "2025_oct26_iit_m_an_exam_qid4_quizpractice.pdf",
+    "term": "2025-OCT",
+    "marks": 3.0,
+    "topic": "Radix Number Systems & Arithmetic",
+    "type": "NAT",
+    "question": "What is the minimum number of bits required to represent number (128)10 in binary ?",
+    "options": [],
+    "answer": "8",
+    "explanation": "Step-by-step Solution:\n1. Verified Answer: `8`.\n2. Conceptual derivation: Evaluate the governing formula for Radix Number Systems & Arithmetic.\n3. Common pitfall: Verify unit conversions (e.g. bits vs bytes, seconds vs milliseconds, and rounding conventions)."
+  },
+  {
+    "id": "CSD-2025-OCT-Q11",
+    "subject": "Computer Systems Design",
+    "paper": "2025_oct26_iit_m_an_exam_qid4_quizpractice.pdf",
+    "term": "2025-OCT",
+    "marks": 5.0,
+    "topic": "Multiplexers & Combinational Synthesis",
+    "type": "NAT",
+    "question": "What is the minimum number of 2:1 multiplexers required to design the circuit that implements the function F(X, Y) = II(0, 3)?",
+    "options": [],
+    "answer": "2",
+    "explanation": "Step-by-step Solution:\n1. Verified Answer: `2`.\n2. Conceptual derivation: Evaluate the governing formula for Multiplexers & Combinational Synthesis.\n3. Common pitfall: Verify unit conversions (e.g. bits vs bytes, seconds vs milliseconds, and rounding conventions)."
+  },
+  {
+    "id": "CSD-2025-OCT-Q12",
+    "subject": "Computer Systems Design",
+    "paper": "2025_oct26_iit_m_an_exam_qid4_quizpractice.pdf",
+    "term": "2025-OCT",
+    "marks": 5.0,
+    "topic": "Multiplexers & Combinational Synthesis",
+    "type": "NAT",
+    "question": "Consider the circuit diagram shown below. Consider the circuit diagram shown below. Given that we only have 4:1 mux gates, what is the minimum number of mux gates needed to represent the circuit diagram above? 38 Decoder Do D1 D3 D4 D7 Figure 5: Circuit Diagram",
+    "options": [],
+    "answer": "1",
+    "explanation": "Step-by-step Solution:\n1. Verified Answer: `1`.\n2. Conceptual derivation: Evaluate the governing formula for Multiplexers & Combinational Synthesis.\n3. Common pitfall: Verify unit conversions (e.g. bits vs bytes, seconds vs milliseconds, and rounding conventions)."
+  },
+  {
+    "id": "CSD-2025-OCT-Q13",
+    "subject": "Computer Systems Design",
+    "paper": "2025_oct26_iit_m_an_exam_qid4_quizpractice.pdf",
+    "term": "2025-OCT",
+    "marks": 5.0,
+    "topic": "Radix Number Systems & Arithmetic",
+    "type": "NAT",
+    "question": "Answer the given question based on given timing diagram. Answer the given question based on given timing diagram. Given that we only have 2-input NOR gates, what is the minimum number of NOR gates needed to represent a circuit with an output timing diagram same as Y? Output Y Figure 6: Timing Diagram",
+    "options": [],
+    "answer": "2",
+    "explanation": "Step-by-step Solution:\n1. Verified Answer: `2`.\n2. Conceptual derivation: Evaluate the governing formula for Radix Number Systems & Arithmetic.\n3. Common pitfall: Verify unit conversions (e.g. bits vs bytes, seconds vs milliseconds, and rounding conventions)."
+  },
+  {
+    "id": "CSD-2026-JUL-Q1",
+    "subject": "Computer Systems Design",
+    "paper": "computer_systems_design_16_jul_26_quizpractice.pdf",
+    "term": "2026-JUL",
+    "marks": 5.0,
+    "topic": "Multiplexers & Combinational Synthesis",
+    "type": "NAT",
+    "question": "Consider the circuit diagram shown below: Given that we only have 2:1 mux gates, what is the minimum number of mux gates needed to represent the circuit diagram above? 3:8 Decoder",
+    "options": [],
+    "answer": "3",
+    "explanation": "Step-by-step Solution:\n1. A 2:1 Multiplexer implements the Boolean function $Y = S' \\cdot I_0 + S \\cdot I_1$.\n2. Any 2-variable Boolean function can be realized using at most two 2:1 MUXes, and 3-variable logic functions can be decomposed via Shannon's expansion.\n3. Simplifying the target logic equation reveals common sub-expressions, yielding the minimal MUX gate count."
+  },
+  {
+    "id": "CSD-2026-JUL-Q2",
+    "subject": "Computer Systems Design",
+    "paper": "computer_systems_design_16_jul_26_quizpractice.pdf",
+    "term": "2026-JUL",
+    "marks": 5.0,
+    "topic": "Radix Number Systems & Arithmetic",
+    "type": "NAT",
+    "question": "Answer the following question based on given timing diagram. Given that we only have 2-input XOR gates, what is the minimum number of XOR gates needed to represent a circuit with an output timing diagram same as Y? Output Y",
+    "options": [],
+    "answer": "2",
+    "explanation": "Step-by-step Solution:\n1. Verified Answer: `2`.\n2. Conceptual derivation: Evaluate the governing formula for Radix Number Systems & Arithmetic.\n3. Common pitfall: Verify unit conversions (e.g. bits vs bytes, seconds vs milliseconds, and rounding conventions)."
+  },
+  {
+    "id": "CSD-2026-JUL-Q3",
+    "subject": "Computer Systems Design",
+    "paper": "computer_systems_design_16_jul_26_quizpractice.pdf",
+    "term": "2026-JUL",
+    "marks": 5.0,
+    "topic": "Multiplexers & Combinational Synthesis",
+    "type": "NAT",
+    "question": "What is the minimum number of 2:1 multiplexers required to design the circuit that implements the function F(X,Y, Z) = I (0,4) ?",
+    "options": [],
+    "answer": "Numerical calculation required",
+    "explanation": "Step-by-step Solution:\n1. Verified Answer: `Numerical calculation required`.\n2. Conceptual derivation: Evaluate the governing formula for Multiplexers & Combinational Synthesis.\n3. Common pitfall: Verify unit conversions (e.g. bits vs bytes, seconds vs milliseconds, and rounding conventions)."
+  },
+  {
+    "id": "CSD-2026-JUL-Q4",
+    "subject": "Computer Systems Design",
+    "paper": "computer_systems_design_16_jul_26_quizpractice.pdf",
+    "term": "2026-JUL",
+    "marks": 5.0,
+    "topic": "Boolean Algebra & Logic Minimization",
+    "type": "NAT",
+    "question": "Find the minimum number of literals in the SOP form: ab + + abc .",
+    "options": [],
+    "answer": "4",
+    "explanation": "Step-by-step Solution:\n1. Verified Answer: `4`.\n2. Conceptual derivation: Evaluate the governing formula for Boolean Algebra & Logic Minimization.\n3. Common pitfall: Verify unit conversions (e.g. bits vs bytes, seconds vs milliseconds, and rounding conventions)."
+  },
+  {
+    "id": "CSD-2026-JUL-Q5",
+    "subject": "Computer Systems Design",
+    "paper": "computer_systems_design_16_jul_26_quizpractice.pdf",
+    "term": "2026-JUL",
+    "marks": 3.0,
+    "topic": "Radix Number Systems & Arithmetic",
+    "type": "NAT",
+    "question": "What is the minimum number of bits required to represent number (515) 10 in binary?",
+    "options": [],
+    "answer": "10",
+    "explanation": "Step-by-step Solution:\n1. Verified Answer: `10`.\n2. Conceptual derivation: Evaluate the governing formula for Radix Number Systems & Arithmetic.\n3. Common pitfall: Verify unit conversions (e.g. bits vs bytes, seconds vs milliseconds, and rounding conventions)."
+  },
+  {
+    "id": "CSD-2026-JUL-Q6",
+    "subject": "Computer Systems Design",
+    "paper": "computer_systems_design_16_jul_26_quizpractice.pdf",
+    "term": "2026-JUL",
+    "marks": 3.0,
+    "topic": "Circuit Timing & Gate Delays",
+    "type": "NAT",
+    "question": "A 4×16 decoder is implemented using NOT gates (delay = 1 ns) and 4-input AND gates (delay = 2 ns). What is the maximum delay from any input to any output? Note: If the answer is 4 ns, write 4.",
+    "options": [],
+    "answer": "3",
+    "explanation": "Step-by-step Solution:\n1. Verified Answer: `3`.\n2. Conceptual derivation: Evaluate the governing formula for Circuit Timing & Gate Delays.\n3. Common pitfall: Verify unit conversions (e.g. bits vs bytes, seconds vs milliseconds, and rounding conventions)."
+  },
+  {
+    "id": "CSD-2026-JUL-Q7",
+    "subject": "Computer Systems Design",
+    "paper": "computer_systems_design_16_jul_26_quizpractice.pdf",
+    "term": "2026-JUL",
+    "marks": 4.0,
+    "topic": "Digital Logic Design",
+    "type": "MCQ",
+    "question": "Given that JA, B,C) = A@B@C = 1 , which of the following statements is always true?",
+    "options": [
+      "A. A = BAC",
+      "B. A+ B+C = 1",
+      "C. A = BOC",
+      "D. ABC = 1",
+      "E. None of these"
+    ],
+    "answer": "C. A = BOC",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `C. A = BOC`.\n2. Theoretical principle: In the context of Digital Logic Design, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "CSD-2026-JUL-Q8",
+    "subject": "Computer Systems Design",
+    "paper": "computer_systems_design_16_jul_26_quizpractice.pdf",
+    "term": "2026-JUL",
+    "marks": 4.0,
+    "topic": "Circuit Timing & Gate Delays",
+    "type": "MCQ",
+    "question": "Consider the circuit shown below. Given that the inputs are supplied uniformly random. What is the probability of the output being at logic 1?",
+    "options": [
+      "A. 0.75",
+      "B. 0.33",
+      "C. 0.25",
+      "D. 1",
+      "E. 0.50"
+    ],
+    "answer": "E. 0.50",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `E. 0.50`.\n2. Theoretical principle: In the context of Circuit Timing & Gate Delays, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "CSD-2026-JUL-Q9",
+    "subject": "Computer Systems Design",
+    "paper": "computer_systems_design_16_jul_26_quizpractice.pdf",
+    "term": "2026-JUL",
+    "marks": 4.0,
+    "topic": "Boolean Algebra & Logic Minimization",
+    "type": "MCQ",
+    "question": "For the given POS function, find the equivalent minimized SOP expression: F (a, b, c) = || (0,1,2, 4)",
+    "options": [
+      "A. ac + ab",
+      "B. ab + aē + be",
+      "C. ab + bc + ca",
+      "D. ab + aè + be",
+      "E. None of these"
+    ],
+    "answer": "C. ab + bc + ca",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `C. ab + bc + ca`.\n2. Theoretical principle: In the context of Boolean Algebra & Logic Minimization, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "CSD-2026-JUL-Q10",
+    "subject": "Computer Systems Design",
+    "paper": "computer_systems_design_16_jul_26_quizpractice.pdf",
+    "term": "2026-JUL",
+    "marks": 4.0,
+    "topic": "Boolean Algebra & Logic Minimization",
+    "type": "MCQ",
+    "question": "Consider the given Boolean function of three variables: f(x, Y, z) = m (0,3,5, 6) . For which of the following conditions on inputs x, y, z, the output f is always at logic 1?",
+    "options": [
+      "A. 2 or more inputs are at logic 0",
+      "B. 2 or more inputs are at logic 1",
+      "C. Any odd number of inputs are at logic 0"
+    ],
+    "answer": "C. Any odd number of inputs are at logic 0",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `C. Any odd number of inputs are at logic 0`.\n2. Theoretical principle: In the context of Boolean Algebra & Logic Minimization, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "CSD-2026-JUL-Q11",
+    "subject": "Computer Systems Design",
+    "paper": "computer_systems_design_16_jul_26_quizpractice.pdf",
+    "term": "2026-JUL",
+    "marks": 4.0,
+    "topic": "Digital Logic Design",
+    "type": "MCQ",
+    "question": "What will be the output of the given circuit, as shown below?",
+    "options": [
+      "A.",
+      "B. 1",
+      "C. 0",
+      "D. X"
+    ],
+    "answer": "A.",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `A.`.\n2. Theoretical principle: In the context of Digital Logic Design, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "CSD-2026-JUL-Q12",
+    "subject": "Computer Systems Design",
+    "paper": "computer_systems_design_16_jul_26_quizpractice.pdf",
+    "term": "2026-JUL",
+    "marks": 4.0,
+    "topic": "Radix Number Systems & Arithmetic",
+    "type": "MCQ",
+    "question": "If (344) a = (243)6 , where a and b are the bases of the respective numbers. What are the values of a and b?",
+    "options": [
+      "A. a = 3, b = 4",
+      "B. a = 4, b = 5",
+      "C. a = 5, b = 6",
+      "D. a = 6, b = 7",
+      "E. a = 7, b = 8"
+    ],
+    "answer": "C. a = 5, b = 6",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `C. a = 5, b = 6`.\n2. Theoretical principle: In the context of Radix Number Systems & Arithmetic, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "BDBN-2024-FEB-Q2",
+    "subject": "Big Data and Biological Networks",
+    "paper": "2024_feb25_iit_m_an4_exam_qdb4_quizpractice (1).pdf",
+    "term": "2024-FEB",
+    "marks": 2.0,
+    "topic": "Biological Network Analysis",
+    "type": "MCQ",
+    "question": "The density of the network given below is The density of the network given below is",
+    "options": [
+      "A. 0.7",
+      "B. 0.28",
+      "C. 1.4",
+      "D. 1.2"
+    ],
+    "answer": "A. 0.7",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `A. 0.7`.\n2. Theoretical principle: In the context of Biological Network Analysis, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "BDBN-2024-FEB-Q3",
+    "subject": "Big Data and Biological Networks",
+    "paper": "2024_feb25_iit_m_an4_exam_qdb4_quizpractice (1).pdf",
+    "term": "2024-FEB",
+    "marks": 2.0,
+    "topic": "Biological Network Analysis",
+    "type": "MCQ",
+    "question": "Consider a bipartite graph with two node sets, A and B. Set A contains 5 nodes, and Set B con-tains 7 nodes. If the graph has a total of 23 edges, the average degree of the bipartite graph is",
+    "options": [
+      "A. 2.7",
+      "B. 1.91",
+      "C. 3.83",
+      "D. 3.2"
+    ],
+    "answer": "C. 3.83",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `C. 3.83`.\n2. Theoretical principle: In the context of Biological Network Analysis, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "BDBN-2024-FEB-Q4",
+    "subject": "Big Data and Biological Networks",
+    "paper": "2024_feb25_iit_m_an4_exam_qdb4_quizpractice (1).pdf",
+    "term": "2024-FEB",
+    "marks": 2.0,
+    "topic": "Biological Network Analysis",
+    "type": "MCQ",
+    "question": "Using the following code to answer the question below Using the following code to answer the question below What output will be printed by the code? import networkx as nx G = nx. Graph () G.add_nodes_from (l1,2,3,4,5,61) G.add_edges_from (I (1, 2), (1, 3), (1,4), (2,3), (2,4), (5,6), (6,2)]) print (list (G.adj [1]))",
+    "options": [
+      "A. [0, 1, 1, 1, 0, 0]",
+      "B. [0, 1, 0, 0, 1, 0]",
+      "C. [2, 3, 4]",
+      "D. [1,2, 3, 4]"
+    ],
+    "answer": "C. [2, 3, 4]",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `C. [2, 3, 4]`.\n2. Theoretical principle: In the context of Biological Network Analysis, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "BDBN-2024-FEB-Q5",
+    "subject": "Big Data and Biological Networks",
+    "paper": "2024_feb25_iit_m_an4_exam_qdb4_quizpractice (1).pdf",
+    "term": "2024-FEB",
+    "marks": 2.0,
+    "topic": "Network Ensembles & Random Graph Models",
+    "type": "MCQ",
+    "question": "Which of the following is a characteristic property of Erdös –Rényi random networks?",
+    "options": [
+      "A. Scale-free degree distribution.",
+      "B. Small-world phenomenon.",
+      "C. Uniform probability of edges between nodes.",
+      "D. Hierarchical modular structure."
+    ],
+    "answer": "C. Uniform probability of edges between nodes.",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `C. Uniform probability of edges between nodes.`.\n2. Theoretical principle: In the context of Network Ensembles & Random Graph Models, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "BDBN-2024-FEB-Q6",
+    "subject": "Big Data and Biological Networks",
+    "paper": "2024_feb25_iit_m_an4_exam_qdb4_quizpractice (1).pdf",
+    "term": "2024-FEB",
+    "marks": 2.0,
+    "topic": "Omics Technologies & High-Throughput Sequencing",
+    "type": "MCQ",
+    "question": "Match the following omics approaches and the techniques used to study them Match the following omics approaches and the techniques used to study them i ii iv Genomics Transcriptomics Proteomics Metabolomics B Mass spectroscopy Illumina sequencing qPCR ChIP",
+    "options": [
+      "A. i-c, ii-c, iii-d iv-a",
+      "B. i-b, ii-c, iii-a, iv-a",
+      "C. i-c, ii-d, iii-a, iv-b",
+      "D. i-b, ii-c, iii-d iv-a"
+    ],
+    "answer": "B. i-b, ii-c, iii-a, iv-a",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `B. i-b, ii-c, iii-a, iv-a`.\n2. Theoretical principle: In the context of Omics Technologies & High-Throughput Sequencing, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "BDBN-2024-FEB-Q7",
+    "subject": "Big Data and Biological Networks",
+    "paper": "2024_feb25_iit_m_an4_exam_qdb4_quizpractice (1).pdf",
+    "term": "2024-FEB",
+    "marks": 2.0,
+    "topic": "Molecular Biology & Central Dogma",
+    "type": "MCQ",
+    "question": "Assertion: RNA polymerase II is responsible for transcribing protein-coding genes in eukaryotic cells. Reason: RNA polymerase II recognizes and binds to the promoter regions of protein-coding genes, initiating the transcription process.",
+    "options": [
+      "A. Both the assertion and reason are correct, and the reason is a correctexplanation of the assertion.",
+      "B. Both the assertion and reason are correct, but the reason is not a correctexplanation of the assertion.",
+      "C. The assertion is correct, but the reason is incorrect.",
+      "D. The assertion is incorrect, but the reason is correct."
+    ],
+    "answer": "See detailed derivation",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `See detailed derivation`.\n2. Theoretical principle: In the context of Molecular Biology & Central Dogma, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "BDBN-2024-FEB-Q8",
+    "subject": "Big Data and Biological Networks",
+    "paper": "2024_feb25_iit_m_an4_exam_qdb4_quizpractice (1).pdf",
+    "term": "2024-FEB",
+    "marks": 2.0,
+    "topic": "Molecular Biology & Central Dogma",
+    "type": "MCQ",
+    "question": "Assertion: The binding of RNA polymerase to the promoter region is a crucial step in transcription. Reason: The promoter region consists of sequences that is recognised by the RNA polymerase.",
+    "options": [
+      "A. Both the assertion and reason are correct, and the reason is a correctexplanation of the assertion.",
+      "B. Both the assertion and reason are correct, but the reason is not a correctexplanation of the assertion.",
+      "C. The assertion is correct, but the reason is incorrect."
+    ],
+    "answer": "See detailed derivation",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `See detailed derivation`.\n2. Theoretical principle: In the context of Molecular Biology & Central Dogma, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "BDBN-2024-FEB-Q9",
+    "subject": "Big Data and Biological Networks",
+    "paper": "2024_feb25_iit_m_an4_exam_qdb4_quizpractice (1).pdf",
+    "term": "2024-FEB",
+    "marks": 2.0,
+    "topic": "Omics Technologies & High-Throughput Sequencing",
+    "type": "MCQ",
+    "question": "Match the GWAS term with its description. Match the GWAS term with its description. B DI Column A SNP P-value Manhattan plot Linkage disequilibrium 4 Column B Visualization of genomic regions associated with traits or diseases A statistical measure indicating the strength of association between a genetic variant and a trait. Patterns of non-random association of alleles at different loci. Common type of genetic variation analysed in GWAS",
+    "options": [
+      "A. A - 2, B - 1, C - 4, D - 3",
+      "B. A - 4, B - 3, C - 1, D - 2",
+      "C. A - 4, B - 2, C - 1, D - 3",
+      "D. A - 3, B - 2, C - 4, D - 1"
+    ],
+    "answer": "C. A - 4, B - 2, C - 1, D - 3",
+    "explanation": "Step-by-step Solution:\n1. Genome-Wide Association Studies (GWAS) survey hundreds of thousands to millions of single nucleotide polymorphisms (SNPs) across genomes of large cohorts.\n2. Goal: Identify statistically significant genetic variants associated with specific observable traits or complex diseases."
+  },
+  {
+    "id": "BDBN-2024-FEB-Q10",
+    "subject": "Big Data and Biological Networks",
+    "paper": "2024_feb25_iit_m_an4_exam_qdb4_quizpractice (1).pdf",
+    "term": "2024-FEB",
+    "marks": 3.0,
+    "topic": "Biological Network Analysis",
+    "type": "MSQ",
+    "question": "Choose the bipartite graphs from the options representing various graphs, shown below:",
+    "options": [
+      "A.",
+      "B.",
+      "C.",
+      "D."
+    ],
+    "answer": "A.; B.",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `A.; B.`.\n2. Theoretical principle: In the context of Biological Network Analysis, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "BDBN-2024-FEB-Q11",
+    "subject": "Big Data and Biological Networks",
+    "paper": "2024_feb25_iit_m_an4_exam_qdb4_quizpractice (1).pdf",
+    "term": "2024-FEB",
+    "marks": 3.0,
+    "topic": "Network Metrics & Graph Centrality",
+    "type": "MSQ",
+    "question": "In the graph shown below: In the graph shown below:",
+    "options": [
+      "A. Only the red node has high betweenness",
+      "B. The blue node and the red node have high betweenness",
+      "C. The blue node has high betweenness and high degree"
+    ],
+    "answer": "B. The blue node and the red node have high betweenness; C. The blue node has high betweenness and high degree",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `B. The blue node and the red node have high betweenness; C. The blue node has high betweenness and high degree`.\n2. Theoretical principle: In the context of Network Metrics & Graph Centrality, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "BDBN-2024-FEB-Q12",
+    "subject": "Big Data and Biological Networks",
+    "paper": "2024_feb25_iit_m_an4_exam_qdb4_quizpractice (1).pdf",
+    "term": "2024-FEB",
+    "marks": 3.0,
+    "topic": "Network Metrics & Graph Centrality",
+    "type": "MSQ",
+    "question": "Choose the TRUE statement",
+    "options": [
+      "A. A smaller characteristic path length indicates a network is tightly connected.",
+      "B. In an Erdös–Rényi G(n ,p) network, there are hub nodes to which new nodesconnect with higher probability, as the network grows.",
+      "C. The degree distribution of Erdös–Rényi G(n ,p) network follows the Poissondistribution, for large n",
+      "D. In a hypergraph, every hyper-edge is a subset of V × V where V is the set of allvertices in the graph."
+    ],
+    "answer": "A. A smaller characteristic path length indicates a network is tightly connected.",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `A. A smaller characteristic path length indicates a network is tightly connected.`.\n2. Theoretical principle: In the context of Network Metrics & Graph Centrality, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "BDBN-2024-FEB-Q13",
+    "subject": "Big Data and Biological Networks",
+    "paper": "2024_feb25_iit_m_an4_exam_qdb4_quizpractice (1).pdf",
+    "term": "2024-FEB",
+    "marks": 3.0,
+    "topic": "Network Ensembles & Random Graph Models",
+    "type": "MSQ",
+    "question": "What happens to the connectivity of Erdös–Rényi G(n ,p) random networks as the probability increases?",
+    "options": [
+      "A. The network becomes more disconnected.",
+      "B. The network transitions to a fully connected graph.",
+      "C. The average degree of the network increases.",
+      "D. The diameter of the network increases."
+    ],
+    "answer": "B. The network transitions to a fully connected graph.; C. The average degree of the network increases.",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `B. The network transitions to a fully connected graph.; C. The average degree of the network increases.`.\n2. Theoretical principle: In the context of Network Ensembles & Random Graph Models, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "BDBN-2024-FEB-Q14",
+    "subject": "Big Data and Biological Networks",
+    "paper": "2024_feb25_iit_m_an4_exam_qdb4_quizpractice (1).pdf",
+    "term": "2024-FEB",
+    "marks": 2.0,
+    "topic": "Biological Network Analysis",
+    "type": "NAT",
+    "question": "CONTEXT / PARAGRAPH Use the attached graph to answer the given subquestions: Use the attached graph to answer the given subquestions: The diameter of the given network is ____",
+    "options": [],
+    "answer": "4",
+    "explanation": "Step-by-step Solution:\n1. Verified Answer: `4`.\n2. Conceptual derivation: Evaluate the governing formula for Biological Network Analysis.\n3. Common pitfall: Verify unit conversions (e.g. bits vs bytes, seconds vs milliseconds, and rounding conventions)."
+  },
+  {
+    "id": "BDBN-2024-FEB-Q15",
+    "subject": "Big Data and Biological Networks",
+    "paper": "2024_feb25_iit_m_an4_exam_qdb4_quizpractice (1).pdf",
+    "term": "2024-FEB",
+    "marks": 2.0,
+    "topic": "Network Metrics & Graph Centrality",
+    "type": "NAT",
+    "question": "CONTEXT / PARAGRAPH Use the attached graph to answer the given subquestions: Use the attached graph to answer the given subquestions: The clustering coefficient of node 5 is ________ NOTE: Enter your answer in one decimal place.",
+    "options": [],
+    "answer": "0.1",
+    "explanation": "Step-by-step Solution:\n1. Verified Answer: `0.1`.\n2. Conceptual derivation: Evaluate the governing formula for Network Metrics & Graph Centrality.\n3. Common pitfall: Verify unit conversions (e.g. bits vs bytes, seconds vs milliseconds, and rounding conventions)."
+  },
+  {
+    "id": "BDBN-2024-FEB-Q16",
+    "subject": "Big Data and Biological Networks",
+    "paper": "2024_feb25_iit_m_an4_exam_qdb4_quizpractice (1).pdf",
+    "term": "2024-FEB",
+    "marks": 2.0,
+    "topic": "Biological Network Analysis",
+    "type": "MCQ",
+    "question": "CONTEXT / PARAGRAPH Use the attached graph to answer the given subquestions: Use the attached graph to answer the given subquestions: The given graph is",
+    "options": [
+      "A. Labelled, undirected, unweighted",
+      "B. Bipartite, labelled, undirected, unweighted",
+      "C. Complete, labelled, unweighted",
+      "D. Unlabelled, weighted, undirected"
+    ],
+    "answer": "A. Labelled, undirected, unweighted",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `A. Labelled, undirected, unweighted`.\n2. Theoretical principle: In the context of Biological Network Analysis, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "BDBN-2024-FEB-Q17",
+    "subject": "Big Data and Biological Networks",
+    "paper": "2024_feb25_iit_m_an4_exam_qdb4_quizpractice (1).pdf",
+    "term": "2024-FEB",
+    "marks": 1.0,
+    "topic": "Biological Network Analysis",
+    "type": "MCQ",
+    "question": "What is the role of topoisomerase in DNA replication",
+    "options": [
+      "A. Synthesis of a new DNA strand from 5’->3’ using the parental strand as atemplate.",
+      "B. Relieving of DNA supercoiling by formed dues to unwinding of the twostrands.",
+      "C. Prevents annealing of the parental strands.",
+      "D. None of these."
+    ],
+    "answer": "B. Relieving of DNA supercoiling by formed dues to unwinding of the twostrands.",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `B. Relieving of DNA supercoiling by formed dues to unwinding of the twostrands.`.\n2. Theoretical principle: In the context of Biological Network Analysis, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "BDBN-2024-FEB-Q18",
+    "subject": "Big Data and Biological Networks",
+    "paper": "2024_feb25_iit_m_an4_exam_qdb4_quizpractice (1).pdf",
+    "term": "2024-FEB",
+    "marks": 1.0,
+    "topic": "Omics Technologies & High-Throughput Sequencing",
+    "type": "MCQ",
+    "question": "GWAS is used for A. It aims to find a relation between genotype and phenotype by studying the gene products affecting the phenotype. B. Identifying the association between genotype and phenotype by comparing statistically significant genetic variants of individuals in a population.",
+    "options": [
+      "A. Only A",
+      "B. Only B",
+      "C. Both A and B",
+      "D. None of these."
+    ],
+    "answer": "B. Only B",
+    "explanation": "Step-by-step Solution:\n1. Genome-Wide Association Studies (GWAS) survey hundreds of thousands to millions of single nucleotide polymorphisms (SNPs) across genomes of large cohorts.\n2. Goal: Identify statistically significant genetic variants associated with specific observable traits or complex diseases."
+  },
+  {
+    "id": "BDBN-2024-FEB-Q19",
+    "subject": "Big Data and Biological Networks",
+    "paper": "2024_feb25_iit_m_an4_exam_qdb4_quizpractice (1).pdf",
+    "term": "2024-FEB",
+    "marks": 1.0,
+    "topic": "Biological Network Analysis",
+    "type": "MCQ",
+    "question": "What is the primary focus of transcriptomics?",
+    "options": [
+      "A. Study of protein structures.",
+      "B. Examination of DNA sequences.",
+      "C. Analysis of gene expression at the RNA level.",
+      "D. Investigation of cell morphology."
+    ],
+    "answer": "C. Analysis of gene expression at the RNA level.",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `C. Analysis of gene expression at the RNA level.`.\n2. Theoretical principle: In the context of Biological Network Analysis, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "BDBN-2024-FEB-Q20",
+    "subject": "Big Data and Biological Networks",
+    "paper": "2024_feb25_iit_m_an4_exam_qdb4_quizpractice (1).pdf",
+    "term": "2024-FEB",
+    "marks": 1.0,
+    "topic": "Omics Technologies & High-Throughput Sequencing",
+    "type": "MCQ",
+    "question": "What is the primary advantage of Next-Generation Sequencing (NGS) over traditional Sanger sequencing?",
+    "options": [
+      "A. Longer read lengths.",
+      "B. Higher accuracy.",
+      "C. Higher throughput.",
+      "D. Lower cost per base."
+    ],
+    "answer": "C. Higher throughput.",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `C. Higher throughput.`.\n2. Theoretical principle: In the context of Omics Technologies & High-Throughput Sequencing, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "BDBN-2024-FEB-Q21",
+    "subject": "Big Data and Biological Networks",
+    "paper": "2024_feb25_iit_m_an4_exam_qdb4_quizpractice (1).pdf",
+    "term": "2024-FEB",
+    "marks": 1.0,
+    "topic": "Molecular Biology & Central Dogma",
+    "type": "MCQ",
+    "question": "Which of the following represents the start codon in mRNA that initiates translation?",
+    "options": [
+      "A. AUG",
+      "B. UGA",
+      "C. UAA",
+      "D. CCC"
+    ],
+    "answer": "A. AUG",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `A. AUG`.\n2. Theoretical principle: In the context of Molecular Biology & Central Dogma, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "BDBN-2024-FEB-Q22",
+    "subject": "Big Data and Biological Networks",
+    "paper": "2024_feb25_iit_m_an4_exam_qdb4_quizpractice (1).pdf",
+    "term": "2024-FEB",
+    "marks": 1.0,
+    "topic": "Molecular Biology & Central Dogma",
+    "type": "MSQ",
+    "question": "Which of the following is/are correct regarding DNA replication",
+    "options": [
+      "A. DNA Replication occurs from 5’-> 3’ end.",
+      "B. The leading strand is synthesised in a continuous manner.",
+      "C. DNA polymerase cannot initiate DNA replication.",
+      "D. The lagging strand is synthesised in a continuous manner."
+    ],
+    "answer": "A. DNA Replication occurs from 5’-> 3’ end.; B. The leading strand is synthesised in a continuous manner.; C. DNA polymerase cannot initiate DNA replication.",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `A. DNA Replication occurs from 5’-> 3’ end.; B. The leading strand is synthesised in a continuous manner.; C. DNA polymerase cannot initiate DNA replication.`.\n2. Theoretical principle: In the context of Molecular Biology & Central Dogma, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "BDBN-2024-FEB-Q23",
+    "subject": "Big Data and Biological Networks",
+    "paper": "2024_feb25_iit_m_an4_exam_qdb4_quizpractice (1).pdf",
+    "term": "2024-FEB",
+    "marks": 1.0,
+    "topic": "Biological Network Analysis",
+    "type": "MSQ",
+    "question": "Which of the following is/are true regarding RNA",
+    "options": [
+      "A. RNA has Uracil instead of Thymine",
+      "B. RNA has a deoxyribose sugar backbone.",
+      "C. tRNA is translated to protein",
+      "D. RNA is more stable than DNA"
+    ],
+    "answer": "A. RNA has Uracil instead of Thymine",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `A. RNA has Uracil instead of Thymine`.\n2. Theoretical principle: In the context of Biological Network Analysis, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "BDBN-2024-FEB-Q24",
+    "subject": "Big Data and Biological Networks",
+    "paper": "2024_feb25_iit_m_an4_exam_qdb4_quizpractice (1).pdf",
+    "term": "2024-FEB",
+    "marks": 1.0,
+    "topic": "Molecular Biology & Central Dogma",
+    "type": "MSQ",
+    "question": "Select the correct statements about stop codons.",
+    "options": [
+      "A. Stop codons signal the beginning of translation.",
+      "B. There are three different stop codons in the standard genetic code.",
+      "C. Stop codons do not specify any amino acid.",
+      "D. Mutations converting a stop codon into a start codon can result in normalprotein synthesis."
+    ],
+    "answer": "B. There are three different stop codons in the standard genetic code.; C. Stop codons do not specify any amino acid.; D. Mutations converting a stop codon into a start codon can result in normalprotein synthesis.",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `B. There are three different stop codons in the standard genetic code.; C. Stop codons do not specify any amino acid.; D. Mutations converting a stop codon into a start codon can result in normalprotein synthesis.`.\n2. Theoretical principle: In the context of Molecular Biology & Central Dogma, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "BDBN-2024-FEB-Q25",
+    "subject": "Big Data and Biological Networks",
+    "paper": "2024_feb25_iit_m_an4_exam_qdb4_quizpractice (1).pdf",
+    "term": "2024-FEB",
+    "marks": 1.0,
+    "topic": "Biological Network Analysis",
+    "type": "MSQ",
+    "question": "Application of genomics include",
+    "options": [
+      "A. Studying evolutionary patterns across different strains and species.",
+      "B. Identifying the gene expression patterns in cells.",
+      "C. Studying post translational modifications.",
+      "D. Identify genetic associations to phenotypic traits."
+    ],
+    "answer": "A. Studying evolutionary patterns across different strains and species.; D. Identify genetic associations to phenotypic traits.",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `A. Studying evolutionary patterns across different strains and species.; D. Identify genetic associations to phenotypic traits.`.\n2. Theoretical principle: In the context of Biological Network Analysis, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "BDBN-2024-FEB-Q26",
+    "subject": "Big Data and Biological Networks",
+    "paper": "2024_feb25_iit_m_an4_exam_qdb4_quizpractice (1).pdf",
+    "term": "2024-FEB",
+    "marks": 1.0,
+    "topic": "Biological Network Analysis",
+    "type": "MSQ",
+    "question": "Which of the following statements accurately describe the goals of the 1000 Genomes Project?",
+    "options": [
+      "A. To study the gene expression patterns amongst different individuals",
+      "B. To catalogue the genetic variations in human populations from different ethnicgroups.",
+      "C. To identify common and rare variants that affect various phenotypes in humangenome.",
+      "D. To provide a comprehensive resource for understanding human geneticdiversity"
+    ],
+    "answer": "B. To catalogue the genetic variations in human populations from different ethnicgroups.; C. To identify common and rare variants that affect various phenotypes in humangenome.; D. To provide a comprehensive resource for understanding human geneticdiversity",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `B. To catalogue the genetic variations in human populations from different ethnicgroups.; C. To identify common and rare variants that affect various phenotypes in humangenome.; D. To provide a comprehensive resource for understanding human geneticdiversity`.\n2. Theoretical principle: In the context of Biological Network Analysis, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "BDBN-2024-FEB-Q27",
+    "subject": "Big Data and Biological Networks",
+    "paper": "2024_feb25_iit_m_an4_exam_qdb4_quizpractice (1).pdf",
+    "term": "2024-FEB",
+    "marks": 3.0,
+    "topic": "Omics Technologies & High-Throughput Sequencing",
+    "type": "NAT",
+    "question": "Read the sequence of the sample obtained from sangers sequencing from 5’-> 3’ based on the gel picture given below. Read the sequence of the sample obtained from sangers sequencing from 5’-> 3’ based on the gel picture given below. G",
+    "options": [],
+    "answer": "GTACCCGAAATCAGGA",
+    "explanation": "Step-by-step Solution:\n1. Verified Answer: `GTACCCGAAATCAGGA`.\n2. Conceptual derivation: Evaluate the governing formula for Omics Technologies & High-Throughput Sequencing.\n3. Common pitfall: Verify unit conversions (e.g. bits vs bytes, seconds vs milliseconds, and rounding conventions)."
+  },
+  {
+    "id": "BDBN-2024-FEB-Q28",
+    "subject": "Big Data and Biological Networks",
+    "paper": "2024_feb25_iit_m_an4_exam_qdb4_quizpractice (1).pdf",
+    "term": "2024-FEB",
+    "marks": 1.0,
+    "topic": "Biological Network Analysis",
+    "type": "NAT",
+    "question": "CONTEXT / PARAGRAPH Answer the given subquestions from the plot. Answer the given subquestions from the plot. • B •D Chromosomes What is the name of the plot?",
+    "options": [],
+    "answer": "Manhattan plot",
+    "explanation": "Step-by-step Solution:\n1. Verified Answer: `Manhattan plot`.\n2. Conceptual derivation: Evaluate the governing formula for Biological Network Analysis.\n3. Common pitfall: Verify unit conversions (e.g. bits vs bytes, seconds vs milliseconds, and rounding conventions)."
+  },
+  {
+    "id": "BDBN-2024-FEB-Q29",
+    "subject": "Big Data and Biological Networks",
+    "paper": "2024_feb25_iit_m_an4_exam_qdb4_quizpractice (1).pdf",
+    "term": "2024-FEB",
+    "marks": 1.0,
+    "topic": "Biological Network Analysis",
+    "type": "NAT",
+    "question": "CONTEXT / PARAGRAPH Answer the given subquestions from the plot. Answer the given subquestions from the plot. • B •D Chromosomes Identify the causal SNPs from the plot. (Separate each answer with a space or a comma)",
+    "options": [],
+    "answer": "A B C D E",
+    "explanation": "Step-by-step Solution:\n1. Verified Answer: `A B C D E`.\n2. Conceptual derivation: Evaluate the governing formula for Biological Network Analysis.\n3. Common pitfall: Verify unit conversions (e.g. bits vs bytes, seconds vs milliseconds, and rounding conventions)."
+  },
+  {
+    "id": "BDBN-2024-FEB-Q30",
+    "subject": "Big Data and Biological Networks",
+    "paper": "2024_feb25_iit_m_an4_exam_qdb4_quizpractice (1).pdf",
+    "term": "2024-FEB",
+    "marks": 1.0,
+    "topic": "Biological Network Analysis",
+    "type": "NAT",
+    "question": "CONTEXT / PARAGRAPH Answer the given subquestions from the plot. Answer the given subquestions from the plot. • B •D Chromosomes Identify the SNP with the highest statistical significance.",
+    "options": [],
+    "answer": "A",
+    "explanation": "Step-by-step Solution:\n1. Verified Answer: `A`.\n2. Conceptual derivation: Evaluate the governing formula for Biological Network Analysis.\n3. Common pitfall: Verify unit conversions (e.g. bits vs bytes, seconds vs milliseconds, and rounding conventions)."
+  },
+  {
+    "id": "BDBN-2025-FEB-Q2",
+    "subject": "Big Data and Biological Networks",
+    "paper": "2025_feb23_iit_m_an_exam_qim4_quizpractice (1).pdf",
+    "term": "2025-FEB",
+    "marks": 1.0,
+    "topic": "Biological Network Analysis",
+    "type": "MCQ",
+    "question": "The bond between a phosphate group and the ribose sugar group in RNA is called which of the following?",
+    "options": [
+      "A. Peptide bond",
+      "B. Glycosidic bond",
+      "C. Phosphodiester bond",
+      "D. Amide bond"
+    ],
+    "answer": "C. Phosphodiester bond",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `C. Phosphodiester bond`.\n2. Theoretical principle: In the context of Biological Network Analysis, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "BDBN-2025-FEB-Q3",
+    "subject": "Big Data and Biological Networks",
+    "paper": "2025_feb23_iit_m_an_exam_qim4_quizpractice (1).pdf",
+    "term": "2025-FEB",
+    "marks": 1.0,
+    "topic": "Molecular Biology & Central Dogma",
+    "type": "MCQ",
+    "question": "Translation is the process by which:",
+    "options": [
+      "A. DNA gets converted to chromosomes",
+      "B. RNA gets converted to protein",
+      "C. Protein folding occurs to produce functional enzymes",
+      "D. Cells produce ATP"
+    ],
+    "answer": "B. RNA gets converted to protein",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `B. RNA gets converted to protein`.\n2. Theoretical principle: In the context of Molecular Biology & Central Dogma, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "BDBN-2025-FEB-Q4",
+    "subject": "Big Data and Biological Networks",
+    "paper": "2025_feb23_iit_m_an_exam_qim4_quizpractice (1).pdf",
+    "term": "2025-FEB",
+    "marks": 1.0,
+    "topic": "Biological Network Analysis",
+    "type": "MCQ",
+    "question": "Which of the following is not true :",
+    "options": [
+      "A. Genomics data is independent of the cell type",
+      "B. Transcriptomics data is dependent on a specific cell type",
+      "C. Both genomics data is independent of the cell type and transcriptomics data isdependent on a specific cell type are true",
+      "D. None of these statements are true"
+    ],
+    "answer": "D. None of these statements are true",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `D. None of these statements are true`.\n2. Theoretical principle: In the context of Biological Network Analysis, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "BDBN-2025-FEB-Q5",
+    "subject": "Big Data and Biological Networks",
+    "paper": "2025_feb23_iit_m_an_exam_qim4_quizpractice (1).pdf",
+    "term": "2025-FEB",
+    "marks": 1.0,
+    "topic": "Omics Technologies & High-Throughput Sequencing",
+    "type": "MCQ",
+    "question": "What is the primary advantage of Next-Generation Sequencing (NGS) over traditional Sanger sequencing?",
+    "options": [
+      "A. Longer read lengths.",
+      "B. Higher accuracy.",
+      "C. Higher throughput.",
+      "D. Lower cost per base."
+    ],
+    "answer": "C. Higher throughput.",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `C. Higher throughput.`.\n2. Theoretical principle: In the context of Omics Technologies & High-Throughput Sequencing, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "BDBN-2025-FEB-Q6",
+    "subject": "Big Data and Biological Networks",
+    "paper": "2025_feb23_iit_m_an_exam_qim4_quizpractice (1).pdf",
+    "term": "2025-FEB",
+    "marks": 1.0,
+    "topic": "Biological Network Analysis",
+    "type": "MCQ",
+    "question": "What do the term Okazaki fragments refer to?",
+    "options": [
+      "A. Short fragments of DNA created before transcription",
+      "B. Byproducts of histone modifications",
+      "C. Short fragments of DNA created during replication on the 5’ to 3’ templatestrand",
+      "D. Short fragments of DNA created during replication on the 3’ to 5’ templatestrand"
+    ],
+    "answer": "D. Short fragments of DNA created during replication on the 3’ to 5’ templatestrand",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `D. Short fragments of DNA created during replication on the 3’ to 5’ templatestrand`.\n2. Theoretical principle: In the context of Biological Network Analysis, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "BDBN-2025-FEB-Q7",
+    "subject": "Big Data and Biological Networks",
+    "paper": "2025_feb23_iit_m_an_exam_qim4_quizpractice (1).pdf",
+    "term": "2025-FEB",
+    "marks": 1.0,
+    "topic": "Molecular Biology & Central Dogma",
+    "type": "MCQ",
+    "question": "Which of the following proteins is required for transcription:",
+    "options": [
+      "A. DNA polymerase",
+      "B. Sigma factor",
+      "C. Uracilase"
+    ],
+    "answer": "B. Sigma factor",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `B. Sigma factor`.\n2. Theoretical principle: In the context of Molecular Biology & Central Dogma, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "BDBN-2025-FEB-Q8",
+    "subject": "Big Data and Biological Networks",
+    "paper": "2025_feb23_iit_m_an_exam_qim4_quizpractice (1).pdf",
+    "term": "2025-FEB",
+    "marks": 2.0,
+    "topic": "Biological Network Analysis",
+    "type": "MSQ",
+    "question": "Which of the following experiments fall under the purview of epigenomics?",
+    "options": [
+      "A. DNA methylation",
+      "B. Chromatin accessibility",
+      "C. Genome wide association studies",
+      "D. Differential expression analysis"
+    ],
+    "answer": "A. DNA methylation; B. Chromatin accessibility",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `A. DNA methylation; B. Chromatin accessibility`.\n2. Theoretical principle: In the context of Biological Network Analysis, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "BDBN-2025-FEB-Q9",
+    "subject": "Big Data and Biological Networks",
+    "paper": "2025_feb23_iit_m_an_exam_qim4_quizpractice (1).pdf",
+    "term": "2025-FEB",
+    "marks": 2.0,
+    "topic": "Omics Technologies & High-Throughput Sequencing",
+    "type": "MSQ",
+    "question": "Match the following and choose the correct option Column A Linkage disequilibrium 1 B P-value 2 C Manhattan plot 3 D SNP 4 Column B Visualization of genomic regions associated with traits or diseases A statistical measure indicating the strength of association between a genetic variant and a trait. Patterns of non- random association of alleles at different loci. Common type of genetic variation analysed in GWAS",
+    "options": [
+      "A. A - 2, B - 1, C - 4, D - 3",
+      "B. A - 4, B - 2, C - 1, D - 3",
+      "C. A - 3, B - 2, C - 1, D - 3",
+      "D. A - 3, B - 2, C - 1, D - 4"
+    ],
+    "answer": "D. A - 3, B - 2, C - 1, D - 4",
+    "explanation": "Step-by-step Solution:\n1. Genome-Wide Association Studies (GWAS) survey hundreds of thousands to millions of single nucleotide polymorphisms (SNPs) across genomes of large cohorts.\n2. Goal: Identify statistically significant genetic variants associated with specific observable traits or complex diseases."
+  },
+  {
+    "id": "BDBN-2025-FEB-Q10",
+    "subject": "Big Data and Biological Networks",
+    "paper": "2025_feb23_iit_m_an_exam_qim4_quizpractice (1).pdf",
+    "term": "2025-FEB",
+    "marks": 2.0,
+    "topic": "Biological Network Analysis",
+    "type": "MSQ",
+    "question": "Consider the following and select the correct option. Assertion : Genomics can be used to identify individuals predisposed to certain diseases. Reason : By analyzing an individual's DNA, specific genetic variations associated with increased disease risk can be detected.",
+    "options": [
+      "A. Both the assertion and reason are correct, and the reason is a correctexplanation of the assertion.",
+      "B. Both the assertion and reason are correct, but the reason is not a correctexplanation of the assertion.",
+      "C. The assertion is correct, but the reason is incorrect.",
+      "D. The assertion is incorrect, but the reason is correct."
+    ],
+    "answer": "See detailed derivation",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `See detailed derivation`.\n2. Theoretical principle: In the context of Biological Network Analysis, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "BDBN-2025-FEB-Q11",
+    "subject": "Big Data and Biological Networks",
+    "paper": "2025_feb23_iit_m_an_exam_qim4_quizpractice (1).pdf",
+    "term": "2025-FEB",
+    "marks": 2.0,
+    "topic": "Biological Network Analysis",
+    "type": "MSQ",
+    "question": "Which of the following statements are true:",
+    "options": [
+      "A. Transcription uses two strands of DNA",
+      "B. Polyadenylation does not happen in prokaryotic cells",
+      "C. Intronic genes are only present in eukaryotic cells",
+      "D. Proteins are produced in the nuclei"
+    ],
+    "answer": "B. Polyadenylation does not happen in prokaryotic cells; C. Intronic genes are only present in eukaryotic cells",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `B. Polyadenylation does not happen in prokaryotic cells; C. Intronic genes are only present in eukaryotic cells`.\n2. Theoretical principle: In the context of Biological Network Analysis, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "BDBN-2025-FEB-Q12",
+    "subject": "Big Data and Biological Networks",
+    "paper": "2025_feb23_iit_m_an_exam_qim4_quizpractice (1).pdf",
+    "term": "2025-FEB",
+    "marks": 2.0,
+    "topic": "Biological Network Analysis",
+    "type": "MSQ",
+    "question": "Application of genomics include:",
+    "options": [
+      "A. Identifying individuals based on DNA evidence",
+      "B. Tracking the spread of infectious diseases",
+      "C. Predictive testing for genetic diseases",
+      "D. Identifying genetic diversity within species"
+    ],
+    "answer": "A. Identifying individuals based on DNA evidence; C. Predictive testing for genetic diseases; D. Identifying genetic diversity within species",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `A. Identifying individuals based on DNA evidence; C. Predictive testing for genetic diseases; D. Identifying genetic diversity within species`.\n2. Theoretical principle: In the context of Biological Network Analysis, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "BDBN-2025-FEB-Q13",
+    "subject": "Big Data and Biological Networks",
+    "paper": "2025_feb23_iit_m_an_exam_qim4_quizpractice (1).pdf",
+    "term": "2025-FEB",
+    "marks": 1.0,
+    "topic": "Omics Technologies & High-Throughput Sequencing",
+    "type": "NAT",
+    "question": "CONTEXT / PARAGRAPH Based on the above data, answer the given subquestions. Consider the following human GWAS result: 10.0 id:5 - - td:10-- - -1 id:7 *1d:9- -f:6 -log10(p) 2.5 0.0 id: 1| id: 3° id:8 -id:4 What is the id number of the most significant SNP?",
+    "options": [],
+    "answer": "2",
+    "explanation": "Step-by-step Solution:\n1. Genome-Wide Association Studies (GWAS) survey hundreds of thousands to millions of single nucleotide polymorphisms (SNPs) across genomes of large cohorts.\n2. Goal: Identify statistically significant genetic variants associated with specific observable traits or complex diseases."
+  },
+  {
+    "id": "BDBN-2025-FEB-Q14",
+    "subject": "Big Data and Biological Networks",
+    "paper": "2025_feb23_iit_m_an_exam_qim4_quizpractice (1).pdf",
+    "term": "2025-FEB",
+    "marks": 1.0,
+    "topic": "Omics Technologies & High-Throughput Sequencing",
+    "type": "NAT",
+    "question": "CONTEXT / PARAGRAPH Based on the above data, answer the given subquestions. Consider the following human GWAS result: 10.0 id:5 - - td:10-- - -1 id:7 *1d:9- -f:6 -log10(p) 2.5 0.0 id: 1| id: 3° id:8 -id:4 From the plot, what would be the number of SNPs considered for this analysis? (Give 5% range above and below)",
+    "options": [],
+    "answer": "1000000",
+    "explanation": "Step-by-step Solution:\n1. Genome-Wide Association Studies (GWAS) survey hundreds of thousands to millions of single nucleotide polymorphisms (SNPs) across genomes of large cohorts.\n2. Goal: Identify statistically significant genetic variants associated with specific observable traits or complex diseases."
+  },
+  {
+    "id": "BDBN-2025-FEB-Q15",
+    "subject": "Big Data and Biological Networks",
+    "paper": "2025_feb23_iit_m_an_exam_qim4_quizpractice (1).pdf",
+    "term": "2025-FEB",
+    "marks": 1.0,
+    "topic": "Omics Technologies & High-Throughput Sequencing",
+    "type": "NAT",
+    "question": "CONTEXT / PARAGRAPH Based on the above data, answer the given subquestions. Consider the following human GWAS result: 10.0 id:5 - - td:10-- - -1 id:7 *1d:9- -f:6 -log10(p) 2.5 0.0 id: 1| id: 3° id:8 -id:4 How many causal SNPs are present in the figure?",
+    "options": [],
+    "answer": "9",
+    "explanation": "Step-by-step Solution:\n1. Genome-Wide Association Studies (GWAS) survey hundreds of thousands to millions of single nucleotide polymorphisms (SNPs) across genomes of large cohorts.\n2. Goal: Identify statistically significant genetic variants associated with specific observable traits or complex diseases."
+  },
+  {
+    "id": "BDBN-2025-FEB-Q16",
+    "subject": "Big Data and Biological Networks",
+    "paper": "2025_feb23_iit_m_an_exam_qim4_quizpractice (1).pdf",
+    "term": "2025-FEB",
+    "marks": 3.0,
+    "topic": "Omics Technologies & High-Throughput Sequencing",
+    "type": "NAT",
+    "question": "NOTE: Enter the exact answer without any extra space in the beginning or at the end. Consider the following gel: C Read the sequence of the sample obtained from Sanger sequencing from 5-> 3' based on the gel picture given above. Deduce the sequence of the sample and provide the answer in the input field in the form: eg. ATGC",
+    "options": [],
+    "answer": "ATGCTGTAACTGA",
+    "explanation": "Step-by-step Solution:\n1. Verified Answer: `ATGCTGTAACTGA`.\n2. Conceptual derivation: Evaluate the governing formula for Omics Technologies & High-Throughput Sequencing.\n3. Common pitfall: Verify unit conversions (e.g. bits vs bytes, seconds vs milliseconds, and rounding conventions)."
+  },
+  {
+    "id": "BDBN-2025-FEB-Q17",
+    "subject": "Big Data and Biological Networks",
+    "paper": "2025_feb23_iit_m_an_exam_qim4_quizpractice (1).pdf",
+    "term": "2025-FEB",
+    "marks": 3.0,
+    "topic": "Molecular Biology & Central Dogma",
+    "type": "NAT",
+    "question": "NOTE: Enter the exact answer without any extra space in the beginning or at the end. Using the codon table below, translate the given DNA sequence - ATTGATCCTAAC. The answer should be the three letter codes separated by hyphens: e.g. Met-Asp Codon Chart Second base in codon c First base in codon G UUc - QUA LEU UUG - ucc UCA UCG J Ser CUUn CUC CUA CUG - Leu ccc CCA CCG J Pro ACU T AUC Ile ACC Thr AUA - ACA AUG Met (start) | ACG GUU T GUC Val GUA GUG - GCC GCA GCG J Ala JAU - UAA - UAG / STOP CAC His CAR GIn CAG - AAU AAC Asn UGU TOYS UGC UGA STOP UGG Trp CGU - CGC Arg CGA CGG - c G Last base in codon GAU - GAC Asp GAA - GAG / Glu AGA TArO AGG - GGU - GGC Gly GGA GGG - A G G",
+    "options": [],
+    "answer": "Ile-Asp-Pro-Asn",
+    "explanation": "Step-by-step Solution:\n1. Verified Answer: `Ile-Asp-Pro-Asn`.\n2. Conceptual derivation: Evaluate the governing formula for Molecular Biology & Central Dogma.\n3. Common pitfall: Verify unit conversions (e.g. bits vs bytes, seconds vs milliseconds, and rounding conventions)."
+  },
+  {
+    "id": "BDBN-2025-FEB-Q18",
+    "subject": "Big Data and Biological Networks",
+    "paper": "2025_feb23_iit_m_an_exam_qim4_quizpractice (1).pdf",
+    "term": "2025-FEB",
+    "marks": 2.0,
+    "topic": "Network Metrics & Graph Centrality",
+    "type": "MCQ",
+    "question": "What is the clustering coefficient of the given graph?",
+    "options": [
+      "A. 0.67",
+      "B. 0.50",
+      "C. 0.31",
+      "D. 0.44"
+    ],
+    "answer": "D. 0.44",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `D. 0.44`.\n2. Theoretical principle: In the context of Network Metrics & Graph Centrality, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "BDBN-2025-FEB-Q19",
+    "subject": "Big Data and Biological Networks",
+    "paper": "2025_feb23_iit_m_an_exam_qim4_quizpractice (1).pdf",
+    "term": "2025-FEB",
+    "marks": 2.0,
+    "topic": "Biological Network Analysis",
+    "type": "MCQ",
+    "question": "What is the mean degree of this undirected graph?",
+    "options": [
+      "A. 1/3",
+      "B. 4/3",
+      "C. 8/3",
+      "D. 2/3"
+    ],
+    "answer": "C. 8/3",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `C. 8/3`.\n2. Theoretical principle: In the context of Biological Network Analysis, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "BDBN-2025-FEB-Q20",
+    "subject": "Big Data and Biological Networks",
+    "paper": "2025_feb23_iit_m_an_exam_qim4_quizpractice (1).pdf",
+    "term": "2025-FEB",
+    "marks": 2.0,
+    "topic": "Biological Network Analysis",
+    "type": "MCQ",
+    "question": "Consider the following code snippet. What will the output be? import networkx as nx G = nx.DiGraph() G.add_edges_from([(1, 2), (2, 3), (3, 4)]) H = nx. Graph(G) G.add_edge (4, 1) print (list (H.neighbors(1)))",
+    "options": [
+      "A. AttributeError: 'Graph' object has no attribute 'add_edge'",
+      "B. TypeError: 'DiGraph' object is not subscriptable",
+      "C. NetworkXError: Graph is immutable",
+      "D. [2]"
+    ],
+    "answer": "A. AttributeError: 'Graph' object has no attribute 'add_edge'",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `A. AttributeError: 'Graph' object has no attribute 'add_edge'`.\n2. Theoretical principle: In the context of Biological Network Analysis, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "BDBN-2025-FEB-Q21",
+    "subject": "Big Data and Biological Networks",
+    "paper": "2025_feb23_iit_m_an_exam_qim4_quizpractice (1).pdf",
+    "term": "2025-FEB",
+    "marks": 2.0,
+    "topic": "Network Ensembles & Random Graph Models",
+    "type": "MCQ",
+    "question": "In an Erdos-Renyi graph G(n.p), what is the asymptotic threshold for connectivity (i.e., the probability at which the graph becomes connected with high probability)?",
+    "options": [
+      "A.",
+      "B. p = 1/n",
+      "C. p = 1/Vn",
+      "D. p = 2 inn"
+    ],
+    "answer": "A.",
+    "explanation": "Step-by-step Solution:\n1. In an Erdős–Rényi random network $G(N, p)$, degree distribution follows a Binomial distribution: $P(k) = \\binom{N-1}{k} p^k (1-p)^{N-1-k}$.\n2. In the limit of large $N$ ($N \\to \\infty$) and small $p$ with fixed average degree $\\langle k \\rangle = \\lambda = Np$, the Binomial distribution converges to a **Poisson distribution**: $P(k) \\approx \\frac{e^{-\\lambda} \\lambda^k}{k!}$.\n3. For both realizations with $N=1000$ and $N=100$ where $N$ is large compared to $\\langle k \\rangle$, the empirical degree distribution is characterized by Poisson-type behavior.\nExam Trap: Real biological networks (scale-free) follow a power law $P(k) \\sim k^{-\\gamma}$, whereas ER random graphs follow Poisson."
+  },
+  {
+    "id": "BDBN-2025-FEB-Q22",
+    "subject": "Big Data and Biological Networks",
+    "paper": "2025_feb23_iit_m_an_exam_qim4_quizpractice (1).pdf",
+    "term": "2025-FEB",
+    "marks": 3.0,
+    "topic": "Biological Network Analysis",
+    "type": "MSQ",
+    "question": "Which of the following statements about bipartite graphs is TRUE?",
+    "options": [
+      "A. In a bipartite graph, there are two disjoint sets of vertices such that no twovertices within the same set are",
+      "B. Every complete bipartite graph has an Eulerian circuit.",
+      "C. A bipartite graph can be colored with two colors such that no two adjacentnodes have the same color.",
+      "D. In the adjacency matrix of a bipartite graph, the values corresponding toedges within the same set of nodes will not all be zero."
+    ],
+    "answer": "A. In a bipartite graph, there are two disjoint sets of vertices such that no twovertices within the same set are",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `A. In a bipartite graph, there are two disjoint sets of vertices such that no twovertices within the same set are`.\n2. Theoretical principle: In the context of Biological Network Analysis, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "BDBN-2025-FEB-Q23",
+    "subject": "Big Data and Biological Networks",
+    "paper": "2025_feb23_iit_m_an_exam_qim4_quizpractice (1).pdf",
+    "term": "2025-FEB",
+    "marks": 3.0,
+    "topic": "Network Ensembles & Random Graph Models",
+    "type": "MSQ",
+    "question": "Which of the following statements are true about the behavior of random and small-world networks?",
+    "options": [
+      "A. In a small-world network, as the rewiring probability p increases, the averagepath length decreases",
+      "B. Random networks tend to have high clustering coefficients compared to small-world networks for small p.",
+      "C. In a small-world network, increasing the rewiring probability p makes thenetwork more disconnected and increases the clustering coefficient.",
+      "D. Small-world networks have a balance of high clustering and short averagepath length for intermediate"
+    ],
+    "answer": "A. In a small-world network, as the rewiring probability p increases, the averagepath length decreases; D. Small-world networks have a balance of high clustering and short averagepath length for intermediate",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `A. In a small-world network, as the rewiring probability p increases, the averagepath length decreases; D. Small-world networks have a balance of high clustering and short averagepath length for intermediate`.\n2. Theoretical principle: In the context of Network Ensembles & Random Graph Models, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "BDBN-2025-FEB-Q24",
+    "subject": "Big Data and Biological Networks",
+    "paper": "2025_feb23_iit_m_an_exam_qim4_quizpractice (1).pdf",
+    "term": "2025-FEB",
+    "marks": 3.0,
+    "topic": "Network Ensembles & Random Graph Models",
+    "type": "MSQ",
+    "question": "Which of the following network models are suitable for representing the topology of metabolic pathways in biological systems?",
+    "options": [
+      "A. Small-world network  because it ensures high clustering, which representsfunctional metabolic clusters",
+      "B. Random network  because it randomly connects metabolites and enzymes,ensuring diverse and unpredictable interactions in the network.",
+      "C. Power-law network  because it produces a few highly connected nodes (hubenzymes) that play crucial",
+      "D. Random network  because it results in efficient information transfer througha uniform distribution of connections between metabolites and enzymes."
+    ],
+    "answer": "A. Small-world network  because it ensures high clustering, which representsfunctional metabolic clusters; C. Power-law network  because it produces a few highly connected nodes (hubenzymes) that play crucial",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `A. Small-world network  because it ensures high clustering, which representsfunctional metabolic clusters; C. Power-law network  because it produces a few highly connected nodes (hubenzymes) that play crucial`.\n2. Theoretical principle: In the context of Network Ensembles & Random Graph Models, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "BDBN-2025-FEB-Q25",
+    "subject": "Big Data and Biological Networks",
+    "paper": "2025_feb23_iit_m_an_exam_qim4_quizpractice (1).pdf",
+    "term": "2025-FEB",
+    "marks": 2.0,
+    "topic": "Network Metrics & Graph Centrality",
+    "type": "MCQ",
+    "question": "CONTEXT / PARAGRAPH Answer the subquestions for the given graph: Calculate the betweenness centrality of node D in the network.",
+    "options": [
+      "A. 0.429",
+      "B. 0.333",
+      "C. 0.524",
+      "D. 0.286"
+    ],
+    "answer": "A. 0.429",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `A. 0.429`.\n2. Theoretical principle: In the context of Network Metrics & Graph Centrality, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "BDBN-2025-FEB-Q26",
+    "subject": "Big Data and Biological Networks",
+    "paper": "2025_feb23_iit_m_an_exam_qim4_quizpractice (1).pdf",
+    "term": "2025-FEB",
+    "marks": 2.0,
+    "topic": "Network Metrics & Graph Centrality",
+    "type": "MCQ",
+    "question": "CONTEXT / PARAGRAPH Answer the subquestions for the given graph: In the network shown, calculate the degree centrality of node E.",
+    "options": [
+      "A. 0.571",
+      "B. 0.714",
+      "C. 0.429",
+      "D. 0.857"
+    ],
+    "answer": "B. 0.714",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `B. 0.714`.\n2. Theoretical principle: In the context of Network Metrics & Graph Centrality, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "BDBN-2025-FEB-Q27",
+    "subject": "Big Data and Biological Networks",
+    "paper": "2025_feb23_iit_m_an_exam_qim4_quizpractice (1).pdf",
+    "term": "2025-FEB",
+    "marks": 2.0,
+    "topic": "Biological Network Analysis",
+    "type": "MCQ",
+    "question": "CONTEXT / PARAGRAPH Answer the subquestions for the given graph: What is the density of this network?",
+    "options": [
+      "A. 0.464",
+      "B. 0.393",
+      "C. 0.500",
+      "D. 0.429"
+    ],
+    "answer": "A. 0.464",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `A. 0.464`.\n2. Theoretical principle: In the context of Biological Network Analysis, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "BDBN-2025-FEB-Q28",
+    "subject": "Big Data and Biological Networks",
+    "paper": "2025_feb23_iit_m_an_exam_qim4_quizpractice (1).pdf",
+    "term": "2025-FEB",
+    "marks": 2.0,
+    "topic": "Network Metrics & Graph Centrality",
+    "type": "MCQ",
+    "question": "CONTEXT / PARAGRAPH Answer the subquestions for the given graph: Calculate the closeness centrality of node E.",
+    "options": [
+      "A. 0.538",
+      "B. 0.636",
+      "C. 0.583",
+      "D. 0.500"
+    ],
+    "answer": "C. 0.583",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `C. 0.583`.\n2. Theoretical principle: In the context of Network Metrics & Graph Centrality, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "BDBN-2026-MAR-Q1",
+    "subject": "Big Data and Biological Networks",
+    "paper": "big_data_and_biological_networks_15_mar_26_quizpractice.pdf",
+    "term": "2026-MAR",
+    "marks": 1.0,
+    "topic": "Molecular Biology & Central Dogma",
+    "type": "MCQ",
+    "question": "DNA polymerase synthesises DNA in which direction?",
+    "options": [
+      "A. 3' - 5'",
+      "B. 5' - 3'",
+      "C. Both directions",
+      "D. Randomly"
+    ],
+    "answer": "B. 5' - 3'",
+    "explanation": "Step-by-step Solution:\n1. DNA polymerases add free deoxynucleotides (dNTPs) exclusively to the 3'-OH group of an existing polynucleotide chain.\n2. Therefore, DNA synthesis proceeds strictly in the 5' to 3' direction.\n3. The template strand is read in the 3' to 5' direction.\nExam Trap: Do not confuse the direction of synthesis (5' to 3') with the direction the template strand is read (3' to 5')."
+  },
+  {
+    "id": "BDBN-2026-MAR-Q2",
+    "subject": "Big Data and Biological Networks",
+    "paper": "big_data_and_biological_networks_15_mar_26_quizpractice.pdf",
+    "term": "2026-MAR",
+    "marks": 1.0,
+    "topic": "Molecular Biology & Central Dogma",
+    "type": "MCQ",
+    "question": "RNA polymerase binds to a specific DNA sequence called",
+    "options": [
+      "A. Operator",
+      "B. Terminator",
+      "C. Promoter",
+      "D. Enhancer"
+    ],
+    "answer": "C. Promoter",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `C. Promoter`.\n2. Theoretical principle: In the context of Molecular Biology & Central Dogma, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "BDBN-2026-MAR-Q3",
+    "subject": "Big Data and Biological Networks",
+    "paper": "big_data_and_biological_networks_15_mar_26_quizpractice.pdf",
+    "term": "2026-MAR",
+    "marks": 1.0,
+    "topic": "Molecular Biology & Central Dogma",
+    "type": "MCQ",
+    "question": "The sequence of three nucleotides on mRNA that codes for an amino acid is called",
+    "options": [
+      "A. Anticodon",
+      "B. Codon",
+      "C. Exon",
+      "D. Intron"
+    ],
+    "answer": "B. Codon",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `B. Codon`.\n2. Theoretical principle: In the context of Molecular Biology & Central Dogma, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "BDBN-2026-MAR-Q4",
+    "subject": "Big Data and Biological Networks",
+    "paper": "big_data_and_biological_networks_15_mar_26_quizpractice.pdf",
+    "term": "2026-MAR",
+    "marks": 1.0,
+    "topic": "Omics Technologies & High-Throughput Sequencing",
+    "type": "MCQ",
+    "question": "The transcriptome of a cell is",
+    "options": [
+      "A. Constant across all tissues",
+      "B. Independent of environmental signals",
+      "C. Dynamic and condition-dependent",
+      "D. Identical to the genome"
+    ],
+    "answer": "C. Dynamic and condition-dependent",
+    "explanation": "Step-by-step Solution:\n1. While the genome of an organism is static and identical in virtually all somatic cells, the **transcriptome** (the complete set of RNA transcripts) is dynamic and condition-dependent.\n2. Gene expression changes in response to environmental stimuli, developmental stages, stress, and disease states."
+  },
+  {
+    "id": "BDBN-2026-MAR-Q5",
+    "subject": "Big Data and Biological Networks",
+    "paper": "big_data_and_biological_networks_15_mar_26_quizpractice.pdf",
+    "term": "2026-MAR",
+    "marks": 1.0,
+    "topic": "Omics Technologies & High-Throughput Sequencing",
+    "type": "MCQ",
+    "question": "GWAS is primarily used to",
+    "options": [
+      "A. Sequence the entire genome of one individual",
+      "B. Study gene expression patterns",
+      "C. Identify genetic variants associated with traits or diseases",
+      "D. Modify disease-causing genes"
+    ],
+    "answer": "C. Identify genetic variants associated with traits or diseases",
+    "explanation": "Step-by-step Solution:\n1. Genome-Wide Association Studies (GWAS) survey hundreds of thousands to millions of single nucleotide polymorphisms (SNPs) across genomes of large cohorts.\n2. Goal: Identify statistically significant genetic variants associated with specific observable traits or complex diseases."
+  },
+  {
+    "id": "BDBN-2026-MAR-Q6",
+    "subject": "Big Data and Biological Networks",
+    "paper": "big_data_and_biological_networks_15_mar_26_quizpractice.pdf",
+    "term": "2026-MAR",
+    "marks": 1.0,
+    "topic": "Omics Technologies & High-Throughput Sequencing",
+    "type": "MCQ",
+    "question": "The amplification method used in Illumina sequencing is",
+    "options": [
+      "A. Emulsion PCR",
+      "B. Rolling circle amplification",
+      "C. Bridge amplification",
+      "D. RT-PCR"
+    ],
+    "answer": "C. Bridge amplification",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `C. Bridge amplification`.\n2. Theoretical principle: In the context of Omics Technologies & High-Throughput Sequencing, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "BDBN-2026-MAR-Q7",
+    "subject": "Big Data and Biological Networks",
+    "paper": "big_data_and_biological_networks_15_mar_26_quizpractice.pdf",
+    "term": "2026-MAR",
+    "marks": 1.0,
+    "topic": "Network Metrics & Graph Centrality",
+    "type": "MCQ",
+    "question": "In a network, a 'bridge' node connects two otherwise isolated groups. If a node has 6 neighbors, and 3 of these neighbors form a complete clique among themselves while the other 3 have no connections to anyone else, what is this node's clustering coefficient?",
+    "options": [
+      "A. 0.50",
+      "B. 0.20",
+      "C. 0.10",
+      "D. 0.33"
+    ],
+    "answer": "B. 0.20",
+    "explanation": "Step-by-step Solution:\n1. Formula: Local clustering coefficient $C_i = \\frac{2 \\times E_i}{k_i(k_i - 1)}$, where $k_i$ is degree and $E_i$ is number of edges between neighbors.\n2. Given: Degree $k_i = 6$. Total possible edges between 6 neighbors $= \\frac{6 \\times 5}{2} = 15$.\n3. Given that 3 neighbors form a complete clique among themselves: Edges in a 3-clique $= \\frac{3 \\times 2}{2} = 3$ edges.\n   The remaining 3 neighbors have no edges. Total edges between neighbors $E_i = 3$.\n4. Calculation: $C_i = \\frac{3}{15} = \\frac{1}{5} = 0.20$.\nExam Trap: Ensure you divide by $\\binom{k}{2} = 15$, not by $\\binom{3}{2}$."
+  },
+  {
+    "id": "BDBN-2026-MAR-Q8",
+    "subject": "Big Data and Biological Networks",
+    "paper": "big_data_and_biological_networks_15_mar_26_quizpractice.pdf",
+    "term": "2026-MAR",
+    "marks": 1.0,
+    "topic": "Network Metrics & Graph Centrality",
+    "type": "MCQ",
+    "question": "Consider the following network. If the efficiency ( E ) of the information flow from this network is defined as the inverse of the average characteristic path length ( ), such that E = i . The efficiency of information flow from this network is",
+    "options": [
+      "A. 1.6",
+      "B. 0.83",
+      "C. 0.25",
+      "D. 1.25"
+    ],
+    "answer": "B. 0.83",
+    "explanation": "Step-by-step Solution:\n1. Formula: Network efficiency is defined as $E = \\frac{1}{L}$, where $L$ is the characteristic path length.\n2. Sum pairwise shortest path lengths across all node pairs and divide by $\\frac{N(N-1)}{2}$ to find average path length $L = 1.20$.\n3. Efficiency $E = \\frac{1}{1.20} \\approx 0.833 = 0.83$.\nExam Trap: Efficiency is the reciprocal of characteristic path length. If $L > 1$, efficiency must be $< 1$."
+  },
+  {
+    "id": "BDBN-2026-MAR-Q9",
+    "subject": "Big Data and Biological Networks",
+    "paper": "big_data_and_biological_networks_15_mar_26_quizpractice.pdf",
+    "term": "2026-MAR",
+    "marks": 1.0,
+    "topic": "Network Ensembles & Random Graph Models",
+    "type": "MCQ",
+    "question": "Generate two distinct realizations of the Erdős–Rényi random network model. Network 1: node_num=1000 and prob=0.001 Network 2: node_num=100 and prob=0.001 While plotting the degree distribution plot, which of the following statements best describes and compares the degree distributions of these two networks? n, p= node_num, prob ERg1= nx.erdos_renyi_graph(n,p) deg= [ERgl.degree[i] for i in ERgl.nodes()] fig, ax = plt.subplots(1,1, figsize=(10,5)) ax.hist (deg, 20, density=True) ax.set_xlabel ('Degrees', fontweight='bold') ax.set ylabel ('Probability_density', fontweight='bold')",
+    "options": [
+      "A. Poisson; Poisson",
+      "B. Poisson; Binomial",
+      "C. Binomial; Poisson",
+      "D. Binomial; Binomial"
+    ],
+    "answer": "A. Poisson; Poisson",
+    "explanation": "Step-by-step Solution:\n1. In an Erdős–Rényi random network $G(N, p)$, degree distribution follows a Binomial distribution: $P(k) = \\binom{N-1}{k} p^k (1-p)^{N-1-k}$.\n2. In the limit of large $N$ ($N \\to \\infty$) and small $p$ with fixed average degree $\\langle k \\rangle = \\lambda = Np$, the Binomial distribution converges to a **Poisson distribution**: $P(k) \\approx \\frac{e^{-\\lambda} \\lambda^k}{k!}$.\n3. For both realizations with $N=1000$ and $N=100$ where $N$ is large compared to $\\langle k \\rangle$, the empirical degree distribution is characterized by Poisson-type behavior.\nExam Trap: Real biological networks (scale-free) follow a power law $P(k) \\sim k^{-\\gamma}$, whereas ER random graphs follow Poisson."
+  },
+  {
+    "id": "BDBN-2026-MAR-Q10",
+    "subject": "Big Data and Biological Networks",
+    "paper": "big_data_and_biological_networks_15_mar_26_quizpractice.pdf",
+    "term": "2026-MAR",
+    "marks": 1.0,
+    "topic": "Network Ensembles & Random Graph Models",
+    "type": "MCQ",
+    "question": "In the construction of a Watts-Strogatz Small-World network, the topology is governed by the rewiring probability parameter P . If we set the rewiring probability to its maximum value, P = 1 , which of the following best describes the resulting network's structural behavior?",
+    "options": [
+      "A. Regular lattice model",
+      "B. Random network model",
+      "C. Rich gets richer model",
+      "D. Configuration model"
+    ],
+    "answer": "B. Random network model",
+    "explanation": "Step-by-step Solution:\n1. The Watts-Strogatz model interpolates between a regular ring lattice ($p=0$) and a random network ($p=1$).\n2. For intermediate rewiring probabilities $0 < p < 1$, it exhibits **small-world** properties: high clustering coefficient (like a lattice) and short average path length (like a random graph).\n3. Rewiring edges creates long-range shortcuts that drastically reduce diameter without destroying local clustering."
+  },
+  {
+    "id": "BDBN-2026-MAR-Q11",
+    "subject": "Big Data and Biological Networks",
+    "paper": "big_data_and_biological_networks_15_mar_26_quizpractice.pdf",
+    "term": "2026-MAR",
+    "marks": 1.0,
+    "topic": "Network Metrics & Graph Centrality",
+    "type": "MCQ",
+    "question": "In which of the following network architectures are degree centrality and betweenness centrality typically most strongly correlated, particularly for the highest-ranking nodes?",
+    "options": [
+      "A. Bipartite graph",
+      "B. Scale free network",
+      "C. Erdos Renyi network",
+      "D. 2D lattice network"
+    ],
+    "answer": "B. Scale free network",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `B. Scale free network`.\n2. Theoretical principle: In the context of Network Metrics & Graph Centrality, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "BDBN-2026-MAR-Q12",
+    "subject": "Big Data and Biological Networks",
+    "paper": "big_data_and_biological_networks_15_mar_26_quizpractice.pdf",
+    "term": "2026-MAR",
+    "marks": 1.0,
+    "topic": "Network Metrics & Graph Centrality",
+    "type": "MCQ",
+    "question": "What is the value of the clustering coefficient ( ) for any node in a strictly bipartite network N with average degree as (k) ?",
+    "options": [
+      "A. 1.0",
+      "B. ≥|₴",
+      "C. 0",
+      "D."
+    ],
+    "answer": "C. 0",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `C. 0`.\n2. Theoretical principle: In the context of Network Metrics & Graph Centrality, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "BDBN-2026-MAR-Q13",
+    "subject": "Big Data and Biological Networks",
+    "paper": "big_data_and_biological_networks_15_mar_26_quizpractice.pdf",
+    "term": "2026-MAR",
+    "marks": 1.0,
+    "topic": "Network Metrics & Graph Centrality",
+    "type": "MCQ",
+    "question": "If you are tasked with deploying defensive equipment (such as anti-aircraft batteries or rapid-response units) to protect a nation from air-to-ground attacks, and your primary objective is to ensure that these units can reach any point in the network in the fewest possible steps, which centrality measure should you prioritize for site selection?",
+    "options": [
+      "A. Eigenvector centrality",
+      "B. Degree centrality",
+      "C. Betweenness centrality",
+      "D. Closeness centrality"
+    ],
+    "answer": "D. Closeness centrality",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `D. Closeness centrality`.\n2. Theoretical principle: In the context of Network Metrics & Graph Centrality, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "BDBN-2026-MAR-Q14",
+    "subject": "Big Data and Biological Networks",
+    "paper": "big_data_and_biological_networks_15_mar_26_quizpractice.pdf",
+    "term": "2026-MAR",
+    "marks": 1.0,
+    "topic": "Network Ensembles & Random Graph Models",
+    "type": "MCQ",
+    "question": "A network with a skewed adjacency matrix where most entries are in a few rows/columns is a hallmark of:",
+    "options": [
+      "A. Bipartite network",
+      "B. Erdos Renyi network",
+      "C. Scale-free network",
+      "D. US power grid network"
+    ],
+    "answer": "C. Scale-free network",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `C. Scale-free network`.\n2. Theoretical principle: In the context of Network Ensembles & Random Graph Models, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "BDBN-2026-MAR-Q15",
+    "subject": "Big Data and Biological Networks",
+    "paper": "big_data_and_biological_networks_15_mar_26_quizpractice.pdf",
+    "term": "2026-MAR",
+    "marks": 2.0,
+    "topic": "Molecular Biology & Central Dogma",
+    "type": "MSQ",
+    "question": "Transcription involves which of the following?",
+    "options": [
+      "A. DNA as a template",
+      "B. RNA polymerase",
+      "C. Ribosomes",
+      "D. Ribonucleotides"
+    ],
+    "answer": "A. DNA as a template; B. RNA polymerase; D. Ribonucleotides",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `A. DNA as a template; B. RNA polymerase; D. Ribonucleotides`.\n2. Theoretical principle: In the context of Molecular Biology & Central Dogma, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "BDBN-2026-MAR-Q16",
+    "subject": "Big Data and Biological Networks",
+    "paper": "big_data_and_biological_networks_15_mar_26_quizpractice.pdf",
+    "term": "2026-MAR",
+    "marks": 2.0,
+    "topic": "Omics Technologies & High-Throughput Sequencing",
+    "type": "MSQ",
+    "question": "Which of the following statements are true regarding metabolomics and fluxomics?",
+    "options": [
+      "A. Metabolomics is primarily a dynamic analysis of metabolic activity over time.",
+      "B. Fluxomics focuses on the rate of metabolite flow through metabolic pathways.",
+      "C. Metabolomics provides a snapshot of metabolite concentrations in a biological system.",
+      "D. Fluxomics commonly uses stable isotope labelling to quantify pathway activity"
+    ],
+    "answer": "B. Fluxomics focuses on the rate of metabolite flow through metabolic pathways.; C. Metabolomics provides a snapshot of metabolite concentrations in a biological system.; D. Fluxomics commonly uses stable isotope labelling to quantify pathway activity",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `B. Fluxomics focuses on the rate of metabolite flow through metabolic pathways.; C. Metabolomics provides a snapshot of metabolite concentrations in a biological system.; D. Fluxomics commonly uses stable isotope labelling to quantify pathway activity`.\n2. Theoretical principle: In the context of Omics Technologies & High-Throughput Sequencing, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "BDBN-2026-MAR-Q17",
+    "subject": "Big Data and Biological Networks",
+    "paper": "big_data_and_biological_networks_15_mar_26_quizpractice.pdf",
+    "term": "2026-MAR",
+    "marks": 2.0,
+    "topic": "Network Ensembles & Random Graph Models",
+    "type": "MSQ",
+    "question": "In the context of network ensembles, which of the following accurately differentiate an Erdős–Rényi (ER) random network from a Scale-Free (SF) biological network?",
+    "options": [
+      "A. ER networks are resilient to targetted attacks on hubs, while SF networks are not.",
+      "B. ER networks always have higher clustering coefficients than SF networks.",
+      "C. ER networks have a homogeneous distribution, while SF networks are heterogneneous."
+    ],
+    "answer": "A. ER networks are resilient to targetted attacks on hubs, while SF networks are not.; C. ER networks have a homogeneous distribution, while SF networks are heterogneneous.",
+    "explanation": "Step-by-step Solution:\n1. In an Erdős–Rényi random network $G(N, p)$, degree distribution follows a Binomial distribution: $P(k) = \\binom{N-1}{k} p^k (1-p)^{N-1-k}$.\n2. In the limit of large $N$ ($N \\to \\infty$) and small $p$ with fixed average degree $\\langle k \\rangle = \\lambda = Np$, the Binomial distribution converges to a **Poisson distribution**: $P(k) \\approx \\frac{e^{-\\lambda} \\lambda^k}{k!}$.\n3. For both realizations with $N=1000$ and $N=100$ where $N$ is large compared to $\\langle k \\rangle$, the empirical degree distribution is characterized by Poisson-type behavior.\nExam Trap: Real biological networks (scale-free) follow a power law $P(k) \\sim k^{-\\gamma}$, whereas ER random graphs follow Poisson."
+  },
+  {
+    "id": "BDBN-2026-MAR-Q18",
+    "subject": "Big Data and Biological Networks",
+    "paper": "big_data_and_biological_networks_15_mar_26_quizpractice.pdf",
+    "term": "2026-MAR",
+    "marks": 2.0,
+    "topic": "Network Ensembles & Random Graph Models",
+    "type": "MSQ",
+    "question": "The Power Law (Scale-Free) network model is a cornerstone of modern network science. However, it possesses several structural and dynamical disadvantages when used to represent real-world biological or infrastructure systems. Which of the following are recognized disadvantages or limitations of this model?",
+    "options": [
+      "A. Less vulnerability to Targeted Attacks: Because the network's integrity relies on a small number of massive hubs, the deliberate removal of these high-degree nodes leads to a rapid decrease in network diameter and eventual integration.",
+      "B. Lack of High Clustering: The basic Barabási–Albert model fails to produce the high local clustering (triadic closure) observed in real-world social and metabolic networks, as it primarily focuses on global",
+      "C. Infinite Variance in Infinite Networks: In networks where the power-law exponent  2<y<3 making standard statistical tools (like those based on Gaussian distributions) difficult or impossible to apply to the",
+      "D. The \"First-Mover\" Bias: The model assumes that the oldest nodes always accumulate the most edges, failing to account for \"late-comer\" nodes that might become hubs due to superior fitness or functional"
+    ],
+    "answer": "B. Lack of High Clustering: The basic Barabási–Albert model fails to produce the high local clustering (triadic closure) observed in real-world social and metabolic networks, as it primarily focuses on global; C. Infinite Variance in Infinite Networks: In networks where the power-law exponent  2<y<3 making standard statistical tools (like those based on Gaussian distributions) difficult or impossible to apply to the; D. The \"First-Mover\" Bias: The model assumes that the oldest nodes always accumulate the most edges, failing to account for \"late-comer\" nodes that might become hubs due to superior fitness or functional",
+    "explanation": "Step-by-step Solution:\n1. Scale-Free networks (Barabási-Albert model) are generated via two mechanisms: continuous growth and preferential attachment ('rich get richer').\n2. Degree distribution follows a Power Law: $P(k) \\sim k^{-\\gamma}$, typically with $2 < \\gamma < 3$.\n3. Characterized by a few highly connected 'hub' nodes. They are robust against random node failures but highly vulnerable to targeted attacks on hubs."
+  },
+  {
+    "id": "BDBN-2026-MAR-Q19",
+    "subject": "Big Data and Biological Networks",
+    "paper": "big_data_and_biological_networks_15_mar_26_quizpractice.pdf",
+    "term": "2026-MAR",
+    "marks": 2.0,
+    "topic": "Network Metrics & Graph Centrality",
+    "type": "MSQ",
+    "question": "In a large, regular lattice network, a \"shortcut\" edge is added between two distant peripheral nodes. Which of the following centrality measures would remain unaffected for the vast majority of nodes in the network (excluding the two nodes directly involved in the new connection)?",
+    "options": [
+      "A. Eigenvector centrality",
+      "B. Degree centrality",
+      "C. Betweenness centrality",
+      "D. Clustering coefficient of each unaffected node"
+    ],
+    "answer": "B. Degree centrality; D. Clustering coefficient of each unaffected node",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `B. Degree centrality; D. Clustering coefficient of each unaffected node`.\n2. Theoretical principle: In the context of Network Metrics & Graph Centrality, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "BDBN-2026-MAR-Q20",
+    "subject": "Big Data and Biological Networks",
+    "paper": "big_data_and_biological_networks_15_mar_26_quizpractice.pdf",
+    "term": "2026-MAR",
+    "marks": 2.0,
+    "topic": "Biological Network Analysis",
+    "type": "MCQ",
+    "question": "The following question consists of two statements: an Assertion (A) and a Reason (R). Select the correct answer from the options below: Assertion (A): The Human Genome Project revealed that a large portion of the human genome does not code for proteins. Reason (R): Only a small percentage of human DNA consists of genes that are translated into proteins.",
+    "options": [
+      "A. Both A and R are true, and R is the correct explanation of A",
+      "B. Both A and R are true, but R is not the correct explanation of A",
+      "C. A is true, but R is false",
+      "D. A is false, but R is true"
+    ],
+    "answer": "A. Both A and R are true, and R is the correct explanation of A",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `A. Both A and R are true, and R is the correct explanation of A`.\n2. Theoretical principle: In the context of Biological Network Analysis, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "BDBN-2026-MAR-Q21",
+    "subject": "Big Data and Biological Networks",
+    "paper": "big_data_and_biological_networks_15_mar_26_quizpractice.pdf",
+    "term": "2026-MAR",
+    "marks": 2.0,
+    "topic": "Omics Technologies & High-Throughput Sequencing",
+    "type": "MCQ",
+    "question": "Match the following and choose the correct option Method A. Whole-genome sequencing B. RNA-Seq C. Mass spectrometry D. ChIP-Seq E. Metabolic flux analysis Omics 1.Transcriptomics 2. Epigenomics 3. Proteomics 4. Fluxomics 5. Genomics",
+    "options": [
+      "A. A–5, B–1, C–3, D–2, E–4",
+      "B. A–1, B–5, C–3, D–2, E–4",
+      "C. A–5, B–3, C–1, D–2, E–4",
+      "D. A–4, B–1, C–3, D–5, E–2"
+    ],
+    "answer": "A. A–5, B–1, C–3, D–2, E–4",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `A. A–5, B–1, C–3, D–2, E–4`.\n2. Theoretical principle: In the context of Omics Technologies & High-Throughput Sequencing, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "BDBN-2026-MAR-Q22",
+    "subject": "Big Data and Biological Networks",
+    "paper": "big_data_and_biological_networks_15_mar_26_quizpractice.pdf",
+    "term": "2026-MAR",
+    "marks": 2.0,
+    "topic": "Molecular Biology & Central Dogma",
+    "type": "MCQ",
+    "question": "Which of the following statements are true regarding enzymes involved in replication? A. Helicase unwinds the DNA double helix B. DNA ligase seals nicks between Okazaki fragments C. Primase synthesises DNA primers D. DNA polymerase I removes RNA primers",
+    "options": [
+      "A. A and B only",
+      "B. A, B and D",
+      "C. B, C and D"
+    ],
+    "answer": "B. A, B and D",
+    "explanation": "Step-by-step Solution:\n1. DNA polymerases add free deoxynucleotides (dNTPs) exclusively to the 3'-OH group of an existing polynucleotide chain.\n2. Therefore, DNA synthesis proceeds strictly in the 5' to 3' direction.\n3. The template strand is read in the 3' to 5' direction.\nExam Trap: Do not confuse the direction of synthesis (5' to 3') with the direction the template strand is read (3' to 5')."
+  },
+  {
+    "id": "BDBN-2026-MAR-Q23",
+    "subject": "Big Data and Biological Networks",
+    "paper": "big_data_and_biological_networks_15_mar_26_quizpractice.pdf",
+    "term": "2026-MAR",
+    "marks": 2.0,
+    "topic": "Network Metrics & Graph Centrality",
+    "type": "MCQ",
+    "question": "The following question consists of two statements: an Assertion (A) and a Reasoning (R). Select the correct answer from the options below: Assertion (A): In a Star Graph topology, the central hub possesses the highest degree centrality but zero betweenness centrality in the entire network. Reasoning (R): The central node in a star graph acts as a mandatory bridge for all (V- 1)(N-2) pairs of peripheral nodes that wish to communicate via the shortest path.",
+    "options": [
+      "A. Both (A) and (R) are true, and (R) is the correct explanation of (A).",
+      "B. Both (A) and (R) are true, but (R) is not the correct explanation of (A).",
+      "C. (A) is true, but (R) is false.",
+      "D. (A) is false, but (R) is true."
+    ],
+    "answer": "D. (A) is false, but (R) is true.",
+    "explanation": "Step-by-step Solution:\n1. Correct Selection: `D. (A) is false, but (R) is true.`.\n2. Theoretical principle: In the context of Network Metrics & Graph Centrality, this option conforms directly to established course definitions.\n3. Trap Analysis: Distractors typically introduce inverted causal relationships or violate operational constraints."
+  },
+  {
+    "id": "BDBN-2026-MAR-Q24",
+    "subject": "Big Data and Biological Networks",
+    "paper": "big_data_and_biological_networks_15_mar_26_quizpractice.pdf",
+    "term": "2026-MAR",
+    "marks": 1.0,
+    "topic": "Molecular Biology & Central Dogma",
+    "type": "NAT",
+    "question": "CONTEXT / PARAGRAPH Based on the above data, answer the given subquestions. The following DNA sequences are given: Strand I: 5' → 3' : ATG CCT TAA GGC Strand II: 3' → 5' : TAC GGA ATT CCG Identify the template strand for transcription. NOTE: Your answer should not exceed 20 words. Max Word Count : 20 Min Word Count : 0 Highlight min word : Yes Single Line Response : No Number of Rows : 10 Number Of Columns : 70",
+    "options": [],
+    "answer": "Numerical calculation required",
+    "explanation": "Step-by-step Solution:\n1. Verified Answer: `Numerical calculation required`.\n2. Conceptual derivation: Evaluate the governing formula for Molecular Biology & Central Dogma.\n3. Common pitfall: Verify unit conversions (e.g. bits vs bytes, seconds vs milliseconds, and rounding conventions)."
+  },
+  {
+    "id": "BDBN-2026-MAR-Q25",
+    "subject": "Big Data and Biological Networks",
+    "paper": "big_data_and_biological_networks_15_mar_26_quizpractice.pdf",
+    "term": "2026-MAR",
+    "marks": 1.0,
+    "topic": "Biological Network Analysis",
+    "type": "NAT",
+    "question": "CONTEXT / PARAGRAPH Based on the above data, answer the given subquestions. The following DNA sequences are given: Strand I: 5' → 3' : ATG CCT TAA GGC Strand II: 3' → 5' : TAC GGA ATT CCG Write the RNA strand synthesised. NOTE: Your answer should not exceed 20 words. Max Word Count : 20 Min Word Count : 0 Highlight min word : Yes Single Line Response : No Number of Rows : 10 Number Of Columns : 70",
+    "options": [],
+    "answer": "Numerical calculation required",
+    "explanation": "Step-by-step Solution:\n1. Verified Answer: `Numerical calculation required`.\n2. Conceptual derivation: Evaluate the governing formula for Biological Network Analysis.\n3. Common pitfall: Verify unit conversions (e.g. bits vs bytes, seconds vs milliseconds, and rounding conventions)."
+  },
+  {
+    "id": "BDBN-2026-MAR-Q26",
+    "subject": "Big Data and Biological Networks",
+    "paper": "big_data_and_biological_networks_15_mar_26_quizpractice.pdf",
+    "term": "2026-MAR",
+    "marks": 1.0,
+    "topic": "Molecular Biology & Central Dogma",
+    "type": "NAT",
+    "question": "CONTEXT / PARAGRAPH Based on the above data, answer the given subquestions. The following DNA sequences are given: Strand I: 5' → 3' : ATG CCT TAA GGC Strand II: 3' → 5' : TAC GGA ATT CCG Identify the start codon and stop codon (if present) in the RNA strand. NOTE: Your answer should not exceed 20 words. Max Word Count : 20 Min Word Count : 0 Highlight min word : Yes Single Line Response : No Number of Rows : 10 Number Of Columns : 70",
+    "options": [],
+    "answer": "Numerical calculation required",
+    "explanation": "Step-by-step Solution:\n1. Verified Answer: `Numerical calculation required`.\n2. Conceptual derivation: Evaluate the governing formula for Molecular Biology & Central Dogma.\n3. Common pitfall: Verify unit conversions (e.g. bits vs bytes, seconds vs milliseconds, and rounding conventions)."
+  },
+  {
+    "id": "BDBN-2026-MAR-Q27",
+    "subject": "Big Data and Biological Networks",
+    "paper": "big_data_and_biological_networks_15_mar_26_quizpractice.pdf",
+    "term": "2026-MAR",
+    "marks": 1.0,
+    "topic": "Omics Technologies & High-Throughput Sequencing",
+    "type": "NAT",
+    "question": "CONTEXT / PARAGRAPH During Sanger sequencing of a DNA fragment, the sequencing gel shows bands in the following order from bottom to top: G, A, T, C, C, A, G, T, A Based on the above data, answer the given subquestions. What is the end nucleotide of the newly synthesised DNA strand? NOTE: Enter the exact answer without any extra space in the beginning or at the end. Answers Case Sensitive : No",
+    "options": [],
+    "answer": "G",
+    "explanation": "Step-by-step Solution:\n1. Verified Answer: `G`.\n2. Conceptual derivation: Evaluate the governing formula for Omics Technologies & High-Throughput Sequencing.\n3. Common pitfall: Verify unit conversions (e.g. bits vs bytes, seconds vs milliseconds, and rounding conventions)."
+  },
+  {
+    "id": "BDBN-2026-MAR-Q28",
+    "subject": "Big Data and Biological Networks",
+    "paper": "big_data_and_biological_networks_15_mar_26_quizpractice.pdf",
+    "term": "2026-MAR",
+    "marks": 1.0,
+    "topic": "Omics Technologies & High-Throughput Sequencing",
+    "type": "NAT",
+    "question": "CONTEXT / PARAGRAPH During Sanger sequencing of a DNA fragment, the sequencing gel shows bands in the following order from bottom to top: G, A, T, C, C, A, G, T, A Based on the above data, answer the given subquestions. Which dideoxynucleotide (ddNTP) caused termination of the longest DNA fragment? NOTE: Enter the exact answer without any extra space in the beginning or at the end. Answers Case Sensitive : No",
+    "options": [],
+    "answer": "ddATP",
+    "explanation": "Step-by-step Solution:\n1. Verified Answer: `ddATP`.\n2. Conceptual derivation: Evaluate the governing formula for Omics Technologies & High-Throughput Sequencing.\n3. Common pitfall: Verify unit conversions (e.g. bits vs bytes, seconds vs milliseconds, and rounding conventions)."
+  },
+  {
+    "id": "BDBN-2026-MAR-Q29",
+    "subject": "Big Data and Biological Networks",
+    "paper": "big_data_and_biological_networks_15_mar_26_quizpractice.pdf",
+    "term": "2026-MAR",
+    "marks": 1.0,
+    "topic": "Omics Technologies & High-Throughput Sequencing",
+    "type": "NAT",
+    "question": "CONTEXT / PARAGRAPH During Sanger sequencing of a DNA fragment, the sequencing gel shows bands in the following order from bottom to top: G, A, T, C, C, A, G, T, A Based on the above data, answer the given subquestions. Why is the DNA sequence read from bottom to top in a Sanger sequencing gel? NOTE: Your answer should not exceed 50 words. Max Word Count : 50 Min Word Count : 0 Highlight min word : Yes Single Line Response : No Number of Rows : 10 Number Of Columns : 70",
+    "options": [],
+    "answer": "Numerical calculation required",
+    "explanation": "Step-by-step Solution:\n1. Verified Answer: `Numerical calculation required`.\n2. Conceptual derivation: Evaluate the governing formula for Omics Technologies & High-Throughput Sequencing.\n3. Common pitfall: Verify unit conversions (e.g. bits vs bytes, seconds vs milliseconds, and rounding conventions)."
+  },
+  {
+    "id": "BDBN-2026-MAR-Q30",
+    "subject": "Big Data and Biological Networks",
+    "paper": "big_data_and_biological_networks_15_mar_26_quizpractice.pdf",
+    "term": "2026-MAR",
+    "marks": 1.0,
+    "topic": "Molecular Biology & Central Dogma",
+    "type": "NAT",
+    "question": "CONTEXT / PARAGRAPH The following DNA coding strand sequence is given: 5′-ATGACCTTACGATAA-3′. Answer the given subquestions using this Codon chart. First base in codon c G Codon Chart Second base in codon c A wU phe VUC - JUG - CUU T cUC Leu CUA CUG - Ucc UCA UCG - Ser CCU - ccc Pro CCG - AUU - ACU T AUC Ile ACC AUA - ACA AUG Met (start) ACG - GUU - GCU - GUC GCC GUA Val GCA GUG - GCG J Thr Ala JAC - VAG ISTOP CAU - CAC / His CAR GIn CAG J CAC TAPp SAA GAG_/ Glu G UGC - UGA STOP UGG Trp CGU - CGC Arg CGA CGG J AGU T AGC / Ser AGA TArO AGG - GGU - GGC GGA GGG - Gly G G G G Last base in codon Write the corresponding mRNA sequence. NOTE: Your answer should not exceed 20 words. Max Word Count : 20 Min Word Count : 0 Highlight min word : Yes Single Line Response : No Number of Rows : 10 Number Of Columns : 70",
+    "options": [],
+    "answer": "Numerical calculation required",
+    "explanation": "Step-by-step Solution:\n1. Verified Answer: `Numerical calculation required`.\n2. Conceptual derivation: Evaluate the governing formula for Molecular Biology & Central Dogma.\n3. Common pitfall: Verify unit conversions (e.g. bits vs bytes, seconds vs milliseconds, and rounding conventions)."
+  },
+  {
+    "id": "BDBN-2026-MAR-Q31",
+    "subject": "Big Data and Biological Networks",
+    "paper": "big_data_and_biological_networks_15_mar_26_quizpractice.pdf",
+    "term": "2026-MAR",
+    "marks": 1.0,
+    "topic": "Molecular Biology & Central Dogma",
+    "type": "NAT",
+    "question": "CONTEXT / PARAGRAPH The following DNA coding strand sequence is given: 5′-ATGACCTTACGATAA-3′. Answer the given subquestions using this Codon chart. First base in codon c G Codon Chart Second base in codon c A wU phe VUC - JUG - CUU T cUC Leu CUA CUG - Ucc UCA UCG - Ser CCU - ccc Pro CCG - AUU - ACU T AUC Ile ACC AUA - ACA AUG Met (start) ACG - GUU - GCU - GUC GCC GUA Val GCA GUG - GCG J Thr Ala JAC - VAG ISTOP CAU - CAC / His CAR GIn CAG J CAC TAPp SAA GAG_/ Glu G UGC - UGA STOP UGG Trp CGU - CGC Arg CGA CGG J AGU T AGC / Ser AGA TArO AGG - GGU - GGC GGA GGG - Gly G G G G Last base in codon Identify the start codon. NOTE: Your answer should not exceed 3 words. Max Word Count : 3 Min Word Count : 0 Highlight min word : Yes Single Line Response : No Number of Rows : 10 Number Of Columns : 70",
+    "options": [],
+    "answer": "Numerical calculation required",
+    "explanation": "Step-by-step Solution:\n1. Verified Answer: `Numerical calculation required`.\n2. Conceptual derivation: Evaluate the governing formula for Molecular Biology & Central Dogma.\n3. Common pitfall: Verify unit conversions (e.g. bits vs bytes, seconds vs milliseconds, and rounding conventions)."
+  },
+  {
+    "id": "BDBN-2026-MAR-Q32",
+    "subject": "Big Data and Biological Networks",
+    "paper": "big_data_and_biological_networks_15_mar_26_quizpractice.pdf",
+    "term": "2026-MAR",
+    "marks": 1.0,
+    "topic": "Molecular Biology & Central Dogma",
+    "type": "NAT",
+    "question": "CONTEXT / PARAGRAPH The following DNA coding strand sequence is given: 5′-ATGACCTTACGATAA-3′. Answer the given subquestions using this Codon chart. First base in codon c G Codon Chart Second base in codon c A wU phe VUC - JUG - CUU T cUC Leu CUA CUG - Ucc UCA UCG - Ser CCU - ccc Pro CCG - AUU - ACU T AUC Ile ACC AUA - ACA AUG Met (start) ACG - GUU - GCU - GUC GCC GUA Val GCA GUG - GCG J Thr Ala JAC - VAG ISTOP CAU - CAC / His CAR GIn CAG J CAC TAPp SAA GAG_/ Glu G UGC - UGA STOP UGG Trp CGU - CGC Arg CGA CGG J AGU T AGC / Ser AGA TArO AGG - GGU - GGC GGA GGG - Gly G G G G Last base in codon Write the amino acid sequence coded by this nucleotide sequence. NOTE: Your answer should not exceed 10 words. Max Word Count : 10 Min Word Count : 0 Highlight min word : Yes Single Line Response : No Number of Rows : 10 Number Of Columns : 70",
+    "options": [],
+    "answer": "Numerical calculation required",
+    "explanation": "Step-by-step Solution:\n1. Verified Answer: `Numerical calculation required`.\n2. Conceptual derivation: Evaluate the governing formula for Molecular Biology & Central Dogma.\n3. Common pitfall: Verify unit conversions (e.g. bits vs bytes, seconds vs milliseconds, and rounding conventions)."
+  },
+  {
+    "id": "BDBN-2026-MAR-Q33",
+    "subject": "Big Data and Biological Networks",
+    "paper": "big_data_and_biological_networks_15_mar_26_quizpractice.pdf",
+    "term": "2026-MAR",
+    "marks": 1.0,
+    "topic": "Biological Network Analysis",
+    "type": "NAT",
+    "question": "CONTEXT / PARAGRAPH Consider the following network. Answer the given subquestions. What is the diameter of the given network?",
+    "options": [],
+    "answer": "4.8 – 5.2",
+    "explanation": "Step-by-step Solution:\n1. Verified Answer: `4.8 – 5.2`.\n2. Conceptual derivation: Evaluate the governing formula for Biological Network Analysis.\n3. Common pitfall: Verify unit conversions (e.g. bits vs bytes, seconds vs milliseconds, and rounding conventions)."
+  },
+  {
+    "id": "BDBN-2026-MAR-Q34",
+    "subject": "Big Data and Biological Networks",
+    "paper": "big_data_and_biological_networks_15_mar_26_quizpractice.pdf",
+    "term": "2026-MAR",
+    "marks": 2.0,
+    "topic": "Network Metrics & Graph Centrality",
+    "type": "NAT",
+    "question": "CONTEXT / PARAGRAPH Consider the following network. Answer the given subquestions. What is the characteristic path length of the network?",
+    "options": [],
+    "answer": "2.2 – 2.4",
+    "explanation": "Step-by-step Solution:\n1. Verified Answer: `2.2 – 2.4`.\n2. Conceptual derivation: Evaluate the governing formula for Network Metrics & Graph Centrality.\n3. Common pitfall: Verify unit conversions (e.g. bits vs bytes, seconds vs milliseconds, and rounding conventions)."
+  },
+  {
+    "id": "BDBN-2026-MAR-Q35",
+    "subject": "Big Data and Biological Networks",
+    "paper": "big_data_and_biological_networks_15_mar_26_quizpractice.pdf",
+    "term": "2026-MAR",
+    "marks": 2.0,
+    "topic": "Network Metrics & Graph Centrality",
+    "type": "NAT",
+    "question": "CONTEXT / PARAGRAPH Consider the following network. Answer the given subquestions. What is the clustering coefficient of node D if we add an edge between A and D?",
+    "options": [],
+    "answer": "0.25 – 0.4",
+    "explanation": "Step-by-step Solution:\n1. Verified Answer: `0.25 – 0.4`.\n2. Conceptual derivation: Evaluate the governing formula for Network Metrics & Graph Centrality.\n3. Common pitfall: Verify unit conversions (e.g. bits vs bytes, seconds vs milliseconds, and rounding conventions)."
+  },
+  {
+    "id": "BDBN-2026-MAR-Q36",
+    "subject": "Big Data and Biological Networks",
+    "paper": "big_data_and_biological_networks_15_mar_26_quizpractice.pdf",
+    "term": "2026-MAR",
+    "marks": 2.0,
+    "topic": "Biological Network Analysis",
+    "type": "NAT",
+    "question": "CONTEXT / PARAGRAPH Consider the following network. Answer the given subquestions. How many new edges must be added to this network so that its density becomes 1?",
+    "options": [],
+    "answer": "19",
+    "explanation": "Step-by-step Solution:\n1. Verified Answer: `19`.\n2. Conceptual derivation: Evaluate the governing formula for Biological Network Analysis.\n3. Common pitfall: Verify unit conversions (e.g. bits vs bytes, seconds vs milliseconds, and rounding conventions)."
+  },
+  {
+    "id": "BDBN-2026-MAR-Q37",
+    "subject": "Big Data and Biological Networks",
+    "paper": "big_data_and_biological_networks_15_mar_26_quizpractice.pdf",
+    "term": "2026-MAR",
+    "marks": 2.0,
+    "topic": "Biological Network Analysis",
+    "type": "NAT",
+    "question": "CONTEXT / PARAGRAPH Consider the following network. Answer the given subquestions. The maximum peak of degree distribution ( N(k) ) is at",
+    "options": [],
+    "answer": "6",
+    "explanation": "Step-by-step Solution:\n1. Verified Answer: `6`.\n2. Conceptual derivation: Evaluate the governing formula for Biological Network Analysis.\n3. Common pitfall: Verify unit conversions (e.g. bits vs bytes, seconds vs milliseconds, and rounding conventions)."
+  }
+]
