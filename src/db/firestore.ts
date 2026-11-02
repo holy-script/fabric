@@ -38,6 +38,9 @@ if (!admin.apps.length) {
 }
 
 export const db = admin.firestore();
+try {
+  db.settings({ ignoreUndefinedProperties: true });
+} catch {}
 
 // Collection References
 export const tradesCollection = db.collection("trades");
@@ -47,6 +50,7 @@ export const userStatesCollection = db.collection("userState");
 export const goalsCollection = db.collection("goals");
 export const settingsCollection = db.collection("settings");
 export const graphsCollection = db.collection("graphs");
+export const biometricsCollection = db.collection("biometrics");
 
 export async function setVaultChannelId(channelId: string, userId: string = "1131646846"): Promise<void> {
   try {

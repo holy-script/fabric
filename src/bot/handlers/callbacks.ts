@@ -26,6 +26,18 @@ import { exportPortfolioToNotion, isNotionConfigured } from "../../notion/export
 import { handleHeartbeat } from "../commands/heartbeat.js";
 import { handleGold } from "../commands/gold.js";
 import { handleDomain } from "../commands/domain.js";
+import { getLatestCouncilSession } from "../commands/council.js";
+import { handleHealth, formatBiometricCard, formatSetupGuide } from "../commands/health.js";
+import {
+  handleFociStatus,
+  handleFociTest,
+  handleFociReset,
+  handleFociScan,
+} from "../commands/foci.js";
+import { muteFociAlerts } from "../../integrations/foci/bridge.js";
+import { getLatestBiometrics } from "../../services/wearables.js";
+import { generateSocraticChallenge } from "../../ai/challenger.js";
+import { startSession } from "../../db/firestore.js";
 import {
   sendDawnBriefing,
   sendMiddayReset,
@@ -75,6 +87,113 @@ export async function handleCallbackQuery(ctx: Context) {
       }
     } catch (err: any) {
       await ctx.reply(`⚠️ Error locking reflection: ${err.message}`);
+    }
+    return;
+  }
+
+  if (data === "council:challenge") {
+    const session = getLatestCouncilSession(userId);
+    if (!session) {
+      await ctx.reply(
+        "⚠️ No recent Council deliberation found to challenge. Run `/council <dilemma>` first.",
+        { parse_mode: "Markdown" }
+      );
+      return;
+    }
+
+    const waitMsg = await ctx.reply(
+      "⚔️ *Unleashing Socratic Challenger against Council Verdict...*",
+      { parse_mode: "Markdown" }
+    );
+
+    try {
+      const v = session.report.verdict;
+      const challenge = await generateSocraticChallenge(
+        session.report.problem,
+        v.action,
+        `Trade Type: ${v.tradeType}, Focus: ${v.focusHours}h, Expected Facts: ${v.expectedFacts}, Rationale: ${v.rationale}`
+      );
+
+      const challengeText = [
+        `⚔️ *SOCRATIC STRESS-TEST: COUNCIL VERDICT UNDER FIRE*`,
+        `━━━━━━━━━━━━━━━━━━━━━━━━━━`,
+        `🎯 *Council Verdict:*`,
+        `_"${v.action}"_`,
+        ``,
+        `🗡️ *Blindspot & Fragility:*`,
+        `"${challenge.challenge}"`,
+        ``,
+        `❓ *Provocative Question:*`,
+        `"${challenge.provocativeQuestion}"`,
+        ``,
+        `🔄 *Via Negativa Counter-Perspective:*`,
+        `"${challenge.counterPerspective}"`,
+      ].join("\n");
+
+      const followUpKeyboard = new InlineKeyboard()
+        .text("⚡ Spark Action Anyway", "council:spark")
+        .text("📊 Balance", "action:balance");
+
+      await ctx.api.editMessageText(
+        ctx.chat!.id,
+        waitMsg.message_id,
+        challengeText,
+        {
+          parse_mode: "Markdown",
+          reply_markup: followUpKeyboard,
+        }
+      );
+    } catch (err: any) {
+      console.error("Council challenge error:", err);
+      await ctx.reply(`⚠️ Failed to generate challenge: ${err.message}`);
+    }
+    return;
+  }
+
+  if (data === "council:spark") {
+    const session = getLatestCouncilSession(userId);
+    if (!session) {
+      await ctx.reply(
+        `⚡ *Spark a Session:*\nSend \`/spark <task> [duration]\` or send a voice memo saying what you are starting!`,
+        { parse_mode: "Markdown" }
+      );
+      return;
+    }
+
+    const v = session.report.verdict;
+    try {
+      await startSession({
+        userId,
+        taskDescription: `[Council Trade] ${v.action}`,
+        focusExpectedHours: v.focusHours || 1.0,
+        tags: ["council", v.tradeType],
+        startedAt: new Date(),
+      });
+
+      const sparkMsg = [
+        `⚡ *COUNCIL ACTION SPARKED INTO ACTIVE FLOW!*`,
+        `━━━━━━━━━━━━━━━━━━━━━━━━━━`,
+        `🎯 *Active Objective:*`,
+        `*${v.action}*`,
+        ``,
+        `⏳ *Focus Commitment:* ${v.focusHours}h (\`${v.tradeType}\`)`,
+        `💡 *Target Facts:* ${v.expectedFacts}`,
+        `⚡ *Projected Energy Delta:* ${v.expectedEnergyDelta > 0 ? "+" : ""}${v.expectedEnergyDelta} / 5.0`,
+        ``,
+        `_Focus lock engaged. Execute without friction. Send \`/settle\` when complete to lock in your 4F trade._`,
+      ].join("\n");
+
+      const activeKeyboard = new InlineKeyboard()
+        .text("🏁 Settle Session", "action:settle")
+        .text("📊 Balance", "action:balance");
+
+      await ctx.reply(sparkMsg, {
+        parse_mode: "Markdown",
+        reply_markup: activeKeyboard,
+      });
+    } catch (err: any) {
+      console.error("Council spark error:", err);
+      await ctx.reply(`⚠️ Could not spark session: ${err.message}`);
     }
     return;
   }
@@ -331,10 +450,69 @@ export async function handleCallbackQuery(ctx: Context) {
     await handleGold(ctx);
   } else if (data === "action:domain_menu") {
     await handleDomain(ctx);
+  } else if (data === "action:health_card") {
+    await handleHealth(ctx);
+  } else if (data === "action:health_guide") {
+    const keyboard = new InlineKeyboard()
+      .text("🔄 Check Again", "action:refresh_health")
+      .text("🧬 Wearables HUD", "action:health_card");
+    await ctx.reply(formatSetupGuide(userId), {
+      parse_mode: "Markdown",
+      reply_markup: keyboard,
+    });
+  } else if (data === "action:refresh_health") {
+    const snapshot = await getLatestBiometrics(userId);
+    if (snapshot) {
+      const keyboard = new InlineKeyboard()
+        .text("🔄 Refresh", "action:refresh_health")
+        .text("⚙️ Setup Guide", "action:health_guide")
+        .row()
+        .text("🥗 Vitality Protocol", "action:vitality")
+        .text("📊 Balance Radar", "action:balance");
+      try {
+        await ctx.editMessageText(formatBiometricCard(snapshot), {
+          parse_mode: "Markdown",
+          reply_markup: keyboard,
+        });
+      } catch {
+        await ctx.reply(formatBiometricCard(snapshot), {
+          parse_mode: "Markdown",
+          reply_markup: keyboard,
+        });
+      }
+    } else {
+      const keyboard = new InlineKeyboard()
+        .text("🔄 Check Again", "action:refresh_health")
+        .text("🥗 Vitality Protocol", "action:vitality");
+      try {
+        await ctx.editMessageText(formatSetupGuide(userId), {
+          parse_mode: "Markdown",
+          reply_markup: keyboard,
+        });
+      } catch {
+        await ctx.reply(formatSetupGuide(userId), {
+          parse_mode: "Markdown",
+          reply_markup: keyboard,
+        });
+      }
+    }
   } else if (data === "action:reflect_prompt") {
     await ctx.reply(
       `🪞 *Reflect on Knowledge:*\nSend \`/reflect <topic or keyword>\` (e.g., \`/reflect squat\` or \`/reflect trading\`) to layer your conclusions!`,
       { parse_mode: "Markdown" }
     );
+  } else if (data === "action:foci_status") {
+    await handleFociStatus(ctx);
+  } else if (data === "action:foci_test") {
+    await handleFociTest(ctx);
+  } else if (data === "action:foci_reset") {
+    await handleFociReset(ctx);
+  } else if (data === "action:foci_scan") {
+    await handleFociScan(ctx);
+  } else if (data === "action:foci_mute_30") {
+    muteFociAlerts(userId, 30);
+    await ctx.reply("🔕 *FOCI Alerts Muted:* Prolonged stress biofeedback alerts paused for 30 minutes.", {
+      parse_mode: "Markdown",
+    });
   }
 }

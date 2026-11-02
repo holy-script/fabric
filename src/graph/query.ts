@@ -499,6 +499,7 @@ export interface GraphSummaryNode {
   author?: string;
   actionableTakeaway?: string;
   telegramStreamUrl?: string;
+  notionUrl?: string;
 }
 
 export interface GraphSummaryEdge {
@@ -588,6 +589,7 @@ export async function getGraphSummary(forceRefresh = false): Promise<GraphSummar
       author: (n.properties.author as string) || "",
       actionableTakeaway: (n.properties.actionableTakeaway as string) || "",
       telegramStreamUrl: (n.properties.telegramStreamUrl || n.properties.telegramUrl || n.properties.streamUrl || "") as string,
+      notionUrl: (n.properties.notionUrl || "") as string,
     });
   }
 

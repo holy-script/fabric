@@ -36,6 +36,9 @@ import { handleSimulate } from "./commands/simulate.js";
 import { handleNotion } from "./commands/notion.js";
 import { handleGithub } from "./commands/github.js";
 import { handleSyncIg } from "./commands/syncig.js";
+import { handleCouncil } from "./commands/council.js";
+import { handleHealth } from "./commands/health.js";
+import { handleFoci } from "./commands/foci.js";
 import { deduplicateUpdates } from "./middleware/dedup.js";
 import { handleNaturalMessage } from "./handlers/message.js";
 import { handleVoiceMessage } from "./handlers/voice.js";
@@ -62,6 +65,7 @@ export function createBot() {
       { command: "portfolio", description: "Synthesizer proof of growth" },
       { command: "github", description: "Passive Git commit telemetry setup" },
       { command: "simulate", description: "Test a new workflow before adopting" },
+      { command: "council", description: "Deliberate complex dilemmas with the Polymath Council" },
       { command: "notion", description: "Sync knowledge garden to Notion" },
       { command: "wins", description: "View the Hopecore vault of wins" },
       { command: "gotchas", description: "View documented traps & pitfalls" },
@@ -75,6 +79,9 @@ export function createBot() {
       { command: "ask", description: "Consult the 4F Advisor engine" },
       { command: "domain", description: "Hot-swappable domain workbench & slots" },
       { command: "gold", description: "GOLDBEES ETF Dip Tracker & Allocation Formula" },
+      { command: "foci", description: "FOCI BLE Diaphragmatic Breath & Focus Telemetry" },
+      { command: "health", description: "Wearables & biometric recovery telemetry" },
+      { command: "bio", description: "View biometric recovery HUD & sleep score" },
       { command: "vitality", description: "Biological Architecture, Meals & Grooming" },
       { command: "meal", description: "Log whole-food meal & metabolic impact" },
       { command: "sidequest", description: "Anti-fatigue creative escape hatch" },
@@ -104,6 +111,7 @@ export function createBot() {
   bot.command("portfolio", handlePortfolio);
   bot.command("github", handleGithub);
   bot.command("simulate", handleSimulate);
+  bot.command("council", handleCouncil);
   bot.command("notion", handleNotion);
   bot.command("garden", handleGarden);
   bot.command("wins", handleWins);
@@ -125,6 +133,9 @@ export function createBot() {
   bot.command("domain", handleDomain);
   bot.command("domains", handleDomain);
   bot.command("gold", handleGold);
+  bot.command("foci", handleFoci);
+  bot.command("health", handleHealth);
+  bot.command("bio", handleHealth);
   bot.command("vitality", handleVitality);
   bot.command("meal", handleMeal);
   bot.command("sidequest", handleSidequest);

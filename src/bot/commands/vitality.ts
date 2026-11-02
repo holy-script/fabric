@@ -12,7 +12,9 @@ export async function handleVitality(ctx: Context) {
     .text("🥗 Log Clean Meal", "action:meal_prompt")
     .text("⚡ 15m Kinetic Reset", "action:spark_kinetic")
     .row()
+    .text("🧬 Wearables HUD", "action:health_card")
     .text("🧴 Grooming Protocol", "action:grooming_guide")
+    .row()
     .text("📊 Balance Radar", "action:balance");
 
   const message =

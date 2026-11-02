@@ -109,5 +109,6 @@ export interface UserState {
   activePlugins: string[];
   lastAudit?: Date;
   updatedAt: Date;
+  latestBiometrics?: any;
 }
 
