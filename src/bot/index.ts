@@ -39,6 +39,7 @@ import { handleSyncIg } from "./commands/syncig.js";
 import { handleCouncil } from "./commands/council.js";
 import { handleHealth } from "./commands/health.js";
 import { handleFoci } from "./commands/foci.js";
+import { handleAgentCommand } from "./commands/agent.js";
 import { deduplicateUpdates } from "./middleware/dedup.js";
 import { handleNaturalMessage } from "./handlers/message.js";
 import { handleVoiceMessage } from "./handlers/voice.js";
@@ -91,6 +92,7 @@ export function createBot() {
       { command: "syncig", description: "Auto-sync Instagram Saved reels to Vault" },
       { command: "sms", description: "Airtel GSM SMS Gateway (100 free SMS/day via ADB)" },
       { command: "phone", description: "Android hardware telemetry & Focus Mode (DND)" },
+      { command: "agent", description: "Agent-to-Agent (A2A) protocol & MCP server setup" },
       { command: "start", description: "Overview & instructions" },
     ])
     .catch((err) => console.error("Could not set bot commands:", err));
@@ -145,6 +147,7 @@ export function createBot() {
   bot.command("syncig", handleSyncIg);
   bot.command("sms", handleSms);
   bot.command("phone", handlePhone);
+  bot.command("agent", handleAgentCommand);
   bot.command("ask", handleAsk);
 
   // Voice memo ingestion (multimodal)
