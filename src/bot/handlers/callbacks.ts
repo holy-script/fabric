@@ -8,6 +8,7 @@ import { executeSimulation } from "../commands/simulate.js";
 import { handleSentinel } from "../commands/sentinel.js";
 import { handleDsa } from "../commands/dsa.js";
 import { handleSidequest } from "../commands/sidequest.js";
+import { swapDomain } from "../../domains/manager.js";
 import { installPlugin, uninstallPlugin, swapPlugin } from "../../plugins/manager.js";
 import { unlockGoal, getUserState, findKnowledgeItem } from "../../db/firestore.js";
 import { setActiveReflectionSession } from "../commands/reflect.js";
@@ -106,6 +107,16 @@ export async function handleCallbackQuery(ctx: Context) {
         `• *Scent:* 2 sprays signature fragrance on pulse points (wrist + neck side).\n` +
         `• *PM:* Gentle foaming cleanser $\\rightarrow$ Barrier repair cream.\n\n` +
         `_Aesthetic self-respect builds an indomitable mindset._`,
+      { parse_mode: "Markdown" }
+    );
+  } else if (data === "action:domain_swap_kinetic") {
+    const res = await swapDomain(userId, "somatic-grooming", "kinetic-cns");
+    await ctx.reply(res.message, { parse_mode: "Markdown" });
+  } else if (data === "action:domain_add_prompt") {
+    await ctx.reply(
+      `✨ *Create a Custom Domain:*\n\n` +
+        `Send: \`/domain add <Name> | <Pillar> | <Description>\`\n\n` +
+        `_Example: \`/domain add Bouldering | Vitality | Finger tendon conditioning and problem-solving\`_`,
       { parse_mode: "Markdown" }
     );
   } else if (data === "action:portfolio_export") {

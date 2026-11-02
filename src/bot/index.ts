@@ -20,6 +20,7 @@ import { handleGold } from "./commands/gold.js";
 import { handleSidequest } from "./commands/sidequest.js";
 import { handleVitality, handleMeal } from "./commands/vitality.js";
 import { handleDsa } from "./commands/dsa.js";
+import { handleDomain } from "./commands/domain.js";
 import { handlePortfolio } from "./commands/portfolio.js";
 import { handleWins, handleGotchas, handleSearch, handleGarden } from "./commands/garden.js";
 import { handleGoal, handleGoals, handleClaim } from "./commands/goals.js";
@@ -60,6 +61,7 @@ export function createBot() {
       { command: "plugins", description: "Manage Ways of Working plugins" },
       { command: "muse", description: "Summon the Muse for creative sparks" },
       { command: "ask", description: "Consult the 4F Advisor engine" },
+      { command: "domain", description: "Hot-swappable domain workbench & slots" },
       { command: "gold", description: "GOLDBEES ETF Dip Tracker & Allocation Formula" },
       { command: "vitality", description: "Biological Architecture, Meals & Grooming" },
       { command: "meal", description: "Log whole-food meal & metabolic impact" },
@@ -101,6 +103,8 @@ export function createBot() {
   bot.command("synthesize", handleCluster);
   bot.command("path", handlePath);
   bot.command("setchannel", handleSetChannel);
+  bot.command("domain", handleDomain);
+  bot.command("domains", handleDomain);
   bot.command("gold", handleGold);
   bot.command("vitality", handleVitality);
   bot.command("meal", handleMeal);

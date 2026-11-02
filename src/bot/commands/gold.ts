@@ -37,3 +37,4 @@ export async function handleGold(ctx: Context) {
     );
   }
 }
+
