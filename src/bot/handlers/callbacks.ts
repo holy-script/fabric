@@ -24,7 +24,7 @@ import {
 import { swapDomain } from "../../domains/manager.js";
 import { installPlugin, uninstallPlugin, swapPlugin } from "../../plugins/manager.js";
 import { unlockGoal, getUserState, findKnowledgeItem } from "../../db/firestore.js";
-import { setActiveReflectionSession } from "../commands/reflect.js";
+import { setActiveReflectionSession, handleReflexion } from "../commands/reflect.js";
 import { exportPortfolioToNotion, isNotionConfigured } from "../../notion/exporter.js";
 import { handleHeartbeat } from "../commands/heartbeat.js";
 import { handleGold } from "../commands/gold.js";
@@ -205,6 +205,8 @@ export async function handleCallbackQuery(ctx: Context) {
     await handleBalance(ctx);
   } else if (data === "action:sentinel") {
     await handleSentinel(ctx);
+  } else if (data === "action:reflexion") {
+    await handleReflexion(ctx);
   } else if (data === "action:briefing") {
     await handleBriefing(ctx);
   } else if (data === "action:settle") {

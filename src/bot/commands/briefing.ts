@@ -1,4 +1,5 @@
 import type { Context } from "grammy";
+import { InlineKeyboard } from "grammy";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { config } from "../../config/env.js";
 import {
@@ -9,6 +10,7 @@ import {
   knowledgeCollection,
 } from "../../db/firestore.js";
 import { getUserActivePlugins } from "../../plugins/manager.js";
+import { getReflexionSummary } from "../../ai/reflexion.js";
 
 const genAI = new GoogleGenerativeAI(config.geminiApiKey);
 const model = genAI.getGenerativeModel({ model: "gemini-3.5-flash" });
@@ -126,6 +128,16 @@ ${recentTradesText}
     console.warn("Could not query daily vault spark:", err);
   }
 
+  // Autonomous Episodic Reflexion Summary
+  try {
+    const reflexionSummary = await getReflexionSummary(userId);
+    if (reflexionSummary) {
+      briefing += `\n\n${reflexionSummary}`;
+    }
+  } catch (err) {
+    console.warn("Could not query episodic reflexion summary:", err);
+  }
+
   // Save to agentOutputs in Firestore
   try {
     await db.collection("agentOutputs").add({
@@ -151,19 +163,26 @@ export async function handleBriefing(ctx: Context): Promise<void> {
     // Ignore chat action failure
   }
 
+  const keyboard = new InlineKeyboard()
+    .text("🧠 Episodic Reflexion", "action:reflexion")
+    .text("🛡️ Sentinel Recon", "action:sentinel")
+    .row()
+    .text("⚡ Spark Morning Sprint", "action:spark_prompt")
+    .text("📊 Balance", "action:balance");
+
   try {
     const briefing = await generateMorningBriefing(userId);
     try {
-      await ctx.reply(briefing, { parse_mode: "Markdown" });
+      await ctx.reply(briefing, { parse_mode: "Markdown", reply_markup: keyboard });
     } catch {
       // Fallback in case Markdown parsing triggers telegram formatting error
-      await ctx.reply(briefing);
+      await ctx.reply(briefing, { reply_markup: keyboard });
     }
   } catch (err) {
     console.error("Error generating morning briefing:", err);
     await ctx.reply(
       "⚠️ *Failed to generate Morning Recon Briefing.*\nPlease try again shortly.",
-      { parse_mode: "Markdown" }
+      { parse_mode: "Markdown", reply_markup: keyboard }
     );
   }
 }

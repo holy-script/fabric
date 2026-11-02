@@ -1,6 +1,8 @@
 import type { Context } from "grammy";
+import { InlineKeyboard } from "grammy";
 import { findKnowledgeItem, addReflectionToKnowledgeItem } from "../../db/firestore.js";
 import { appendReflectionToNotionPage } from "../../notion/client.js";
+import { runEpisodicReflexion } from "../../ai/reflexion.js";
 
 export interface ReflectionSession {
   itemId: string;
@@ -34,19 +36,86 @@ export function clearActiveReflectionSession(userId: string) {
   activeReflectionSessions.delete(userId);
 }
 
+export async function handleReflexion(ctx: Context) {
+  const userId = ctx.from?.id.toString();
+  if (!userId) return;
+
+  const statusMsg = await ctx.reply(
+    "🧠 *Episodic Memory Loop: Auditing recent trades, focus crashes, and inducing new axioms...*",
+    { parse_mode: "Markdown" }
+  );
+
+  try {
+    const report = await runEpisodicReflexion(userId, 7);
+
+    const keyboard = new InlineKeyboard()
+      .text("🔄 Re-Run Reflexion", "action:reflexion")
+      .text("🛡️ Sentinel Audit", "action:sentinel")
+      .row()
+      .text("🌅 Morning Briefing", "action:briefing")
+      .text("📊 Balance", "action:balance");
+
+    try {
+      await ctx.api.editMessageText(
+        ctx.chat!.id,
+        statusMsg.message_id,
+        report.markdownReport,
+        {
+          parse_mode: "Markdown",
+          reply_markup: keyboard,
+        }
+      );
+    } catch {
+      await ctx.api.editMessageText(
+        ctx.chat!.id,
+        statusMsg.message_id,
+        report.markdownReport,
+        { reply_markup: keyboard }
+      );
+    }
+  } catch (error) {
+    console.error("Episodic reflexion error:", error);
+    await ctx.api.editMessageText(
+      ctx.chat!.id,
+      statusMsg.message_id,
+      `❌ *Episodic Reflexion Failed:*\n${error instanceof Error ? error.message : "Unknown error"}`,
+      { parse_mode: "Markdown" }
+    );
+  }
+}
+
 export async function handleReflect(ctx: Context) {
   const userId = ctx.from?.id.toString();
   if (!userId) return;
 
-  const query = ctx.message?.text?.replace(/^\/reflect\s*/i, "").trim();
+  const text = ctx.message?.text || "";
+  const query = text.replace(/^\/reflect\s*/i, "").trim();
+
+  // Autonomous episodic reflexion triggers: /reflect audit, /reflect episodic, /reflexion
+  const lower = query.toLowerCase();
+  if (
+    lower === "audit" ||
+    lower === "reflect" ||
+    lower === "audit reflect" ||
+    lower === "reflexion" ||
+    lower === "episodic" ||
+    text.startsWith("/reflexion")
+  ) {
+    return handleReflexion(ctx);
+  }
 
   if (!query) {
+    const keyboard = new InlineKeyboard()
+      .text("🧠 Run Autonomous Reflexion", "action:reflexion")
+      .text("🛡️ Sentinel Recon", "action:sentinel");
+
     await ctx.reply(
       `🧠 *Personal Synthesis & Reflection Engine*\n\n` +
         `Usage: \`/reflect <topic, keyword, or reel name>\`\n\n` +
         `_Example:_ \`/reflect squat\` or \`/reflect mirror\`\n\n` +
-        `This lets you challenge, annotate, and layer your own conclusions over any catalogued reel.`,
-      { parse_mode: "Markdown" }
+        `⚡ *Autonomous Episodic Memory:*\n` +
+        `Run \`/reflexion\` or \`/reflect audit\` to synthesize cognitive performance, identify friction points, and induce high-order axioms from recent trades.`,
+      { parse_mode: "Markdown", reply_markup: keyboard }
     );
     return;
   }

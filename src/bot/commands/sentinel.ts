@@ -6,6 +6,13 @@ export async function handleSentinel(ctx: Context) {
   const userId = ctx.from?.id.toString();
   if (!userId) return;
 
+  const text = ctx.message?.text || "";
+  const sub = text.replace(/^\/(sentinel|audit)\s*/i, "").trim().toLowerCase();
+  if (sub === "reflect" || sub === "reflexion") {
+    const { handleReflexion } = await import("./reflect.js");
+    return handleReflexion(ctx);
+  }
+
   const statusMsg = await ctx.reply(
     "🛡️ *Sentinel Recon: Ingesting 4F telemetry & auditing cognitive equilibrium...*",
     { parse_mode: "Markdown" }
@@ -25,8 +32,9 @@ export async function handleSentinel(ctx: Context) {
 
     keyboard
       .text("🔄 Re-Run Recon", "action:sentinel")
-      .text("📊 Balance", "action:balance")
+      .text("🧠 Episodic Reflexion", "action:reflexion")
       .row()
+      .text("📊 Balance", "action:balance")
       .text("🧩 View Plugins", "action:plugins");
 
     await ctx.api.editMessageText(

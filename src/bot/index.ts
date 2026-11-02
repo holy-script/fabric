@@ -13,7 +13,7 @@ import {
   handleSwap,
 } from "./commands/plugins.js";
 import { handleMuse } from "./commands/muse.js";
-import { handleReflect } from "./commands/reflect.js";
+import { handleReflect, handleReflexion } from "./commands/reflect.js";
 import { handleCluster, handlePath } from "./commands/cluster.js";
 import { handleSetChannel } from "./commands/channel.js";
 import { handleGold } from "./commands/gold.js";
@@ -42,6 +42,8 @@ import { handleFoci } from "./commands/foci.js";
 import { handleAgentCommand } from "./commands/agent.js";
 import { handleNotebookLMCommand } from "./commands/notebooklm.js";
 import { handlePrep } from "./commands/prep.js";
+import { handleBrowserCommand, handleAiModeDirect } from "./commands/browser.js";
+import { handleTaskCommand } from "./commands/task.js";
 import { deduplicateUpdates } from "./middleware/dedup.js";
 import { handleNaturalMessage } from "./handlers/message.js";
 import { handleVoiceMessage } from "./handlers/voice.js";
@@ -97,6 +99,9 @@ export function createBot() {
       { command: "agent", description: "Agent-to-Agent (A2A) protocol & MCP server setup" },
       { command: "nlm", description: "Google NotebookLM podcast & source bundle export" },
       { command: "prep", description: "IITM BS Quiz 1 Sparring & Active Recall" },
+      { command: "browser", description: "Autonomous Chrome browsing & screenshot capture" },
+      { command: "aimode", description: "Google AI Mode browser synthesis & share link" },
+      { command: "task", description: "Hierarchical Task Network (HTN) DAG executor" },
       { command: "start", description: "Overview & instructions" },
     ])
     .catch((err) => console.error("Could not set bot commands:", err));
@@ -132,6 +137,8 @@ export function createBot() {
   bot.command("swap", handleSwap);
   bot.command("muse", handleMuse);
   bot.command("reflect", handleReflect);
+  bot.command("reflexion", handleReflexion);
+  bot.command("audit", handleSentinel);
   bot.command("cluster", handleCluster);
   bot.command("synthesize", handleCluster);
   bot.command("path", handlePath);
@@ -154,6 +161,9 @@ export function createBot() {
   bot.command("agent", handleAgentCommand);
   bot.command(["nlm", "notebooklm"], handleNotebookLMCommand);
   bot.command(["prep", "iitm"], handlePrep);
+  bot.command(["browser", "browse"], handleBrowserCommand);
+  bot.command("aimode", handleAiModeDirect);
+  bot.command(["task", "plan"], handleTaskCommand);
   bot.command("ask", handleAsk);
 
   // Voice memo ingestion (multimodal)

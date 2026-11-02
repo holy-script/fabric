@@ -17,6 +17,7 @@ import { getGoldbeesAnalysis, type GoldbeesAnalysis } from "./goldbees.js";
 import { generateDsaLesson } from "../bot/commands/dsa.js";
 import { generateSocraticChallenge } from "../ai/challenger.js";
 import { DEFAULT_SIDEQUESTS, sidequestsCollection, type SidequestItem } from "../bot/commands/sidequest.js";
+import { getReflexionSummary } from "../ai/reflexion.js";
 import type { Trade } from "../db/types.js";
 
 const genAI = new GoogleGenerativeAI(config.geminiApiKey);
@@ -537,6 +538,17 @@ export async function sendTwilightSettle(
       `Energy remains resilient (\`${energySign}\`). Lock screens, avoid blue light, and initiate mental shutdown.\n`;
   }
 
+  // 4. Episodic Memory & Induced Axiom Summary
+  let reflexionSection = "";
+  try {
+    const summary = await getReflexionSummary(userId);
+    if (summary) {
+      reflexionSection = `━━━━━━━━━━━━━━━━━━━━━━\n${summary}\n`;
+    }
+  } catch (err) {
+    console.warn("[Heartbeat] Error querying reflexion summary for twilight settle:", err);
+  }
+
   const message =
     `🌙 *CHRONOS HEARTBEAT: TWILIGHT SETTLE*\n` +
     `_Circadian Anchor: 21:30 PM • Daily Trade Synthesis & Socratic Inversion_\n\n` +
@@ -544,6 +556,7 @@ export async function sendTwilightSettle(
     `${telemetrySection}\n` +
     `━━━━━━━━━━━━━━━━━━━━━━\n` +
     `${socraticSection}\n` +
+    `${reflexionSection}` +
     `━━━━━━━━━━━━━━━━━━━━━━\n` +
     `${sidequestSection}\n` +
     `━━━━━━━━━━━━━━━━━━━━━━\n` +
@@ -551,10 +564,10 @@ export async function sendTwilightSettle(
 
   const keyboard = new InlineKeyboard()
     .text("🏆 Bank a Win", "action:win_prompt")
-    .text("🎮 Roll Sidequest", "action:sidequest_roll")
+    .text("🧠 Reflexion", "action:reflexion")
     .row()
-    .text("📊 Balance Radar", "action:balance")
-    .text("🪞 Reflect on Knowledge", "action:reflect_prompt");
+    .text("🎮 Roll Sidequest", "action:sidequest_roll")
+    .text("📊 Balance Radar", "action:balance");
 
   await safeSendMessage(bot, userId, message, keyboard);
 }

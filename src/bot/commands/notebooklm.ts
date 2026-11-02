@@ -1,5 +1,6 @@
 import type { Context } from "grammy";
-import { InputFile } from "grammy";
+import { InputFile, InlineKeyboard } from "grammy";
+import path from "path";
 import {
   exportClusterToNotebookLM,
   exportAllClustersToNotebookLM,
@@ -8,6 +9,7 @@ import {
 } from "../../integrations/notebooklm/exporter.js";
 import { checkNotebookLMStatus } from "../../integrations/notebooklm/client.js";
 import { getOrLoadGraph } from "../../graph/query.js";
+import { syncNotebookLM } from "../../browser/tool.js";
 
 export async function handleNotebookLMCommand(ctx: Context): Promise<void> {
   const text = ctx.message?.text || "";
@@ -126,6 +128,62 @@ export async function handleNotebookLMCommand(ctx: Context): Promise<void> {
         ],
       },
     });
+    return;
+  }
+
+  // 1b. Fully Automated Browser Sync: /nlm auto <subject>
+  if (subCommand === "auto" || subCommand === "sync") {
+    const iitmBundles = getIITMGrokkingBundles();
+    let targetBundle = iitmBundles.find((b) => b.subject === target || `iitm_${b.subject}` === target);
+    if (!targetBundle && (!target || target === "cn")) {
+      targetBundle = iitmBundles[0]; // Default: Computer Networks
+    }
+
+    const title = targetBundle?.title || `Fabric OS: ${target || "Knowledge Base"}`;
+    const filePath = targetBundle?.filePath || path.resolve(process.cwd(), "data/notebooklm_sources/Fabric_Master_Heuristics_and_Axioms.md");
+
+    const waitMsg = await ctx.reply(
+      `🤖 *Autonomous NotebookLM Sync Initiated!*\n\n` +
+        `• Target: *${title}*\n` +
+        `• Chrome CDP: \`Connected to ~/.fabric/browser_profile\`\n` +
+        `⏳ _Creating notebook, uploading markdown source & triggering Audio Overview podcast..._`,
+      { parse_mode: "Markdown" }
+    );
+
+    try {
+      const res = await syncNotebookLM(title, filePath, true);
+      if (res.success) {
+        let reply = `🎙️ *NotebookLM Fully Synced & Podcast Triggered!*\n\n`;
+        reply += `• **Notebook:** *${res.title}*\n`;
+        reply += `• **Source Uploaded:** \`${res.sourceTitle || "Markdown Source"}\`\n`;
+        reply += `• **Audio Status:** \`${res.audioStatus}\`\n\n`;
+        reply += `Open the notebook below to listen to the dual-host deep dive:`;
+
+        const keyboard = new InlineKeyboard();
+        if (res.notebookUrl) {
+          keyboard.url("🎙️ Listen on Google NotebookLM", res.notebookUrl);
+        }
+
+        await ctx.api.editMessageText(ctx.chat!.id, waitMsg.message_id, reply, {
+          parse_mode: "Markdown",
+          reply_markup: keyboard,
+        });
+      } else {
+        await ctx.api.editMessageText(
+          ctx.chat!.id,
+          waitMsg.message_id,
+          `⚠️ *NotebookLM Auto-Sync Notice:*\n\n${res.error}\n\n_If first time, ensure your Google Chrome profile has logged into notebooklm.google.com._`,
+          { parse_mode: "Markdown" }
+        );
+      }
+    } catch (err: any) {
+      await ctx.api.editMessageText(
+        ctx.chat!.id,
+        waitMsg.message_id,
+        `❌ *Sync Error:* ${err.message}`,
+        { parse_mode: "Markdown" }
+      );
+    }
     return;
   }
 
