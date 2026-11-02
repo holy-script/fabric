@@ -67,11 +67,11 @@ Rather than managing tasks as static checklists, Fabric OS models every human ac
 
 ## 2. Genesis & Evolution Timeline
 
-Fabric OS did not emerge as a rigid waterfall specification; it evolved organically across **seven distinct technological eras**, with each epoch expanding the boundary between human intent and machine actuation.
+Fabric OS did not emerge as a rigid waterfall specification; it evolved organically across **eight distinct technological eras**, with each epoch expanding the boundary between human intent and machine actuation.
 
 ```mermaid
 timeline
-    title The Seven Epochs of Fabric OS
+    title The Eight Epochs of Fabric OS
     Era 1 : 4F Framework Genesis : Brainstorm with Gemini : Time-Knowledge-Capital Triad : Aristotelian Virtue Vectors
     Era 2 : Telemetry Hub : Telegram Bot Gateway : Firestore Ledger : Trade Accounting : Hopecore Vault
     Era 3 : Physical & Biofeedback : FOCI BLE Respiration : Android ADB DND : Battery & GSM SMS Gateway : Wearable Recovery Scores
@@ -79,6 +79,7 @@ timeline
     Era 5 : Knowledge Mesh & Vault : 3,840+ Post Vault : Tor SOCKS5 & R2 Pool : Private Telegram Cloud Stream : 97-Node Constellation
     Era 6 : Meta-Foundations : Google NotebookLM Podcast Bridge : Google AI Mode Extractor : IITM Academic Grokking Foundry
     Era 7 : Autonomous Meta-OS : Browser Automation Driver : HTN Task DAG Compiler : Episodic Reflexion Loop : Dynamic HUD Cockpit
+    Era 8 : Dynamic Island & Coursework Foundry : Native macOS Dynamic Island : IITM Quiz 1 Academy : Apple Vision OCR : Visual HTN DAG Canvas
 ```
 
 ### Era 1: 4F Framework Genesis & Philosophical Foundations
@@ -128,13 +129,22 @@ timeline
   - **Google AI Mode Web Extractor:** Multi-engine fallback (SerpApi, Google AI Mode, Google CSE, DuckDuckGo) parsing structured markdown blueprints from live web research.
   - **IITM Academic Grokking Foundry:** Full curriculum question bank and practice test harness for IIT Madras BS Degree courses (System Commands, Mathematics, and Computational Thinking).
 
-### Era 7: The Autonomous Meta-OS
-- **Commits:** `056185d` (Latest release).
+### Era 7: Autonomous Meta-OS
+- **Commits:** `056185d`, `8ef70a3`.
 - **Executive Automation:**
   - **Puppeteer Browser Automation Driver:** Headless and headful Chrome automation maintaining a persistent session profile (`~/.fabric/browser_profile`) for zero-login-wall interaction with Google NotebookLM and web research endpoints.
   - **Hierarchical Task Network (HTN) Planner:** Goal-to-DAG compiler breaking high-level objectives into validated, topologically sorted execution dependency graphs.
   - **Autonomous Episodic Reflexion Loop:** Self-reflective cognitive auditor analyzing trade histories, isolating friction points, and inducing high-order actionable heuristics.
   - **Unified Visual HUD Cockpit:** Single-pane dashboard serving real-time telemetry, 10-axis radar virtue charts, interactive 3D constellation, and live FOCI biofeedback bars.
+
+### Era 8: Dynamic Island & Coursework Foundry
+- **Commits:** `d373858` (Current release).
+- **Ambient Surfaces & Academic Synthesis:**
+  - **Dynamic Island & macOS Smart Surfaces:** Apple-grade OLED glassmorphism HUD (`/island`) featuring fluid FOCI breathing wave, radial focus timer, and 1-tap quick action dock; SwiftBar menu bar plugin (`fabric-menubar.5s.sh`) and Raycast dispatchers.
+  - **IITM BS Quiz 1 Academy:** Complete extraction and verification of 179 past exam questions across Computer Networks, Computer Systems Design, and BDBN.
+  - **Native Apple Vision OCR:** High-precision OCR (`scripts/ocr_image.swift`) extracting inline math equations, hexadecimal checksum words, and logic circuit diagrams.
+  - **Visual HTN Task DAG Canvas:** Full topological DAG renderer on `/dashboard#tasks` with step execution statuses, dependency Bezier arcs, and step inspector drawers.
+  - **Zero-Cold-Start Graph Optimization:** Serverless bundling and inverse-zoom label damping resolving canvas visual overlapping.
 
 ---
 
@@ -447,12 +457,14 @@ The architecture specified in this dossier is fully implemented and tested in th
 | **Cognitive Sentinel** | `src/ai/sentinel.ts` | `tests/reflexion.test.ts` | **Passing (100%)** |
 | **Polymath Council** | `src/ai/council.ts` | `tests/a2a.test.ts` | **Passing (100%)** |
 | **FOCI BLE & Wearables**| `src/services/wearables.ts` | `tests/telemetry_foci.test.ts` | **Passing (100%)** |
-| **Knowledge Graph** | `src/graph/query.ts` | `tests/conversation.test.ts` | **Passing (100%)** |
-| **Browser Driver** | `src/browser/driver.ts` | `tests/browser_automation.test.ts`| **Passing (100%)** |
-| **HTN Task Planner** | `src/tasks/planner.ts` | `tests/task_planner.test.ts` | **Passing (100%)** |
-| **Episodic Reflexion** | `src/ai/reflexion.ts` | `tests/reflexion.test.ts` | **Passing (100%)** |
-| **IITM Grokking Foundry**| `scripts/build-iitm-grokking-sources.py` | `tests/iitm_grokking.test.ts` | **Passing (100%)** |
-| **Comprehensive QC Suite**| `scripts/test-all-features.ts` | `bun run test:features` | **Passing (47/47 tests)** |
+| **Knowledge Graph (97-Node Mesh)**| `src/graph/query.ts` | `tests/dashboard.test.ts` | **Passing (100%)** |
+| **Browser Driver & Adapters** | `src/browser/driver.ts` | `tests/browser_automation.test.ts`| **Passing (100%)** |
+| **HTN Task Planner & DAG** | `src/tasks/planner.ts` | `tests/task_planner.test.ts` | **Passing (100%)** |
+| **Episodic Reflexion Loop**| `src/ai/reflexion.ts` | `tests/reflexion.test.ts` | **Passing (100%)** |
+| **macOS Ambient Daemon**| `scripts/fabric-ambient-daemon.ts` | `tests/ambient.test.ts` | **Passing (100%)** |
+| **Dynamic Island & Quick Surfaces**| `api/island.ts`, `api/quick.ts` | `tests/quick_api.test.ts` | **Passing (100%)** |
+| **IITM Quiz 1 Grokking Foundry**| `data/iitm_prep/` | `tests/iitm_prep.test.ts` | **Passing (100%)** |
+| **Global Verification QC Suite**| `tests/` (15 test files) | `bun test` | **Passing (113/113 tests)** |
 
 ---
 

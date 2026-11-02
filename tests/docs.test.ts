@@ -19,6 +19,7 @@ describe("Fabric OS Architecture & Explainability Dossier QC Suite", () => {
     expect(content).toContain("Era 5");
     expect(content).toContain("Era 6");
     expect(content).toContain("Era 7");
+    expect(content).toContain("Era 8");
     expect(content).toContain("The 4F Unified Equation & Cybernetic Loops");
     expect(content).toContain("Aristotelian Virtue Vector");
     expect(content).toContain("System Architecture");
@@ -53,7 +54,7 @@ describe("Fabric OS Architecture & Explainability Dossier QC Suite", () => {
     expect(responseBody).toContain("katex.min.js");
     expect(responseBody).toContain("mermaid.min.js");
     expect(responseBody).toContain("marked.min.js");
-    expect(responseBody).toContain("The Seven Epochs of Fabric OS");
+    expect(responseBody).toContain("The Eight Epochs of Fabric OS");
   });
 
   it("serves raw markdown when ?raw=true is specified", async () => {
