@@ -9,8 +9,12 @@ export async function handleDashboard(ctx: Context) {
   }
 
   const dashboardUrl = `https://fabric-one-sage.vercel.app/api/dashboard?userId=${userId}`;
+  const docsUrl = `https://fabric-one-sage.vercel.app/docs`;
 
-  const keyboard = new InlineKeyboard().webApp("📊 Open Visual HUD", dashboardUrl);
+  const keyboard = new InlineKeyboard()
+    .webApp("📊 Open Visual HUD", dashboardUrl)
+    .row()
+    .url("📜 Architecture & Explainability Dossier", docsUrl);
 
   const message =
     `🔮 *The Fabric: Visual HUD & Mini App*\n\n` +

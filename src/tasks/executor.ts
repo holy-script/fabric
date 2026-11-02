@@ -1,4 +1,5 @@
 import { validateDAG } from "./planner.js";
+import { getCurrentAmbientContext } from "../services/ambient.js";
 import type {
   TaskPlan,
   TaskStep,
@@ -232,13 +233,20 @@ export class TaskExecutor {
     plan.status = "running";
     plan.updatedAt = new Date().toISOString();
 
+    const ambientSeed = initialBlackboard.ambient !== undefined
+      ? initialBlackboard.ambient
+      : await getCurrentAmbientContext().catch(() => null);
+
     const state: ExecutionState = {
       activePlanId: plan.id,
       completedStepIds: [],
       failedStepIds: [],
       runningStepIds: [],
       skippedStepIds: [],
-      blackboard: { ...initialBlackboard },
+      blackboard: {
+        ...(ambientSeed ? { ambient: ambientSeed } : {}),
+        ...initialBlackboard,
+      },
     };
 
     const completedSet = new Set<string>();

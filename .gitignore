@@ -27,3 +27,9 @@ data/notebooklm_sources/*
 !data/notebooklm_sources/iitm_*
 
 .telegram_vault_tracker.json
+.ambient_state.json
+data/ambient_context.json
+data/sessions_quick.json
+data/trades_quick.json
+data/tasks/*
+!data/tasks/.gitkeep

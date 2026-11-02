@@ -6,7 +6,11 @@
   "rewrites": [
     { "source": "/", "destination": "/api/dashboard" },
     { "source": "/dashboard", "destination": "/api/dashboard" },
+    { "source": "/docs", "destination": "/api/docs" },
+    { "source": "/explainability", "destination": "/api/docs" },
+    { "source": "/island", "destination": "/api/island" },
     { "source": "/a2a", "destination": "/api/a2a" },
+    { "source": "/quick", "destination": "/api/quick" },
     { "source": "/health", "destination": "/api/webhooks/health" }
   ],
   "crons": [

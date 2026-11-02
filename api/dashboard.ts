@@ -523,6 +523,10 @@ export default async function handler(
         </div>
       </div>
       <div class="flex items-center gap-1.5">
+        <a href="/docs" target="_blank" class="px-2.5 py-1.5 rounded-lg bg-cyan-950/40 hover:bg-cyan-900/60 text-cyan-300 border border-cyan-500/40 text-xs font-mono font-medium flex items-center gap-1.5 transition active:scale-95" title="Master Architecture & Explainability Dossier">
+          <span>📜</span>
+          <span class="hidden sm:inline">Dossier</span>
+        </a>
         <button onclick="refreshDashboard()" class="p-2 rounded-lg bg-zinc-800/80 hover:bg-zinc-700 text-zinc-300 border border-zinc-700/60 transition active:scale-95" title="Refresh Telemetry">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />

@@ -4,6 +4,7 @@ import { searchGraph } from "../graph/query.js";
 import { searchWebDetailed } from "../services/websearch.js";
 import { getUserState, getRecentTrades } from "../db/firestore.js";
 import { getAllDomains } from "../domains/manager.js";
+import { getCurrentAmbientContext, formatAmbientPromptContext } from "../services/ambient.js";
 import type { UserState, Trade } from "../db/types.js";
 
 const genAI = new GoogleGenerativeAI(config.geminiApiKey);
@@ -89,10 +90,11 @@ export async function answerConversationalQuery(
       new Promise<T>((resolve) => setTimeout(() => resolve(fallback), 1000)),
     ]);
 
-  const [userState, recentTrades, domainState] = await Promise.all([
+  const [userState, recentTrades, domainState, ambientContext] = await Promise.all([
     safeFetch(getUserState(userId), null),
     safeFetch(getRecentTrades(userId, 3), []),
     safeFetch(getAllDomains(userId), { active: [], bench: [] } as any),
+    safeFetch(getCurrentAmbientContext(), null),
   ]);
 
   // 1. Query Knowledge Graph for matching nodes, vaulted reels, heuristics
@@ -159,6 +161,7 @@ export async function answerConversationalQuery(
   const userDiagnosis = userState?.goldenMeans
     ? `Aristotle Scales: Logic (${userState.goldenMeans.logic || 0}), Vitality (${userState.goldenMeans.vitality || 0}), Expressionism (${userState.goldenMeans.expressionism || 0}), Variety (${userState.goldenMeans.variety || 0}), Prioritization (${userState.goldenMeans.prioritization || 0})`
     : "";
+  const ambientPrompt = ambientContext ? formatAmbientPromptContext(ambientContext) : "";
 
   const systemPrompt = `You are Fabric OS — the user's autonomous 4F Meta-OS and intellectual sparring partner.
 Core Philosophy:
@@ -169,7 +172,7 @@ Core Philosophy:
 
 Active Mounted Domains: [${activeDomainNames}]
 ${userDiagnosis ? `User State: ${userDiagnosis}\n` : ""}
-
+${ambientPrompt ? `${ambientPrompt}\n` : ""}
 Context Sources Provided:
 ${localContextStr}
 ${webContextStr}
