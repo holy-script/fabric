@@ -1,0 +1,38 @@
+{
+  "id": "gem_alpha_789",
+  "url": "https://www.youtube.com/watch?v=gem_alpha_789",
+  "title": "IITM Computer Systems Design Groove",
+  "artist": "Silicon Wave",
+  "duration": 300,
+  "thumbnailUrl": "https://example.com/alpha.jpg",
+  "context": {
+    "personalNote": "Unreleased gem from 2021. Peak clarity.",
+    "memories": [],
+    "sonicTexture": {
+      "hasVocals": false,
+      "energyLevel": 5,
+      "mood": [
+        "ambient",
+        "flow"
+      ],
+      "genreTags": [
+        "iitm",
+        "synthwave",
+        "instrumental"
+      ]
+    },
+    "stateAffinity": {
+      "focus": 0,
+      "optimalActivity": [
+        "CASUAL_FLOW",
+        "CREATIVE_BUILD"
+      ]
+    }
+  },
+  "telemetry": {
+    "playCount": 0,
+    "skipCount": 0,
+    "addedAt": 1793709813603,
+    "updatedAt": 1793709813603
+  }
+}

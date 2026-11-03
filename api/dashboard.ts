@@ -11,6 +11,8 @@ import { getLatestBiometrics } from "../src/services/wearables.js";
 import { loadQuestionBank } from "../src/bot/commands/prep.js";
 import { listPlansLocal } from "../src/tasks/store.js";
 import type { TaskPlan } from "../src/tasks/types.js";
+import { listSongs, listPlaylists } from "../src/music/store.js";
+import type { FabricSong, FabricPlaylist } from "../src/music/types.js";
 
 function escapeHtml(str: string | undefined | null): string {
   if (!str) return "";
@@ -369,6 +371,15 @@ export default async function handler(
       console.warn("Failed to load task plans for dashboard:", e);
     }
 
+    let musicSongs: FabricSong[] = [];
+    let musicPlaylists: FabricPlaylist[] = [];
+    try {
+      musicSongs = await withTimeout(listSongs(), 1500, []);
+      musicPlaylists = await withTimeout(listPlaylists(), 1500, []);
+    } catch (e) {
+      console.warn("Failed to load music for dashboard:", e);
+    }
+
     if (!taskPlans || taskPlans.length === 0) {
       taskPlans = [
         {
@@ -671,6 +682,13 @@ export default async function handler(
       <span class="text-sm">⚡</span>
       <span class="truncate">HTN Tasks</span>
       <span class="hidden sm:inline-block text-[9px] font-mono uppercase px-1 py-0.2 rounded bg-purple-500/20 text-purple-300 border border-purple-500/30">DAG</span>
+    </button>
+
+    <!-- TAB 6: SONIC MIND & NEWPIPE -->
+    <button id="navTabSonic" onclick="switchMainTab('sonic')" class="flex-1 min-w-[95px] py-2 px-2 sm:px-3 rounded-xl flex items-center justify-center gap-1.5 transition-all active:scale-95 text-zinc-400 hover:text-zinc-200 border border-transparent">
+      <span class="text-sm">🎵</span>
+      <span class="truncate">Sonic Mind</span>
+      <span class="hidden sm:inline-block text-[9px] font-mono uppercase px-1 py-0.2 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">NewPipe</span>
     </button>
   </nav>
 
@@ -1577,6 +1595,219 @@ export default async function handler(
   </main>
 
   <!-- ========================================== -->
+  <!-- TAB 6: SONIC MIND & NEWPIPE ENGINE SECTION -->
+  <!-- ========================================== -->
+  <main id="tabContentSonic" class="flex flex-col gap-4 hidden">
+
+    <!-- HEADER / INTRO HERO CARD -->
+    <section class="glass-card glow-cyan rounded-2xl p-5 border border-zinc-800 relative overflow-hidden">
+      <div class="absolute -right-4 -top-4 w-28 h-28 bg-emerald-500/10 rounded-full blur-2xl pointer-events-none"></div>
+      
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <div class="flex items-center gap-2 mb-1">
+            <span class="text-xl">🎵</span>
+            <h2 class="text-base font-bold text-zinc-100 tracking-tight">Fabric Sonic Mind & Personal Music Memory</h2>
+            <span class="text-[9px] font-mono uppercase px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">NewPipe Sync</span>
+          </div>
+          <p class="text-xs text-zinc-400 max-w-xl leading-relaxed">
+            Bi-directional cloud synchronization with your custom NewPipe Android build. Every song stores semantic resonance—why it matters, what memories it triggers, and its exact 4F state affinity.
+          </p>
+        </div>
+
+        <div class="hidden sm:flex flex-col items-end gap-1">
+          <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-[10px] font-mono text-emerald-400">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            Cloud Sync Active
+          </span>
+          <span class="text-[10px] font-mono text-zinc-500">Firestore &bull; Android WorkManager</span>
+        </div>
+      </div>
+
+      <!-- METRICS GRID -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 mt-4 pt-4 border-t border-zinc-800/80">
+        <div class="p-2.5 rounded-xl bg-zinc-950/60 border border-zinc-800/60 flex flex-col">
+          <span class="text-[10px] font-mono text-zinc-500 uppercase">Indexed Tracks</span>
+          <span class="text-base font-bold font-mono text-zinc-100 mt-0.5">${musicSongs.length}</span>
+        </div>
+        <div class="p-2.5 rounded-xl bg-zinc-950/60 border border-zinc-800/60 flex flex-col">
+          <span class="text-[10px] font-mono text-zinc-500 uppercase">Active Playlists</span>
+          <span class="text-base font-bold font-mono text-emerald-400 mt-0.5">${musicPlaylists.length}</span>
+        </div>
+        <div class="p-2.5 rounded-xl bg-zinc-950/60 border border-zinc-800/60 flex flex-col">
+          <span class="text-[10px] font-mono text-zinc-500 uppercase">AI Smart Mixes</span>
+          <span class="text-base font-bold font-mono text-cyan-400 mt-0.5">${musicPlaylists.filter(p => p.isSmartMix).length}</span>
+        </div>
+        <div class="p-2.5 rounded-xl bg-zinc-950/60 border border-zinc-800/60 flex flex-col">
+          <span class="text-[10px] font-mono text-zinc-500 uppercase">Recall Rate</span>
+          <span class="text-base font-bold font-mono text-purple-400 mt-0.5">Spaced DJ</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- DYNAMIC MIX GENERATOR PRESETS -->
+    <section class="glass-card rounded-2xl p-4 border border-zinc-800 flex flex-col gap-3">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="text-sm">🎧</span>
+          <h3 class="text-xs font-bold uppercase tracking-wider text-zinc-300">Goal-Oriented Mix Synthesizer</h3>
+        </div>
+        <span class="text-[10px] font-mono text-zinc-500">1-Tap Telegram / NewPipe Queue</span>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+        <button onclick="copyCommand('/mix IITM Computer Systems Design 90m')" class="p-3 rounded-xl bg-zinc-900/80 hover:bg-zinc-800/80 border border-zinc-800 text-left transition-all group flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-bold text-cyan-300 group-hover:text-cyan-200">IITM CSD War Room</span>
+              <span class="text-[10px] font-mono text-zinc-500">90m</span>
+            </div>
+            <p class="text-[11px] text-zinc-400 leading-snug">Continuous cadence, strict instrumental, high-yield focus arc.</p>
+          </div>
+          <span class="text-[9px] font-mono text-cyan-400/80 mt-2 flex items-center gap-1">📋 Tap to copy /mix command &rarr;</span>
+        </button>
+
+        <button onclick="copyCommand('/mix Late night cybernetic coding 60m')" class="p-3 rounded-xl bg-zinc-900/80 hover:bg-zinc-800/80 border border-zinc-800 text-left transition-all group flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-bold text-purple-300 group-hover:text-purple-200">Cybernetic Flow</span>
+              <span class="text-[10px] font-mono text-zinc-500">60m</span>
+            </div>
+            <p class="text-[11px] text-zinc-400 leading-snug">Tokyo ambient synth, fast keyboard velocity, flow harmonics.</p>
+          </div>
+          <span class="text-[9px] font-mono text-purple-400/80 mt-2 flex items-center gap-1">📋 Tap to copy /mix command &rarr;</span>
+        </button>
+
+        <button onclick="copyCommand('/mix Spaced repetition forgotten gems 45m')" class="p-3 rounded-xl bg-zinc-900/80 hover:bg-zinc-800/80 border border-zinc-800 text-left transition-all group flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-bold text-emerald-300 group-hover:text-emerald-200">Forgotten Gems Recall</span>
+              <span class="text-[10px] font-mono text-zinc-500">45m</span>
+            </div>
+            <p class="text-[11px] text-zinc-400 leading-snug">Resurfaces tracks unplayed in 30+ days with high personal notes.</p>
+          </div>
+          <span class="text-[9px] font-mono text-emerald-400/80 mt-2 flex items-center gap-1">📋 Tap to copy /mix command &rarr;</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- ACTIVE PLAYLISTS & SONG MEMORY VAULT -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+      
+      <!-- COLUMN 1: PLAYLISTS & MIXES -->
+      <section class="glass-card rounded-2xl p-4 border border-zinc-800 flex flex-col gap-3 lg:col-span-1">
+        <div class="flex items-center justify-between pb-2 border-b border-zinc-800">
+          <div class="flex items-center gap-2">
+            <span class="text-sm">📁</span>
+            <h3 class="text-xs font-bold uppercase tracking-wider text-zinc-300">Playlists & Mixes</h3>
+          </div>
+          <span class="text-[10px] font-mono text-zinc-500">${musicPlaylists.length}</span>
+        </div>
+
+        <div class="flex flex-col gap-2 max-h-[600px] overflow-y-auto pr-1">
+          ${musicPlaylists.length === 0 ? `
+            <div class="p-4 rounded-xl bg-zinc-950/40 border border-zinc-800/60 text-center">
+              <p class="text-xs text-zinc-400 mb-1">No playlists created yet.</p>
+              <p class="text-[11px] text-zinc-500">Use <code class="text-cyan-400">/mix</code> in Telegram or sync your NewPipe database.</p>
+            </div>
+          ` : musicPlaylists.map(playlist => `
+            <div class="p-3 rounded-xl bg-zinc-900/70 border border-zinc-800/80 hover:border-zinc-700 transition-all flex flex-col gap-1.5">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-zinc-200 truncate">${escapeHtml(playlist.name)}</span>
+                ${playlist.isSmartMix ? `
+                  <span class="text-[9px] font-mono uppercase px-1 py-0.2 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">AI Mix</span>
+                ` : `
+                  <span class="text-[9px] font-mono text-zinc-500">${playlist.songIds.length} tracks</span>
+                `}
+              </div>
+              <p class="text-[11px] text-zinc-400 leading-snug">${escapeHtml(playlist.description || "Curated playlist")}</p>
+              <div class="flex items-center justify-between mt-1 text-[10px] font-mono text-zinc-500 pt-1 border-t border-zinc-800/50">
+                <span>v${playlist.version || 1}</span>
+                <span>${playlist.songIds.length} tracks &bull; Synced</span>
+              </div>
+            </div>
+          `).join("")}
+        </div>
+      </section>
+
+      <!-- COLUMN 2 & 3: SONG MEMORY VAULT (WITH PERSONAL CONTEXT) -->
+      <section class="glass-card rounded-2xl p-4 border border-zinc-800 flex flex-col gap-3 lg:col-span-2">
+        <div class="flex items-center justify-between pb-2 border-b border-zinc-800">
+          <div class="flex items-center gap-2">
+            <span class="text-sm">🧠</span>
+            <h3 class="text-xs font-bold uppercase tracking-wider text-zinc-300">Semantic Song Memory Vault</h3>
+          </div>
+          <span class="text-[10px] font-mono text-zinc-500">${musicSongs.length} Tracks Ingested</span>
+        </div>
+
+        <div class="flex flex-col gap-3 max-h-[600px] overflow-y-auto pr-1">
+          ${musicSongs.length === 0 ? `
+            <div class="p-6 rounded-xl bg-zinc-950/40 border border-zinc-800/60 text-center">
+              <span class="text-2xl mb-2 block">🎵</span>
+              <p class="text-xs font-bold text-zinc-300 mb-1">Your Sonic Mind is ready for ingestion.</p>
+              <p class="text-[11px] text-zinc-400 max-w-md mx-auto mb-3">
+                Drop any YouTube link into Telegram with a personal note explaining why it matters:
+              </p>
+              <code class="px-3 py-1.5 rounded-lg bg-zinc-900 border border-zinc-800 text-[11px] font-mono text-cyan-300">
+                /song https://youtu.be/XYZ Tokyo night walk feeling, high focus
+              </code>
+            </div>
+          ` : musicSongs.map(song => `
+            <div class="p-3.5 rounded-xl bg-zinc-900/80 border border-zinc-800/80 flex flex-col gap-2.5">
+              <div class="flex items-start justify-between gap-3">
+                <div class="flex items-center gap-3 min-w-0">
+                  <div class="w-12 h-12 rounded-lg bg-zinc-950 border border-zinc-800 overflow-hidden flex-shrink-0 flex items-center justify-center">
+                    ${song.thumbnailUrl ? `
+                      <img src="${escapeHtml(song.thumbnailUrl)}" alt="thumb" class="w-full h-full object-cover" />
+                    ` : `
+                      <span class="text-xs text-zinc-600">🎵</span>
+                    `}
+                  </div>
+                  <div class="min-w-0">
+                    <h4 class="text-xs font-bold text-zinc-100 truncate">${escapeHtml(song.title)}</h4>
+                    <p class="text-[11px] text-zinc-400 truncate">${escapeHtml(song.artist)} &bull; ${Math.round(song.duration / 60)} min</p>
+                  </div>
+                </div>
+
+                <div class="flex items-center gap-1.5 flex-shrink-0">
+                  <span class="text-[10px] font-mono px-2 py-0.5 rounded-md bg-zinc-950 border border-zinc-800 text-zinc-300">
+                    ⚡ ${song.context.sonicTexture.energyLevel || 5}/10
+                  </span>
+                  <button onclick="openExternalUrl('${escapeHtml(song.url)}')" class="p-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-300 transition-all text-xs" title="Open Stream">
+                    🔗
+                  </button>
+                </div>
+              </div>
+
+              <!-- PERSONAL CONTEXT NOTE ("WHY IT MATTERS") -->
+              <div class="p-2.5 rounded-lg bg-zinc-950/70 border border-zinc-800/70 text-[11px]">
+                <div class="flex items-center gap-1 text-[10px] font-mono uppercase text-emerald-400 mb-1">
+                  <span>💡</span>
+                  <span>Personal Resonance & Context:</span>
+                </div>
+                <p class="text-zinc-300 leading-relaxed italic">
+                  "${escapeHtml(song.context.personalNote || "Curated track. No notes provided yet.")}"
+                </p>
+              </div>
+
+              <!-- TAGS & STATE AFFINITY -->
+              <div class="flex items-center justify-between text-[10px] font-mono text-zinc-500 pt-1">
+                <div class="flex items-center gap-1 flex-wrap">
+                  ${(song.context.sonicTexture.genreTags || []).map(tag => `
+                    <span class="px-1.5 py-0.2 rounded bg-zinc-950 border border-zinc-800 text-zinc-400">#${escapeHtml(tag)}</span>
+                  `).join("")}
+                </div>
+                <span>Plays: ${song.telemetry.playCount || 0}</span>
+              </div>
+            </div>
+          `).join("")}
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- ========================================== -->
   <!-- TAB 5: HTN TASK DAG ENGINE SECTION         -->
   <!-- ========================================== -->
   <main id="tabContentTasks" class="flex flex-col gap-4 hidden">
@@ -1726,6 +1957,219 @@ export default async function handler(
     </section>
   </main>
 
+  <!-- ========================================== -->
+  <!-- TAB 6: SONIC MIND & NEWPIPE ENGINE SECTION -->
+  <!-- ========================================== -->
+  <main id="tabContentSonic" class="flex flex-col gap-4 hidden">
+
+    <!-- HEADER / INTRO HERO CARD -->
+    <section class="glass-card glow-cyan rounded-2xl p-5 border border-zinc-800 relative overflow-hidden">
+      <div class="absolute -right-4 -top-4 w-28 h-28 bg-emerald-500/10 rounded-full blur-2xl pointer-events-none"></div>
+      
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <div class="flex items-center gap-2 mb-1">
+            <span class="text-xl">🎵</span>
+            <h2 class="text-base font-bold text-zinc-100 tracking-tight">Fabric Sonic Mind & Personal Music Memory</h2>
+            <span class="text-[9px] font-mono uppercase px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">NewPipe Sync</span>
+          </div>
+          <p class="text-xs text-zinc-400 max-w-xl leading-relaxed">
+            Bi-directional cloud synchronization with your custom NewPipe Android build. Every song stores semantic resonance—why it matters, what memories it triggers, and its exact 4F state affinity.
+          </p>
+        </div>
+
+        <div class="hidden sm:flex flex-col items-end gap-1">
+          <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-[10px] font-mono text-emerald-400">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            Cloud Sync Active
+          </span>
+          <span class="text-[10px] font-mono text-zinc-500">Firestore &bull; Android WorkManager</span>
+        </div>
+      </div>
+
+      <!-- METRICS GRID -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 mt-4 pt-4 border-t border-zinc-800/80">
+        <div class="p-2.5 rounded-xl bg-zinc-950/60 border border-zinc-800/60 flex flex-col">
+          <span class="text-[10px] font-mono text-zinc-500 uppercase">Indexed Tracks</span>
+          <span class="text-base font-bold font-mono text-zinc-100 mt-0.5">${musicSongs.length}</span>
+        </div>
+        <div class="p-2.5 rounded-xl bg-zinc-950/60 border border-zinc-800/60 flex flex-col">
+          <span class="text-[10px] font-mono text-zinc-500 uppercase">Active Playlists</span>
+          <span class="text-base font-bold font-mono text-emerald-400 mt-0.5">${musicPlaylists.length}</span>
+        </div>
+        <div class="p-2.5 rounded-xl bg-zinc-950/60 border border-zinc-800/60 flex flex-col">
+          <span class="text-[10px] font-mono text-zinc-500 uppercase">AI Smart Mixes</span>
+          <span class="text-base font-bold font-mono text-cyan-400 mt-0.5">${musicPlaylists.filter(p => p.isSmartMix).length}</span>
+        </div>
+        <div class="p-2.5 rounded-xl bg-zinc-950/60 border border-zinc-800/60 flex flex-col">
+          <span class="text-[10px] font-mono text-zinc-500 uppercase">Recall Rate</span>
+          <span class="text-base font-bold font-mono text-purple-400 mt-0.5">Spaced DJ</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- DYNAMIC MIX GENERATOR PRESETS -->
+    <section class="glass-card rounded-2xl p-4 border border-zinc-800 flex flex-col gap-3">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="text-sm">🎧</span>
+          <h3 class="text-xs font-bold uppercase tracking-wider text-zinc-300">Goal-Oriented Mix Synthesizer</h3>
+        </div>
+        <span class="text-[10px] font-mono text-zinc-500">1-Tap Telegram / NewPipe Queue</span>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+        <button onclick="copyCommand('/mix IITM Computer Systems Design 90m')" class="p-3 rounded-xl bg-zinc-900/80 hover:bg-zinc-800/80 border border-zinc-800 text-left transition-all group flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-bold text-cyan-300 group-hover:text-cyan-200">IITM CSD War Room</span>
+              <span class="text-[10px] font-mono text-zinc-500">90m</span>
+            </div>
+            <p class="text-[11px] text-zinc-400 leading-snug">Continuous cadence, strict instrumental, high-yield focus arc.</p>
+          </div>
+          <span class="text-[9px] font-mono text-cyan-400/80 mt-2 flex items-center gap-1">📋 Tap to copy /mix command &rarr;</span>
+        </button>
+
+        <button onclick="copyCommand('/mix Late night cybernetic coding 60m')" class="p-3 rounded-xl bg-zinc-900/80 hover:bg-zinc-800/80 border border-zinc-800 text-left transition-all group flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-bold text-purple-300 group-hover:text-purple-200">Cybernetic Flow</span>
+              <span class="text-[10px] font-mono text-zinc-500">60m</span>
+            </div>
+            <p class="text-[11px] text-zinc-400 leading-snug">Tokyo ambient synth, fast keyboard velocity, flow harmonics.</p>
+          </div>
+          <span class="text-[9px] font-mono text-purple-400/80 mt-2 flex items-center gap-1">📋 Tap to copy /mix command &rarr;</span>
+        </button>
+
+        <button onclick="copyCommand('/mix Spaced repetition forgotten gems 45m')" class="p-3 rounded-xl bg-zinc-900/80 hover:bg-zinc-800/80 border border-zinc-800 text-left transition-all group flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-bold text-emerald-300 group-hover:text-emerald-200">Forgotten Gems Recall</span>
+              <span class="text-[10px] font-mono text-zinc-500">45m</span>
+            </div>
+            <p class="text-[11px] text-zinc-400 leading-snug">Resurfaces tracks unplayed in 30+ days with high personal notes.</p>
+          </div>
+          <span class="text-[9px] font-mono text-emerald-400/80 mt-2 flex items-center gap-1">📋 Tap to copy /mix command &rarr;</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- ACTIVE PLAYLISTS & SONG MEMORY VAULT -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+      
+      <!-- COLUMN 1: PLAYLISTS & MIXES -->
+      <section class="glass-card rounded-2xl p-4 border border-zinc-800 flex flex-col gap-3 lg:col-span-1">
+        <div class="flex items-center justify-between pb-2 border-b border-zinc-800">
+          <div class="flex items-center gap-2">
+            <span class="text-sm">📁</span>
+            <h3 class="text-xs font-bold uppercase tracking-wider text-zinc-300">Playlists & Mixes</h3>
+          </div>
+          <span class="text-[10px] font-mono text-zinc-500">${musicPlaylists.length}</span>
+        </div>
+
+        <div class="flex flex-col gap-2 max-h-[600px] overflow-y-auto pr-1">
+          ${musicPlaylists.length === 0 ? `
+            <div class="p-4 rounded-xl bg-zinc-950/40 border border-zinc-800/60 text-center">
+              <p class="text-xs text-zinc-400 mb-1">No playlists created yet.</p>
+              <p class="text-[11px] text-zinc-500">Use <code class="text-cyan-400">/mix</code> in Telegram or sync your NewPipe database.</p>
+            </div>
+          ` : musicPlaylists.map(playlist => `
+            <div class="p-3 rounded-xl bg-zinc-900/70 border border-zinc-800/80 hover:border-zinc-700 transition-all flex flex-col gap-1.5">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-zinc-200 truncate">${escapeHtml(playlist.name)}</span>
+                ${playlist.isSmartMix ? `
+                  <span class="text-[9px] font-mono uppercase px-1 py-0.2 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">AI Mix</span>
+                ` : `
+                  <span class="text-[9px] font-mono text-zinc-500">${playlist.songIds.length} tracks</span>
+                `}
+              </div>
+              <p class="text-[11px] text-zinc-400 leading-snug">${escapeHtml(playlist.description || "Curated playlist")}</p>
+              <div class="flex items-center justify-between mt-1 text-[10px] font-mono text-zinc-500 pt-1 border-t border-zinc-800/50">
+                <span>v${playlist.version || 1}</span>
+                <span>${playlist.songIds.length} tracks &bull; Synced</span>
+              </div>
+            </div>
+          `).join("")}
+        </div>
+      </section>
+
+      <!-- COLUMN 2 & 3: SONG MEMORY VAULT (WITH PERSONAL CONTEXT) -->
+      <section class="glass-card rounded-2xl p-4 border border-zinc-800 flex flex-col gap-3 lg:col-span-2">
+        <div class="flex items-center justify-between pb-2 border-b border-zinc-800">
+          <div class="flex items-center gap-2">
+            <span class="text-sm">🧠</span>
+            <h3 class="text-xs font-bold uppercase tracking-wider text-zinc-300">Semantic Song Memory Vault</h3>
+          </div>
+          <span class="text-[10px] font-mono text-zinc-500">${musicSongs.length} Tracks Ingested</span>
+        </div>
+
+        <div class="flex flex-col gap-3 max-h-[600px] overflow-y-auto pr-1">
+          ${musicSongs.length === 0 ? `
+            <div class="p-6 rounded-xl bg-zinc-950/40 border border-zinc-800/60 text-center">
+              <span class="text-2xl mb-2 block">🎵</span>
+              <p class="text-xs font-bold text-zinc-300 mb-1">Your Sonic Mind is ready for ingestion.</p>
+              <p class="text-[11px] text-zinc-400 max-w-md mx-auto mb-3">
+                Drop any YouTube link into Telegram with a personal note explaining why it matters:
+              </p>
+              <code class="px-3 py-1.5 rounded-lg bg-zinc-900 border border-zinc-800 text-[11px] font-mono text-cyan-300">
+                /song https://youtu.be/XYZ Tokyo night walk feeling, high focus
+              </code>
+            </div>
+          ` : musicSongs.map(song => `
+            <div class="p-3.5 rounded-xl bg-zinc-900/80 border border-zinc-800/80 flex flex-col gap-2.5">
+              <div class="flex items-start justify-between gap-3">
+                <div class="flex items-center gap-3 min-w-0">
+                  <div class="w-12 h-12 rounded-lg bg-zinc-950 border border-zinc-800 overflow-hidden flex-shrink-0 flex items-center justify-center">
+                    ${song.thumbnailUrl ? `
+                      <img src="${escapeHtml(song.thumbnailUrl)}" alt="thumb" class="w-full h-full object-cover" />
+                    ` : `
+                      <span class="text-xs text-zinc-600">🎵</span>
+                    `}
+                  </div>
+                  <div class="min-w-0">
+                    <h4 class="text-xs font-bold text-zinc-100 truncate">${escapeHtml(song.title)}</h4>
+                    <p class="text-[11px] text-zinc-400 truncate">${escapeHtml(song.artist)} &bull; ${Math.round(song.duration / 60)} min</p>
+                  </div>
+                </div>
+
+                <div class="flex items-center gap-1.5 flex-shrink-0">
+                  <span class="text-[10px] font-mono px-2 py-0.5 rounded-md bg-zinc-950 border border-zinc-800 text-zinc-300">
+                    ⚡ ${song.context.sonicTexture.energyLevel || 5}/10
+                  </span>
+                  <button onclick="openExternalUrl('${escapeHtml(song.url)}')" class="p-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-300 transition-all text-xs" title="Open Stream">
+                    🔗
+                  </button>
+                </div>
+              </div>
+
+              <!-- PERSONAL CONTEXT NOTE ("WHY IT MATTERS") -->
+              <div class="p-2.5 rounded-lg bg-zinc-950/70 border border-zinc-800/70 text-[11px]">
+                <div class="flex items-center gap-1 text-[10px] font-mono uppercase text-emerald-400 mb-1">
+                  <span>💡</span>
+                  <span>Personal Resonance & Context:</span>
+                </div>
+                <p class="text-zinc-300 leading-relaxed italic">
+                  "${escapeHtml(song.context.personalNote || "Curated track. No notes provided yet.")}"
+                </p>
+              </div>
+
+              <!-- TAGS & STATE AFFINITY -->
+              <div class="flex items-center justify-between text-[10px] font-mono text-zinc-500 pt-1">
+                <div class="flex items-center gap-1 flex-wrap">
+                  ${(song.context.sonicTexture.genreTags || []).map(tag => `
+                    <span class="px-1.5 py-0.2 rounded bg-zinc-950 border border-zinc-800 text-zinc-400">#${escapeHtml(tag)}</span>
+                  `).join("")}
+                </div>
+                <span>Plays: ${song.telemetry.playCount || 0}</span>
+              </div>
+            </div>
+          `).join("")}
+        </div>
+      </section>
+
+    </div>
+  </main>
+
   <!-- ON-SCREEN TOAST NOTIFICATION -->
   <div id="dashboardToast" class="px-4 py-2 rounded-xl bg-zinc-900/95 border border-cyan-500/40 text-cyan-300 text-xs font-mono font-medium shadow-2xl flex items-center gap-2 backdrop-blur-md">
     <span>⚡</span>
@@ -1862,12 +2306,14 @@ export default async function handler(
       const graphContent = document.getElementById('tabContentGraph');
       const academyContent = document.getElementById('tabContentAcademy');
       const tasksContent = document.getElementById('tabContentTasks');
+      const sonicContent = document.getElementById('tabContentSonic');
 
       const navTabHud = document.getElementById('navTabHud');
       const navTabWorkbench = document.getElementById('navTabWorkbench');
       const navTabGraph = document.getElementById('navTabGraph');
       const navTabAcademy = document.getElementById('navTabAcademy');
       const navTabTasks = document.getElementById('navTabTasks');
+      const navTabSonic = document.getElementById('navTabSonic');
 
       // Hide all tabs
       hudContent?.classList.add('hidden');
@@ -1875,9 +2321,10 @@ export default async function handler(
       graphContent?.classList.add('hidden');
       academyContent?.classList.add('hidden');
       tasksContent?.classList.add('hidden');
+      sonicContent?.classList.add('hidden');
 
       // Reset all nav tabs
-      [navTabHud, navTabWorkbench, navTabGraph, navTabAcademy, navTabTasks].forEach(btn => {
+      [navTabHud, navTabWorkbench, navTabGraph, navTabAcademy, navTabTasks, navTabSonic].forEach(btn => {
         btn?.classList.remove('bg-zinc-800', 'text-cyan-400', 'shadow-md', 'border-cyan-500/30');
         btn?.classList.add('text-zinc-400', 'border-transparent');
       });
@@ -1924,6 +2371,11 @@ export default async function handler(
         navTabTasks?.classList.remove('text-zinc-400', 'border-transparent');
 
         if (window.initTaskDag) window.initTaskDag();
+
+      } else if (tab === 'sonic') {
+        sonicContent?.classList.remove('hidden');
+        navTabSonic?.classList.add('bg-zinc-800', 'text-cyan-400', 'shadow-md', 'border-cyan-500/30');
+        navTabSonic?.classList.remove('text-zinc-400', 'border-transparent');
 
       } else {
         // default: hud

@@ -44,6 +44,11 @@ import { handleNotebookLMCommand } from "./commands/notebooklm.js";
 import { handlePrep } from "./commands/prep.js";
 import { handleBrowserCommand, handleAiModeDirect } from "./commands/browser.js";
 import { handleTaskCommand } from "./commands/task.js";
+import {
+  handleSongCommand,
+  handleMixCommand,
+  handlePlaylistsCommand,
+} from "./commands/music.js";
 import { deduplicateUpdates } from "./middleware/dedup.js";
 import { handleNaturalMessage } from "./handlers/message.js";
 import { handleVoiceMessage } from "./handlers/voice.js";
@@ -102,6 +107,9 @@ export function createBot() {
       { command: "browser", description: "Autonomous Chrome browsing & screenshot capture" },
       { command: "aimode", description: "Google AI Mode browser synthesis & share link" },
       { command: "task", description: "Hierarchical Task Network (HTN) DAG executor" },
+      { command: "song", description: "Capture YouTube track with personal context into Sonic Mind" },
+      { command: "mix", description: "Generate dynamic AI flow mix for NewPipe" },
+      { command: "playlists", description: "View Fabric Sonic Mind playlists and track counts" },
       { command: "start", description: "Overview & instructions" },
     ])
     .catch((err) => console.error("Could not set bot commands:", err));
@@ -164,6 +172,9 @@ export function createBot() {
   bot.command(["browser", "browse"], handleBrowserCommand);
   bot.command("aimode", handleAiModeDirect);
   bot.command(["task", "plan"], handleTaskCommand);
+  bot.command("song", handleSongCommand);
+  bot.command("mix", handleMixCommand);
+  bot.command(["playlists", "music"], handlePlaylistsCommand);
   bot.command("ask", handleAsk);
 
   // Voice memo ingestion (multimodal)

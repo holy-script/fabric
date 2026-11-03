@@ -1,0 +1,12 @@
+{
+  "id": "mobile_playlist_1",
+  "name": "Created On Phone Inside NewPipe",
+  "description": "Sync test playlist",
+  "songIds": [
+    "test_song_123"
+  ],
+  "isSmartMix": false,
+  "version": 2,
+  "createdAt": 1793709813690,
+  "updatedAt": 1793709813690
+}

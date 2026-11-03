@@ -745,5 +745,39 @@ export async function handleCallbackQuery(ctx: Context) {
       .text("🏠 Academic Hub", "prep:menu");
 
     await ctx.reply(reply, { parse_mode: "Markdown", reply_markup: keyboard });
+  } else if (data.startsWith("music:energy:")) {
+    // format: music:energy:<songId>:<energyLevel>
+    const [, , songId, energyStr] = data.split(":");
+    const energyLevel = parseInt(energyStr, 10);
+    const { updateSongContext } = await import("../../music/store.js");
+    await updateSongContext(songId, {
+      sonicTexture: {
+        energyLevel,
+        hasVocals: false,
+        mood: energyLevel >= 7 ? ["high-energy", "driving"] : energyLevel <= 3 ? ["ambient", "restorative"] : ["flow", "focus"],
+        genreTags: [],
+      },
+    });
+    await ctx.reply(`⚡ *Calibrated energy for track* \`${songId}\` *to* \`${energyLevel}/10\`!`, {
+      parse_mode: "Markdown",
+    });
+  } else if (data.startsWith("music:addto:")) {
+    // format: music:addto:<songId>
+    const [, , songId] = data.split(":");
+    const { listPlaylists, addSongToPlaylist } = await import("../../music/store.js");
+    const playlists = await listPlaylists();
+    if (playlists.length === 0) {
+      await addSongToPlaylist("favorites", songId);
+      await ctx.reply(`➕ Added track \`${songId}\` to default *Favorites* playlist!`, {
+        parse_mode: "Markdown",
+      });
+    } else {
+      // Add to latest active playlist
+      const target = playlists[0];
+      await addSongToPlaylist(target.id, songId);
+      await ctx.reply(`➕ Added track \`${songId}\` to *${target.name}*!`, {
+        parse_mode: "Markdown",
+      });
+    }
   }
 }

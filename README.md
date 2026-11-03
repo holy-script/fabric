@@ -40,7 +40,7 @@ graph TD
 
     subgraph Surfaces["4. Ambient Smart Surfaces"]
         D1["Dynamic Island OLED Floating HUD (/island)"]
-        D2["5-Tab Cockpit Dashboard (/dashboard)"]
+        D2["6-Tab Cockpit Dashboard (/dashboard)"]
         D3["Telegram Bot (@fabric_meta_os_bot)"]
         D4["Raycast / Apple Shortcuts API Gateway (/api/quick)"]
         D5["macOS Menu Bar Item (SwiftBar)"]
@@ -80,7 +80,14 @@ graph TD
 - Compiles natural language goals into topological DAG plans with Kahn's cycle-detection algorithm.
 - Interactive SVG dependency graph displaying step states (`COMPLETED`, `RUNNING`, `FAILED`, `PENDING`), durations, and JSON execution outputs.
 
-### 6. 🤖 Autonomous Telegram Bot (`@fabric_meta_os_bot`)
+### 6. 🎵 Sonic Mind & FabricPipe (`/dashboard#sonic`)
+- **Semantic Music Memory Vault**: Stores personal resonance, emotional memories, 4F focus vector affinities, and energy levels (1-10) for every YouTube track.
+- **Bi-Directional Cloud Synchronization**: Delta sync engine (`/api/music/sync`) integrating with our custom NewPipe Android build (`fabric-newpipe`).
+- **Goal-Oriented AI DJ**: Synthesizes custom mixes based on current activity (IITM study, spark sprints, late night coding) with spaced repetition for forgotten gems.
+- **Telegram Actuation**: Drop any YouTube link to `@fabric_meta_os_bot` with `/song <url> [context]` to store and sync immediately.
+
+### 7. 🤖 Autonomous Telegram Bot (`@fabric_meta_os_bot`)
+- `/song <url> [context]` & `/mix <intent>` — Capture YouTube gems with personal context and generate dynamic mixes.
 - `/prep [cn|csd|bdbn]` — Interactive active recall sparring with instant feedback.
 - `/prep nlm [subject]` — Autonomous NotebookLM upload & podcast generation.
 - `/task <goal>` — Natural language goal compilation and execution.
@@ -126,3 +133,4 @@ For autonomous coding agents picking up tasks in new sessions, refer to the mast
 ---
 
 *The Fabric OS Project • Built for Human-Machine Symbiosis*
+

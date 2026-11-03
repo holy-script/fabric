@@ -1,0 +1,19 @@
+{
+  "id": "mix-1793709783612",
+  "name": "IITM CSD War Room Mix",
+  "description": "Synthesized for: \"IITM Computer Systems Design intense focus\". Total: 11 mins across 2 tracks.",
+  "intent": "IITM Computer Systems Design intense focus",
+  "songIds": [
+    "gem_alpha_789",
+    "test_song_123"
+  ],
+  "isSmartMix": true,
+  "mixRules": {
+    "targetDurationMinutes": 30,
+    "requireInstrumental": true,
+    "spacedRepetitionRatio": 0.4
+  },
+  "version": 2,
+  "createdAt": 1793709783612,
+  "updatedAt": 1793709783612
+}

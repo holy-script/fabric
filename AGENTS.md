@@ -2,8 +2,8 @@
 
 > **For AI Coding Agents & Autonomous Subagents**  
 > *Last Updated: November 3, 2026*  
-> *Test Status: 113 pass, 0 fail (15 test files, 3,563 assertions)*  
-> *Git Branch: `main` (`d373858`)*  
+> *Test Status: 120 pass, 0 fail (16 test files, 3,598 assertions)*  
+> *Git Branch: `main`*  
 > *Production Deployment: https://fabric-one-sage.vercel.app*
 
 ---
@@ -121,8 +121,14 @@ graph TD
 │   │   ├── query.ts                    # Knowledge graph search, path-finding & bundled fallback
 │   │   ├── builder.ts                  # Incremental graph compiler & synapse link generator
 │   │   └── types.ts                    # GraphNode, GraphEdge, GraphCluster schemas
+│   ├── music/                          # Sonic Mind & Dynamic Mix Framework
+│   │   ├── types.ts                    # Song, context annotations, playlist, sync schemas
+│   │   ├── store.ts                    # Dual Local File & Firestore music persistence
+│   │   ├── mixer.ts                    # Dynamic AI mix generator & spaced repetition DJ
+│   │   └── extractor.ts                # YouTube metadata extractor (yt-dlp)
 │   ├── bot/
 │   │   ├── commands/
+│   │   │   ├── music.ts                # Telegram /song, /mix, /playlists handlers
 │   │   │   ├── prep.ts                 # IITM Quiz 1 sparring, score tracking & NotebookLM sync
 │   │   │   ├── task.ts                 # Natural language HTN goal compilation via Telegram
 │   │   │   ├── reflexion.ts            # Manual & automated episodic memory trigger
@@ -155,16 +161,18 @@ graph TD
 ## ⚡ 5. Production Endpoints & URLs
 
 - **Live Production App**: `https://fabric-one-sage.vercel.app`
-- **Cockpit Dashboard (5 Tabs)**: `https://fabric-one-sage.vercel.app/dashboard`
+- **Cockpit Dashboard (6 Tabs)**: `https://fabric-one-sage.vercel.app/dashboard`
   - Tab 1: `📊 4F Telemetry` (Real-time vitals, golden means, trade history)
   - Tab 2: `🎛️ Workbench & Bio` (Mounted domains, FOCI breath wave, 10D SVG radar)
   - Tab 3: `🕸️ Vault Mesh` (Interactive force-directed graph, zero-cold-start)
   - Tab 4: `🎓 IITM Academy` (Interactive Quiz 1 active recall & KaTeX formula sheets)
   - Tab 5: `⚡ HTN Tasks` (Visual DAG canvas with step inspector & status pulses)
+  - Tab 6: `🎵 Sonic Mind` (Personal song memory vault, context notes, NewPipe cloud sync)
 - **Dynamic Island HUD**: `https://fabric-one-sage.vercel.app/island` (or `/api/island?stream=1`)
+- **Music & NewPipe Sync Gateway**: `https://fabric-one-sage.vercel.app/api/music/sync`
 - **Smart Surface Gateway**: `https://fabric-one-sage.vercel.app/quick`
 - **Master Documentation Reader**: `https://fabric-one-sage.vercel.app/docs`
-- **Telegram Bot**: `@fabric_meta_os_bot` (Commands: `/prep`, `/task`, `/spark`, `/settle`, `/reflexion`, `/aimode`)
+- **Telegram Bot**: `@fabric_meta_os_bot` (Commands: `/song`, `/mix`, `/playlists`, `/prep`, `/task`, `/spark`, `/settle`)
 
 ---
 
@@ -184,11 +192,17 @@ graph TD
    - Engineered the Apple-grade OLED glassmorphism Dynamic Island (`/island`), Raycast scripts, Apple Shortcuts gateway (`/api/quick`), and SwiftBar menu bar plugin.
 7. **Epoch 7: Publication-Grade Explainability & Master Dossier**
    - Authored the 30KB formal architectural specification (`docs/EXPLAINABILITY_AND_EVOLUTION.md`) and interactive live web reader (`/docs`).
-8. **Epoch 8: Coursework Grokking Foundry & Dashboard Evolution (Current)**
+8. **Epoch 8: Coursework Grokking Foundry & Dashboard Evolution**
    - Extracted 179 past exam questions across Computer Networks, Computer Systems Design, and BDBN using native Apple Vision OCR (`scripts/ocr_image.swift`).
    - Built 3 master study notebooks for NotebookLM.
    - Upgraded Dashboard Cockpit with full 5-tab switcher, KaTeX formula cheat sheets, and visual HTN Task DAG viewer.
-   - Permanently resolved graph canvas zoom scaling and Vercel serverless data bundling.
+9. **Epoch 9: Sonic Mind & FabricPipe (NewPipe Bi-Directional Cloud Engine) (Current)**
+   - Architected semantic music memory vault storing personal resonance, emotional memories, 4F focus vectors, and energy ratings for every song.
+   - Built bi-directional cloud synchronization engine (`api/music/sync.ts` & `src/music/store.ts`) for custom NewPipe Android builds.
+   - Designed goal-oriented dynamic mix generator (`src/music/mixer.ts`) with cognitive flow arc sequencing and spaced repetition for forgotten gems.
+   - Cloned, mapped, and verified Gradle 9.8.2 / Java 17 toolchain for `fabric-newpipe` (`/Users/holyscript/Desktop/projects/fabric-newpipe`).
+   - Integrated Telegram bot commands (`/song`, `/mix`, `/playlists`) and Tab 6 (`🎵 Sonic Mind`) in Cockpit Dashboard.
+   - Expanded test suite to **120 pass, 0 fail (16 test files, 3,598 assertions)**.
 
 ---
 
@@ -235,3 +249,4 @@ python3 scripts/build_iitm_prep.py
 ---
 
 *Authored for the Fabric OS Autonomous Agent Mesh. To resume work in a new session, paste the Master Prompt below.*
+

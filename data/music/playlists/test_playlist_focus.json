@@ -1,0 +1,13 @@
+{
+  "id": "test_playlist_focus",
+  "name": "Deep Compiler Focus",
+  "description": "Music for sustained flow state execution",
+  "intent": "Low distraction, high immersion",
+  "songIds": [
+    "test_song_123"
+  ],
+  "isSmartMix": false,
+  "version": 4,
+  "createdAt": 1793709813482,
+  "updatedAt": 1793709813555
+}

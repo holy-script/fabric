@@ -27,19 +27,21 @@ describe("Visual HUD & Dashboard QC Suite", () => {
     expect(statusCode).toBe(200);
     expect(html.length).toBeGreaterThan(50000);
 
-    // Verify all 5 tabs are present in HTML DOM
+    // Verify all 6 tabs are present in HTML DOM
     expect(html.includes('id="tabContentHud"')).toBe(true);
     expect(html.includes('id="tabContentWorkbench"')).toBe(true);
     expect(html.includes('id="tabContentGraph"')).toBe(true);
     expect(html.includes('id="tabContentAcademy"')).toBe(true);
     expect(html.includes('id="tabContentTasks"')).toBe(true);
+    expect(html.includes('id="tabContentSonic"')).toBe(true);
 
-    // Verify navigation buttons for all 5 tabs
+    // Verify navigation buttons for all 6 tabs
     expect(html.includes('id="navTabHud"')).toBe(true);
     expect(html.includes('id="navTabWorkbench"')).toBe(true);
     expect(html.includes('id="navTabGraph"')).toBe(true);
     expect(html.includes('id="navTabAcademy"')).toBe(true);
     expect(html.includes('id="navTabTasks"')).toBe(true);
+    expect(html.includes('id="navTabSonic"')).toBe(true);
 
     // Verify canvas, graph and Academy/HTN elements
     expect(html.includes('id="graphCanvas"')).toBe(true);
