@@ -122,3 +122,4 @@ export interface MixGenerationOptions {
   spacedRepetitionRatio?: number;
   currentFocusScore?: number; // operator's current 4F Focus state (-5 to +5)
 }
+
