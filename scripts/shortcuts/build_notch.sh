@@ -54,4 +54,53 @@ echo "  • Binary size: $(du -h "$OUTPUT_BIN" | cut -f1)"
 echo "🧪 [FabricNotch] Running automated diagnostic check..."
 "$OUTPUT_BIN" --check
 
-echo "🚀 [FabricNotch] Ready! Run '$OUTPUT_BIN' to launch native floating notch HUD."
+# Package into macOS .app bundle
+APP_DIR="$DIST_DIR/FabricNotch.app"
+CONTENTS_DIR="$APP_DIR/Contents"
+MACOS_DIR="$CONTENTS_DIR/MacOS"
+RESOURCES_DIR="$CONTENTS_DIR/Resources"
+
+echo "📦 [FabricNotch] Packaging macOS Application Bundle ($APP_DIR)..."
+mkdir -p "$MACOS_DIR" "$RESOURCES_DIR"
+
+# Copy binary to bundle
+cp "$OUTPUT_BIN" "$MACOS_DIR/FabricNotch"
+chmod +x "$MACOS_DIR/FabricNotch"
+
+# Generate PkgInfo
+echo "APPL????" > "$CONTENTS_DIR/PkgInfo"
+
+# Generate Info.plist
+cat <<EOF > "$CONTENTS_DIR/Info.plist"
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleExecutable</key>
+    <string>FabricNotch</string>
+    <key>CFBundleIdentifier</key>
+    <string>com.fabric.notch</string>
+    <key>CFBundleName</key>
+    <string>Fabric Notch</string>
+    <key>CFBundleDisplayName</key>
+    <string>Fabric Notch</string>
+    <key>CFBundlePackageType</key>
+    <string>APPL</string>
+    <key>CFBundleShortVersionString</key>
+    <string>1.0.0</string>
+    <key>CFBundleVersion</key>
+    <string>1</string>
+    <key>LSMinimumSystemVersion</key>
+    <string>13.0</string>
+    <key>LSUIElement</key>
+    <true/>
+    <key>NSHighResolutionCapable</key>
+    <true/>
+    <key>NSSupportsAutomaticGraphicsSwitching</key>
+    <true/>
+</dict>
+</plist>
+EOF
+
+echo "✨ [FabricNotch] Application bundle packaged successfully at $APP_DIR."
+echo "🚀 [FabricNotch] Ready! Run 'open $APP_DIR' or '$OUTPUT_BIN' to launch native floating notch HUD."
