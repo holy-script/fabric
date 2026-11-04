@@ -1,0 +1,96 @@
+{
+  "version": "1.0.0",
+  "lastUpdated": "2026-11-04T06:46:07.074Z",
+  "subsystems": {
+    "ambient_daemon": {
+      "id": "ambient_daemon",
+      "name": "macOS Ambient Daemon",
+      "description": "Reality sensing context watcher (active application, idle time, git repository state)",
+      "state": "ACTIVE",
+      "enabled": true,
+      "lastHeartbeat": "2026-11-04T06:46:03.300Z",
+      "metrics": {
+        "activeApp": "Electron",
+        "idleSeconds": 0,
+        "gitBranch": "main",
+        "uncommittedCount": 21
+      },
+      "error": null,
+      "updatedAt": "2026-11-04T06:46:07.071Z"
+    },
+    "video_vault_archiver": {
+      "id": "video_vault_archiver",
+      "name": "Tor SOCKS5 Video Vault Archiver",
+      "description": "Streams saved Instagram reels and media vault directly to Telegram via Tor SOCKS5 proxy",
+      "state": "ACTIVE",
+      "enabled": true,
+      "lastHeartbeat": "2026-11-04T06:45:47.585Z",
+      "metrics": {
+        "totalArchived": 3493,
+        "totalBytesUploaded": 17847491126,
+        "lastUpdated": "2026-11-04T06:45:47.585Z"
+      },
+      "error": null,
+      "updatedAt": "2026-11-04T06:46:07.071Z"
+    },
+    "insomnia_governor": {
+      "id": "insomnia_governor",
+      "name": "Insomnia Closed-Lid Power Governor",
+      "description": "Enforces native caffeinate execution with battery safety cutoff (<20%) and thermal throttling detection",
+      "state": "IDLE",
+      "enabled": true,
+      "lastHeartbeat": null,
+      "metrics": {},
+      "error": null,
+      "updatedAt": "2026-11-04T06:46:07.071Z"
+    },
+    "cybernetic_governor": {
+      "id": "cybernetic_governor",
+      "name": "Closed-Loop 4F Cybernetic Governor",
+      "description": "Real-time 4F vector homeostasis minimizing Aristotelian existential loss",
+      "state": "ACTIVE",
+      "enabled": true,
+      "lastHeartbeat": "2026-11-04T06:46:07.071Z",
+      "metrics": {},
+      "error": null,
+      "updatedAt": "2026-11-04T06:46:07.071Z"
+    },
+    "sms_gateway": {
+      "id": "sms_gateway",
+      "name": "Two-Way SMS Umbilical Gateway",
+      "description": "Programmable SMS webhook server and ADB fallback for offline control and emergency alerts",
+      "state": "UNCONFIGURED",
+      "enabled": true,
+      "lastHeartbeat": "2026-11-04T06:46:03.299Z",
+      "metrics": {
+        "notesCount": 9
+      },
+      "error": null,
+      "updatedAt": "2026-11-04T06:46:07.071Z"
+    },
+    "voice_channel": {
+      "id": "voice_channel",
+      "name": "Bidirectional Real-Time Voice Channel",
+      "description": "Streaming neural speech synthesis (Edge-TTS), audio visualizer, and live sparring voice engine",
+      "state": "IDLE",
+      "enabled": true,
+      "lastHeartbeat": null,
+      "metrics": {
+        "storedSessions": 6
+      },
+      "error": null,
+      "updatedAt": "2026-11-04T06:46:07.071Z"
+    },
+    "newpipe_sync": {
+      "id": "newpipe_sync",
+      "name": "FabricPipe & Sonic Mind Cloud Sync",
+      "description": "Bi-directional cloud synchronization engine for Android NewPipe builds and personal song memory",
+      "state": "ACTIVE",
+      "enabled": true,
+      "lastHeartbeat": "2026-11-04T06:46:07.071Z",
+      "metrics": {},
+      "error": null,
+      "updatedAt": "2026-11-04T06:46:07.071Z"
+    }
+  }
+}

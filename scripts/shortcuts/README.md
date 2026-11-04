@@ -154,31 +154,50 @@ curl -s -X POST http://localhost:3000/api/quick \
 
 ---
 
-## 💻 6. Native macOS Floating Notch Panel (`FabricNotch`)
+## 💻 6. Unified Native macOS Desktop App & Daemon Controller (`Fabric.app` & `FabricNotch.app`)
 
-Fabric OS includes a native Swift AppKit + SwiftUI HUD that floats directly around the MacBook camera notch:
+Fabric OS includes a native Swift AppKit + SwiftUI desktop application and HUD floating directly at the MacBook camera notch:
 
 - **Source:** [`scripts/shortcuts/FabricNotch.swift`](file:///Users/holyscript/Desktop/projects/fabric/scripts/shortcuts/FabricNotch.swift)
 - **Compiler:** [`scripts/shortcuts/build_notch.sh`](file:///Users/holyscript/Desktop/projects/fabric/scripts/shortcuts/build_notch.sh)
-- **Binary:** `dist/FabricNotch`
+- **Application Bundles:** `dist/Fabric.app` and `dist/FabricNotch.app`
+- **Binaries:** `dist/Fabric` and `dist/FabricNotch`
+- **QC Test Suite:** [`tests/notch.test.ts`](file:///Users/holyscript/Desktop/projects/fabric/tests/notch.test.ts)
 
 ### Architecture & Capabilities
-- **Floating HUD:** Borderless panel configured with `.statusBar` level and `.canJoinAllSpaces` / `.fullScreenAuxiliary`, maintaining persistent visibility across all macOS spaces and full-screen apps without a browser window.
-- **Dark OLED Glassmorphism:** Continuous corner radius with deep dark blur and edge glow.
-- **Biometric Wave:** Fluid sine wave animated in real-time via `TimelineView` reflecting FOCI diaphragmatic respiration rate and coherence.
-- **Hover Expansion:** Expands downward smoothly on hover to reveal the 4F Vector breakdown and one-click quick actions (`⚡ Spark 90m`, `🏁 Settle`, `🔄 Refresh`, `🌐 Cockpit`).
-- **Antifragile Telemetry:** Polls `.ambient_state.json` with seamless fallback to AppKit system sensing if offline.
+- **Floating Camera Bezel HUD:** Borderless panel configured with `.statusBar` level and `.canJoinAllSpaces` / `.fullScreenAuxiliary`, maintaining persistent visibility across all macOS spaces and full-screen apps without an intrusive browser window.
+- **Dark OLED Glassmorphism:** Continuous corner radius with deep dark blur, edge glow, and spring physics.
+- **Biometric Respiration Wave:** Fluid sine wave animated in real-time via `TimelineView` reflecting FOCI diaphragmatic respiration rate and coherence.
+- **Dedicated Process & Daemon Controller:**
+  - **4 Monitored Background Workers:**
+    1. `macOS Ambient Daemon` (Active app, idle HID & git context)
+    2. `Telegram Video Vault Archiver` (Tor SOCKS5 media digestion)
+    3. `Insomnia Power Governor` (Closed-lid caffeinate sleep sentinel)
+    4. `Cybernetic Governor` (Aristotelian 4F homeostasis & breach interventions)
+  - **Live Status & PID Detection:** Displays real-time status (`🟢 Running` with PID, `⚪ Stopped`, `🔴 Error`/Alert).
+  - **1-Click Start / Stop:** Individual controls for each daemon.
+  - **Prominent 'Force Quit All Daemons':** Immediate child process and daemon cleanup with zero terminal fiddling.
+  - **Native macOS Notification Toasts:** Dispatched via `UserNotifications` whenever daemons change state or when cybernetic governor alerts trigger.
+  - **Clean App Menu & Context Menu:** Includes a clean `Quit Fabric & Stop All Daemons` (`Cmd+Q`) option.
 
 ### Compilation & Launch
 ```bash
-# 1. Compile native binary
+# 1. Compile native binaries & package both .app bundles
 ./scripts/shortcuts/build_notch.sh
 
-# 2. Run diagnostic QC check
-./dist/FabricNotch --check
+# 2. Run diagnostic QC self-test check (8 assertions)
+./dist/Fabric --check
 
-# 3. Launch Notch Panel
-./dist/FabricNotch
+# 3. Query live background daemon status from CLI
+./dist/Fabric --daemons
+
+# 4. Dry-run force-quit simulation
+./dist/Fabric --force-quit --dry-run
+
+# 5. Launch native application
+open dist/Fabric.app
+# or
+./dist/Fabric
 ```
 
 ---

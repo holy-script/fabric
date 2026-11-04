@@ -2,7 +2,7 @@
 
 > **For AI Coding Agents & Autonomous Subagents**  
 > *Last Updated: November 4, 2026*  
-> *Test Status: 250 pass, 0 fail (23 test files, 4,317 assertions)*  
+> *Test Status: 316 pass, 0 fail (26 test files, 4,733 assertions)*  
 > *Git Branch: `main`*  
 > *Production Deployment: https://fabric-one-sage.vercel.app*
 
@@ -207,19 +207,24 @@ graph TD
     - **HTN Multi-Agent Swarm Orchestration**: Upgraded `src/tasks/executor.ts` to support 4 specialized swarm roles (`recon`, `synthesis`, `critic`, `publisher`), dynamic `${blackboard.recon_findings}` token interpolation, and a dialectical critic evaluation gate (`confidence > 0.8`) with automatic refinement retry loops.
     - **Closed-Loop 4F Cybernetic Governor (`src/services/governor.ts`)**: Implemented non-linear Aristotelian loss reduction $\Delta \mathcal{L}$, 4 homeostatic boundary checks (Excessive Focus $>+3$, Depleted Vitality $<-2$, Sedentary $>75\text{m}$, Feedback Dispersion), and a 3-tier progressive actuation cascade (Dynamic Island badge $\to$ macOS Notification + Raycast HUD $\to$ Android ADB Zen lock & screen dimming).
     - **Sub-300ms Real-Time Voice Channel (`src/voice/` & `/api/voice`)**: Engineered bidirectional streaming audio pipeline with multi-persona Edge-TTS neural speech synthesis, Gemini Live multimodal audio frames, low-latency sparring engine, and live audio visualizer orbs in Dynamic Island and Cockpit Dashboard.
-11. **Epoch 11: The Ambient Nervous System & Dream Consolidation (Current)**
+11. **Epoch 11: The Ambient Nervous System & Dream Consolidation**
     - **SMS Umbilical Gateway (`src/services/sms/` & `/api/sms/webhook`)**: Turned Android device into a programmable two-way SMS server via httpSMS REST API and ADB SMS fallback. Added natural language intent routing for offline commands (`spark`, `settle`, `status`, `note`, `mix`) and Governor emergency vitality SMS alerts.
     - **Nightly Dream Consolidation Loop (`src/ai/consolidation.ts` & `/api/consolidation`)**: Automated nightly synthesis aggregating daily git commits, focus sprints, and FOCI breath coherence into new knowledge graph synapses, computing Aristotelian 4F Delta & loss reduction $\Delta \mathcal{L}$, inducing new heuristics, and compiling dual-format Morning Briefings for Telegram and SMS.
     - **Insomnia Closed-Lid Power Governor (`scripts/fabric-insomnia.ts` & `fabric-insomnia.sh`)**: Engineered native `caffeinate` daemon allowing long-running background tasks (video vault archiver, ambient watcher, HTN swarm) to run with the MacBook lid closed, with automated battery (<20%) and thermal throttling safety release.
     - **Silent Headless Browser Guarantee**: Enforced strict headless execution across all browser automation tools with automated cleanup, eliminating any disruptive visible Chrome GUI popups.
-    - Expanded test suite to **250 pass, 0 fail across 23 test files (4,317 assertions)**.
+12. **Epoch 12: Unified Desktop Process Manager, Antigravity Harness & Headless Flow Testing (Current)**
+    - **Unified macOS Application & Daemon Controller (`Fabric.app` / `FabricNotch.app`)**: Upgraded `scripts/shortcuts/FabricNotch.swift` into a complete unified native desktop manager with a floating notch HUD and expandable Process & Daemon Controller. Provides live worker status (`🟢 Running` with PID, `⚪ Stopped`, `🔴 Error`), 1-click Start/Stop for all 4 background workers (`macOS Ambient Daemon`, `Telegram Video Vault Archiver`, `Insomnia Power Governor`, `Cybernetic Governor`), native macOS Notification toasts (`UserNotifications`), a prominent 1-click **"Force Quit All Daemons"** safety button, and clean `Cmd+Q` graceful termination.
+    - **Google Antigravity Agent Harness & Project Spinner (`src/services/antigravity.ts`)**: Built native integration discovering the operator's local Antigravity binary (`/Users/holyscript/.gemini/bin/agy`, v1.4.12). Fabric can now initialize new git repositories, scaffold `.gemini/settings.json`, `README.md`, and `AGENTS.md`, and autonomously dispatch complex research or engineering prompts via REST endpoint `/api/antigravity` and Telegram command `/spin <name> <prompt>`.
+    - **Subsystem State Registry & Lifecycle Governor (`src/services/registry.ts`)**: Standardized explicit lifecycle states (`ACTIVE`, `IDLE`, `DISABLED`, `ERROR`, `UNCONFIGURED`) across all 7 Fabric OS subsystems with atomic state transitions, heartbeat metrics merging, blackboard persistence (`data/subsystem_registry.json`), and control gateway `/api/subsystems`.
+    - **Headless UI/UX Flow & Leakage Regression Suite (`tests/ui_ux_flow.test.ts`)**: Implemented automated Puppeteer testing verifying 4 end-to-end user navigation flows: 6-tab cockpit switcher, Socratic Voice dock interactions with interactive persona pills, Dynamic Island responsive transitions (`430x44` compact $\to$ `140px` expanded), zero uncaught page errors, zero console error leakage, and zero layout overflow.
+    - Expanded test suite to **316 pass, 0 fail across 26 test files (4,733 assertions)**.
 
 ---
 
 ## 🛠️ 7. Key CLI Commands & Verification Protocols
 
 ```bash
-# 1. Run full test suite (250 tests, 0 failures)
+# 1. Run full test suite (316 tests, 0 failures)
 bun test
 
 # 2. Type-check entire codebase (strict TypeScript)
@@ -228,14 +233,20 @@ npx tsc --noEmit
 # 3. Build dist/ for production
 bun run build
 
-# 4. Compile & package native macOS Floating Notch Panel (.app)
+# 4. Compile & package native macOS Unified Application & Notch HUD (.app)
 ./scripts/shortcuts/build_notch.sh
-open dist/FabricNotch.app
+open dist/Fabric.app
 
-# 5. Run macOS Ambient Daemon with Cybernetic Governor in background
+# 5. Query live background workers & daemons from CLI
+./dist/Fabric --daemons
+
+# 6. Force Quit all background daemons without terminal hunting
+./dist/Fabric --force-quit
+
+# 7. Run macOS Ambient Daemon with Cybernetic Governor in background
 bun run scripts/fabric-ambient-daemon.ts
 
-# 6. Run Insomnia Closed-Lid Power Governor
+# 8. Run Insomnia Closed-Lid Power Governor
 ./scripts/shortcuts/fabric-insomnia.sh --start
 ```
 

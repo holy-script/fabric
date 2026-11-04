@@ -36,3 +36,6 @@ data/sessions_quick.json
 data/trades_quick.json
 data/tasks/*
 !data/tasks/.gitkeep
+data/music/playlists/mix-*.json
+data/voice_sessions/
+data/projects/

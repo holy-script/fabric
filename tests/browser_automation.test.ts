@@ -12,6 +12,8 @@ describe("Fabric OS Browser Automation Subsystem", () => {
   let driver: BrowserDriver;
 
   beforeAll(() => {
+    process.env.CHROME_DEBUGGING_PORT = "9333";
+    process.env.FABRIC_BROWSER_PROFILE_DIR = testProfileDir;
     driver = new BrowserDriver({
       headless: true,
       userDataDir: testProfileDir,
@@ -23,6 +25,8 @@ describe("Fabric OS Browser Automation Subsystem", () => {
   afterAll(async () => {
     await driver.close();
     await closeBrowserDriver();
+    delete process.env.CHROME_DEBUGGING_PORT;
+    delete process.env.FABRIC_BROWSER_PROFILE_DIR;
     if (fs.existsSync(testProfileDir)) {
       try {
         fs.rmSync(testProfileDir, { recursive: true, force: true });

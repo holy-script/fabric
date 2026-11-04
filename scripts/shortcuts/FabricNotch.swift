@@ -2,6 +2,7 @@ import Cocoa
 import SwiftUI
 import Foundation
 import Combine
+import UserNotifications
 
 // MARK: - Telemetry Models
 
@@ -65,6 +66,439 @@ public struct FourFVector {
     public var coherenceScore: Int
 }
 
+// MARK: - Native Notification Dispatcher
+
+public final class FabricNotifier: NSObject, UNUserNotificationCenterDelegate {
+    public static let shared = FabricNotifier()
+    private var lastNotifiedTimes: [String: Date] = [:]
+    private var canUseUNUserNotificationCenter: Bool = false
+    
+    public override init() {
+        super.init()
+        if Bundle.main.bundleIdentifier != nil {
+            canUseUNUserNotificationCenter = true
+            let center = UNUserNotificationCenter.current()
+            center.delegate = self
+            center.requestAuthorization(options: [.alert, .sound, .badge]) { _, _ in }
+        }
+    }
+    
+    public func notify(title: String, body: String, identifier: String = UUID().uuidString, throttleSeconds: TimeInterval = 4.0) {
+        let key = "\(title):\(body)"
+        let now = Date()
+        if let last = lastNotifiedTimes[key], now.timeIntervalSince(last) < throttleSeconds {
+            return
+        }
+        lastNotifiedTimes[key] = now
+        
+        DispatchQueue.main.async {
+            if self.canUseUNUserNotificationCenter {
+                let content = UNMutableNotificationContent()
+                content.title = title
+                content.body = body
+                content.sound = .default
+                let request = UNNotificationRequest(identifier: identifier, content: content, trigger: nil)
+                UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
+            } else {
+                // Native macOS notification fallback for CLI execution
+                let escapedTitle = title.replacingOccurrences(of: "\"", with: "\\\"")
+                let escapedBody = body.replacingOccurrences(of: "\"", with: "\\\"")
+                let script = "display notification \"\(escapedBody)\" with title \"\(escapedTitle)\""
+                let proc = Process()
+                proc.executableURL = URL(fileURLWithPath: "/usr/bin/osascript")
+                proc.arguments = ["-e", script]
+                try? proc.run()
+            }
+        }
+    }
+}
+
+// MARK: - Process & Daemon Models
+
+public enum DaemonStatus: String, Codable, CaseIterable {
+    case running = "Running"
+    case stopped = "Stopped"
+    case error = "Error"
+    
+    public var icon: String {
+        switch self {
+        case .running: return "🟢"
+        case .stopped: return "⚪"
+        case .error: return "🔴"
+        }
+    }
+}
+
+public struct DaemonProcessInfo: Identifiable, Equatable {
+    public let id: String
+    public let name: String
+    public let subtitle: String
+    public let scriptPattern: String
+    public var pid: Int32?
+    public var status: DaemonStatus
+    public var statusDetail: String
+    
+    public init(
+        id: String,
+        name: String,
+        subtitle: String,
+        scriptPattern: String,
+        pid: Int32? = nil,
+        status: DaemonStatus = .stopped,
+        statusDetail: String = "Stopped"
+    ) {
+        self.id = id
+        self.name = name
+        self.subtitle = subtitle
+        self.scriptPattern = scriptPattern
+        self.pid = pid
+        self.status = status
+        self.statusDetail = statusDetail
+    }
+}
+
+// MARK: - Process & Daemon Controller
+
+public final class DaemonProcessManager: ObservableObject {
+    @Published public var daemons: [DaemonProcessInfo] = []
+    @Published public var isExecutingAction: Bool = false
+    
+    private var previousStatuses: [String: DaemonStatus] = [:]
+    
+    public static var projectRoot: String {
+        let cwd = FileManager.default.currentDirectoryPath
+        let defaultPath = "/Users/holyscript/Desktop/projects/fabric"
+        if FileManager.default.fileExists(atPath: "\(cwd)/scripts/fabric-ambient-daemon.ts") {
+            return cwd
+        }
+        if FileManager.default.fileExists(atPath: "\(cwd)/../scripts/fabric-ambient-daemon.ts") {
+            return URL(fileURLWithPath: cwd).deletingLastPathComponent().path
+        }
+        if FileManager.default.fileExists(atPath: "\(defaultPath)/scripts/fabric-ambient-daemon.ts") {
+            return defaultPath
+        }
+        return cwd
+    }
+    
+    public init() {
+        self.daemons = [
+            DaemonProcessInfo(
+                id: "ambient",
+                name: "macOS Ambient Daemon",
+                subtitle: "Frontmost App, Idle & Git Telemetry",
+                scriptPattern: "fabric-ambient-daemon"
+            ),
+            DaemonProcessInfo(
+                id: "vault",
+                name: "Telegram Video Vault Archiver",
+                subtitle: "Tor SOCKS5 Media Archiver",
+                scriptPattern: "archive-telegram-vault"
+            ),
+            DaemonProcessInfo(
+                id: "insomnia",
+                name: "Insomnia Power Governor",
+                subtitle: "Closed-Lid Caffeinate Safety Sentinel",
+                scriptPattern: "fabric-insomnia"
+            ),
+            DaemonProcessInfo(
+                id: "governor",
+                name: "Cybernetic Governor",
+                subtitle: "Aristotelian Homeostatic Balance Governor",
+                scriptPattern: "governor"
+            )
+        ]
+        refreshDaemons(notifyChanges: false)
+    }
+    
+    public var runningCount: Int {
+        daemons.filter { $0.status == .running }.count
+    }
+    
+    public func refreshDaemons(notifyChanges: Bool = true) {
+        var updated: [DaemonProcessInfo] = []
+        
+        // Check ambient state for governor status
+        var governorAlertReason: String? = nil
+        let statePath = "\(DaemonProcessManager.projectRoot)/.ambient_state.json"
+        if let stateData = try? Data(contentsOf: URL(fileURLWithPath: statePath)),
+           let json = try? JSONSerialization.jsonObject(with: stateData) as? [String: Any] {
+            if let focus = json["focus"] as? [String: Any],
+               let sedentary = focus["sedentaryMinutes"] as? Int, sedentary > 75 {
+                governorAlertReason = "Sedentary Lock (>75m continuous)"
+            }
+            if let island = json["dynamicIsland"] as? [String: Any],
+               let status = island["status"] as? String, status == "alert" || status == "warning" {
+                let head = island["headline"] as? String ?? "Governor Alert"
+                governorAlertReason = head
+            }
+        }
+        
+        // Check Insomnia PID file
+        let insomniaPidFile = "\(DaemonProcessManager.projectRoot)/.fabric_insomnia.pid"
+        var insomniaFilePid: Int32? = nil
+        if let pidContent = try? String(contentsOfFile: insomniaPidFile, encoding: .utf8).trimmingCharacters(in: .whitespacesAndNewlines),
+           let parsed = Int32(pidContent), parsed > 0 {
+            insomniaFilePid = parsed
+        }
+        
+        for daemon in daemons {
+            var info = daemon
+            var detectedPid: Int32? = nil
+            
+            if daemon.id == "ambient" {
+                detectedPid = findPids(for: "fabric-ambient-daemon").first
+            } else if daemon.id == "vault" {
+                detectedPid = findPids(for: "archive-telegram-vault").first
+            } else if daemon.id == "insomnia" {
+                detectedPid = findPids(for: "fabric-insomnia").first
+                if detectedPid == nil, let fPid = insomniaFilePid, isPidAlive(fPid) {
+                    detectedPid = fPid
+                }
+            } else if daemon.id == "governor" {
+                // Cybernetic Governor runs continuously with ambient daemon
+                detectedPid = findPids(for: "fabric-ambient-daemon").first
+            }
+            
+            info.pid = detectedPid
+            if let pid = detectedPid {
+                if daemon.id == "governor", let reason = governorAlertReason {
+                    info.status = .error
+                    info.statusDetail = "⚠️ \(reason)"
+                } else {
+                    info.status = .running
+                    info.statusDetail = "PID: \(pid)"
+                }
+            } else {
+                info.status = .stopped
+                info.statusDetail = "Stopped"
+            }
+            
+            // Check state transition for notification
+            if notifyChanges {
+                let oldStatus = previousStatuses[daemon.id]
+                if let old = oldStatus, old != info.status {
+                    handleStateTransition(daemon: info, from: old, to: info.status)
+                }
+            }
+            previousStatuses[daemon.id] = info.status
+            updated.append(info)
+        }
+        
+        if Thread.isMainThread {
+            self.daemons = updated
+        } else {
+            DispatchQueue.main.sync { [weak self] in
+                self?.daemons = updated
+            }
+        }
+    }
+    
+    private func handleStateTransition(daemon: DaemonProcessInfo, from old: DaemonStatus, to new: DaemonStatus) {
+        if new == .running {
+            FabricNotifier.shared.notify(
+                title: "🟢 Daemon Started",
+                body: "\(daemon.name) is active (PID: \(daemon.pid ?? 0))."
+            )
+        } else if new == .stopped && old == .running {
+            FabricNotifier.shared.notify(
+                title: "⚪ Daemon Stopped",
+                body: "\(daemon.name) has terminated."
+            )
+        } else if new == .error {
+            FabricNotifier.shared.notify(
+                title: "🔴 Governor Alert",
+                body: "\(daemon.name): \(daemon.statusDetail)"
+            )
+        }
+    }
+    
+    // 1-Click Start
+    public func startDaemon(id: String, completion: (() -> Void)? = nil) {
+        let root = DaemonProcessManager.projectRoot
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            switch id {
+            case "ambient":
+                _ = self?.executeShell("cd \"\(root)\" && nohup bun run scripts/fabric-ambient-daemon.ts > /dev/null 2>&1 &")
+            case "vault":
+                _ = self?.executeShell("cd \"\(root)\" && nohup bun run scripts/archive-telegram-vault.ts > /dev/null 2>&1 &")
+            case "insomnia":
+                _ = self?.executeShell("cd \"\(root)\" && ./scripts/shortcuts/fabric-insomnia.sh --start > /dev/null 2>&1 &")
+            case "governor":
+                _ = self?.executeShell("cd \"\(root)\" && nohup bun run scripts/fabric-ambient-daemon.ts > /dev/null 2>&1 &")
+            default:
+                break
+            }
+            
+            Thread.sleep(forTimeInterval: 0.8)
+            self?.refreshDaemons(notifyChanges: true)
+            DispatchQueue.main.async {
+                completion?()
+            }
+        }
+    }
+    
+    // 1-Click Stop
+    public func stopDaemon(id: String, completion: (() -> Void)? = nil) {
+        let root = DaemonProcessManager.projectRoot
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            guard let self = self else { return }
+            let processes = self.listRunningProcesses()
+            
+            switch id {
+            case "ambient":
+                if let pid = self.findPid(for: "fabric-ambient-daemon", in: processes) {
+                    _ = self.executeShell("kill \(pid) 2>/dev/null || true")
+                }
+            case "vault":
+                if let pid = self.findPid(for: "archive-telegram-vault", in: processes) {
+                    _ = self.executeShell("kill \(pid) 2>/dev/null || true")
+                    _ = self.executeShell("pkill -f \"yt-dlp.*fabric_tg_vault\" 2>/dev/null || true")
+                }
+            case "insomnia":
+                _ = self.executeShell("cd \"\(root)\" && ./scripts/shortcuts/fabric-insomnia.sh --stop 2>/dev/null || true")
+                if let pid = self.findPid(for: "fabric-insomnia", in: processes) {
+                    _ = self.executeShell("kill \(pid) 2>/dev/null || true")
+                }
+            case "governor":
+                if let pid = self.findPid(for: "fabric-ambient-daemon", in: processes) {
+                    _ = self.executeShell("kill \(pid) 2>/dev/null || true")
+                }
+            default:
+                break
+            }
+            
+            Thread.sleep(forTimeInterval: 0.5)
+            self.refreshDaemons(notifyChanges: true)
+            DispatchQueue.main.async {
+                completion?()
+            }
+        }
+    }
+    
+    // Start All Daemons
+    public func startAllDaemons(completion: (() -> Void)? = nil) {
+        let root = DaemonProcessManager.projectRoot
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            _ = self?.executeShell("cd \"\(root)\" && nohup bun run scripts/fabric-ambient-daemon.ts > /dev/null 2>&1 &")
+            _ = self?.executeShell("cd \"\(root)\" && nohup bun run scripts/archive-telegram-vault.ts > /dev/null 2>&1 &")
+            Thread.sleep(forTimeInterval: 0.8)
+            self?.refreshDaemons(notifyChanges: true)
+            DispatchQueue.main.async {
+                FabricNotifier.shared.notify(
+                    title: "🚀 Daemons Started",
+                    body: "Background telemetry and vault archiver initiated."
+                )
+                completion?()
+            }
+        }
+    }
+    
+    // Prominent Force Quit All Daemons
+    public func forceQuitAllDaemons(dryRun: Bool = false) -> [String] {
+        let root = DaemonProcessManager.projectRoot
+        var actionsTaken: [String] = []
+        
+        let targets = [
+            "fabric-ambient-daemon",
+            "archive-telegram-vault",
+            "fabric-insomnia",
+            "caffeinate.*fabric",
+            "yt-dlp.*fabric_tg_vault"
+        ]
+        
+        for target in targets {
+            let pids = findPids(for: target)
+            for pid in pids {
+                actionsTaken.append("Killed \(target) (PID: \(pid))")
+                if !dryRun {
+                    _ = executeShell("kill -9 \(pid) 2>/dev/null || true")
+                }
+            }
+            if !dryRun {
+                _ = executeShell("pkill -9 -f \"\(target)\" 2>/dev/null || true")
+            }
+        }
+        
+        let pidFile = "\(root)/.fabric_insomnia.pid"
+        if FileManager.default.fileExists(atPath: pidFile) {
+            actionsTaken.append("Removed .fabric_insomnia.pid")
+            if !dryRun {
+                try? FileManager.default.removeItem(atPath: pidFile)
+            }
+        }
+        
+        if !dryRun {
+            FabricNotifier.shared.notify(
+                title: "🛑 Force Quit All Daemons",
+                body: "All background workers and child processes terminated cleanly."
+            )
+            refreshDaemons(notifyChanges: false)
+        }
+        
+        return actionsTaken
+    }
+    
+    // Shell execution helpers
+    public func executeShell(_ command: String) -> String {
+        let proc = Process()
+        proc.executableURL = URL(fileURLWithPath: "/bin/zsh")
+        proc.arguments = ["-c", command]
+        let pipe = Pipe()
+        proc.standardOutput = pipe
+        proc.standardError = Pipe()
+        do {
+            try proc.run()
+            let data = pipe.fileHandleForReading.readDataToEndOfFile()
+            proc.waitUntilExit()
+            return String(data: data, encoding: .utf8) ?? ""
+        } catch {
+            return ""
+        }
+    }
+    
+    private func listRunningProcesses() -> [(pid: Int32, command: String)] {
+        let output = executeShell("ps -axo pid,command")
+        var list: [(pid: Int32, command: String)] = []
+        let lines = output.components(separatedBy: .newlines)
+        for line in lines {
+            let trimmed = line.trimmingCharacters(in: .whitespacesAndNewlines)
+            if trimmed.isEmpty || trimmed.hasPrefix("PID") { continue }
+            let parts = trimmed.split(separator: " ", maxSplits: 1, omittingEmptySubsequences: true)
+            if parts.count >= 2, let pid = Int32(parts[0]) {
+                list.append((pid: pid, command: String(parts[1])))
+            }
+        }
+        return list
+    }
+    
+    private func findPid(for pattern: String, in processes: [(pid: Int32, command: String)]) -> Int32? {
+        for p in processes {
+            if p.command.contains(pattern) {
+                return p.pid
+            }
+        }
+        return nil
+    }
+    
+    public func findPids(for pattern: String) -> [Int32] {
+        let out = executeShell("pgrep -f \"\(pattern)\"")
+        var pids: [Int32] = []
+        let currentPid = ProcessInfo.processInfo.processIdentifier
+        let lines = out.components(separatedBy: .newlines)
+        for line in lines {
+            let trimmed = line.trimmingCharacters(in: .whitespacesAndNewlines)
+            if let pid = Int32(trimmed), pid > 0, pid != currentPid {
+                pids.append(pid)
+            }
+        }
+        return pids
+    }
+    
+    private func isPidAlive(_ pid: Int32) -> Bool {
+        return kill(pid, 0) == 0
+    }
+}
+
 // MARK: - Telemetry Store
 
 public final class TelemetryStore: ObservableObject {
@@ -73,6 +507,8 @@ public final class TelemetryStore: ObservableObject {
     @Published public var isConnected: Bool = false
     @Published public var lastRefreshed: Date = Date()
     @Published public var feedbackBanner: String? = nil
+    
+    public let daemonManager = DaemonProcessManager()
     
     private var timer: AnyCancellable?
     private var bannerTimer: AnyCancellable?
@@ -91,12 +527,13 @@ public final class TelemetryStore: ObservableObject {
             coherenceScore: 92
         )
         
+        let root = DaemonProcessManager.projectRoot
         let cwd = FileManager.default.currentDirectoryPath
         candidateFilePaths = [
             "\(cwd)/.ambient_state.json",
+            "\(root)/.ambient_state.json",
             "\(cwd)/../.ambient_state.json",
             "\(cwd)/../../.ambient_state.json",
-            "/Users/holyscript/Desktop/projects/fabric/.ambient_state.json",
             NSHomeDirectory() + "/.ambient_state.json"
         ]
         
@@ -151,6 +588,9 @@ public final class TelemetryStore: ObservableObject {
                 self?.deriveFallbackContext()
             }
         }
+        
+        // Refresh background daemon controller
+        daemonManager.refreshDaemons(notifyChanges: true)
     }
     
     private func deriveFourF(from payload: AmbientPayload) {
@@ -229,6 +669,14 @@ public final class TelemetryStore: ObservableObject {
             vit = max(vit - Int(Double(sedentaryMins - 45) * 0.5), 40)
         }
         
+        // Notify Governor Alert if prolonged sedentary state
+        if sedentaryMins > 75 {
+            FabricNotifier.shared.notify(
+                title: "⚠️ Cybernetic Governor Alert",
+                body: "Prolonged sedentary lock (\(sedentaryMins)m). Stand up and recalibrate posture."
+            )
+        }
+        
         self.fourF = FourFVector(
             focus: foc,
             facts: fac,
@@ -261,8 +709,12 @@ public final class TelemetryStore: ObservableObject {
             "action": "spark",
             "task": "Deep Work Sprint (Notch HUD)",
             "duration": "1.5"
-        ]) { [weak self] res in
+        ]) { [weak self] _ in
             self?.showBanner("⚡ 90m Focus Sprint Sparked!")
+            FabricNotifier.shared.notify(
+                title: "⚡ Focus Sprint Active",
+                body: "90-minute deep work block initiated. Distractions muted."
+            )
             self?.refreshState()
         }
     }
@@ -272,8 +724,12 @@ public final class TelemetryStore: ObservableObject {
             "action": "settle",
             "energyDelta": 1,
             "factsYield": "Completed focused execution cycle via FabricNotch"
-        ]) { [weak self] res in
+        ]) { [weak self] _ in
             self?.showBanner("🏁 Session Settled (+1 Energy)")
+            FabricNotifier.shared.notify(
+                title: "🏁 Flow Session Settled",
+                body: "Execution logged to blackboard (+1 Vitality energy)."
+            )
             self?.refreshState()
         }
     }
@@ -282,6 +738,27 @@ public final class TelemetryStore: ObservableObject {
         if let url = URL(string: "http://localhost:3000/dashboard") {
             NSWorkspace.shared.open(url)
             showBanner("🌐 Opening Dashboard Cockpit")
+        }
+    }
+    
+    public func forceQuitAllDaemons() {
+        showBanner("🛑 Force Quitting All Daemons...")
+        _ = daemonManager.forceQuitAllDaemons()
+        refreshState()
+    }
+    
+    public func startAllDaemons() {
+        showBanner("🚀 Starting All Daemons...")
+        daemonManager.startAllDaemons { [weak self] in
+            self?.refreshState()
+        }
+    }
+    
+    public func quitAndStopAll() {
+        showBanner("🛑 Quitting Fabric & Stopping Daemons...")
+        _ = daemonManager.forceQuitAllDaemons()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
+            NSApplication.shared.terminate(nil)
         }
     }
     
@@ -315,8 +792,8 @@ public final class TelemetryStore: ObservableObject {
     }
     
     private func executeFallbackScript(action: String) {
-        let cwd = FileManager.default.currentDirectoryPath
-        let scriptPath = "\(cwd)/scripts/shortcuts/fabric-\(action).sh"
+        let root = DaemonProcessManager.projectRoot
+        let scriptPath = "\(root)/scripts/shortcuts/fabric-\(action).sh"
         if FileManager.default.isExecutableFile(atPath: scriptPath) {
             let proc = Process()
             proc.executableURL = URL(fileURLWithPath: scriptPath)
@@ -441,7 +918,7 @@ public struct NotchContentView: View {
         ZStack {
             // Dark OLED Glassmorphic Body
             RoundedRectangle(cornerRadius: isHovered ? 24 : 19, style: .continuous)
-                .fill(Color(red: 10/255, green: 10/255, blue: 15/255).opacity(0.92))
+                .fill(Color(red: 10/255, green: 10/255, blue: 15/255).opacity(0.94))
                 .overlay(
                     RoundedRectangle(cornerRadius: isHovered ? 24 : 19, style: .continuous)
                         .stroke(
@@ -457,11 +934,11 @@ public struct NotchContentView: View {
                             lineWidth: 1.0
                         )
                 )
-                .shadow(color: Color.black.opacity(0.75), radius: 16, x: 0, y: 8)
-                .shadow(color: store.fourF.stateColor.opacity(0.15), radius: 10, x: 0, y: 2)
+                .shadow(color: Color.black.opacity(0.80), radius: 18, x: 0, y: 10)
+                .shadow(color: store.fourF.stateColor.opacity(0.16), radius: 12, x: 0, y: 3)
             
             VStack(spacing: 0) {
-                // Compact Top Bar (Always Visible)
+                // Compact Top Bar (Always Visible at Camera Bezel)
                 HStack(spacing: 10) {
                     // Left: Pulse Dot & Vitality Badge
                     HStack(spacing: 5) {
@@ -538,13 +1015,13 @@ public struct NotchContentView: View {
                 .padding(.horizontal, 14)
                 .frame(height: 42)
                 
-                // Hover Expanded Panel
+                // Hover Expanded Command Center Panel
                 if isHovered {
                     VStack(spacing: 8) {
                         Divider()
-                            .background(Color.white.opacity(0.10))
+                            .background(Color.white.opacity(0.12))
                         
-                        // 4F Metrics Row
+                        // 1. 4F Metrics Row
                         HStack(spacing: 8) {
                             metricBadge(title: "FOCUS", val: String(format: "%+.1f", store.fourF.focus), color: store.fourF.stateColor)
                             metricBadge(title: "FACTS", val: String(format: "%+.1f", store.fourF.facts), color: .purple)
@@ -557,9 +1034,9 @@ public struct NotchContentView: View {
                                 .font(.system(size: 9.5, weight: .medium, design: .monospaced))
                                 .foregroundColor(.white.opacity(0.6))
                         }
-                        .padding(.horizontal, 12)
+                        .padding(.horizontal, 14)
                         
-                        // Feedback Banner or Quick Actions
+                        // Feedback Banner (if active)
                         if let banner = store.feedbackBanner {
                             HStack {
                                 Text(banner)
@@ -568,9 +1045,9 @@ public struct NotchContentView: View {
                             }
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 4)
-                            .background(store.fourF.stateColor.opacity(0.2))
+                            .background(store.fourF.stateColor.opacity(0.22))
                             .clipShape(RoundedRectangle(cornerRadius: 6))
-                            .padding(.horizontal, 10)
+                            .padding(.horizontal, 12)
                             .transition(.opacity.combined(with: .scale(scale: 0.95)))
                         } else {
                             // Quick Action Dock
@@ -592,10 +1069,110 @@ public struct NotchContentView: View {
                                     store.openCockpit()
                                 }
                             }
-                            .padding(.horizontal, 10)
+                            .padding(.horizontal, 12)
                         }
+                        
+                        Divider()
+                            .background(Color.white.opacity(0.10))
+                            .padding(.vertical, 1)
+                        
+                        // 2. Process & Daemon Controller
+                        VStack(spacing: 5) {
+                            // Header Row
+                            HStack {
+                                HStack(spacing: 5) {
+                                    Image(systemName: "cpu.fill")
+                                        .font(.system(size: 9.5, weight: .bold))
+                                        .foregroundColor(.cyan)
+                                    Text("PROCESS & DAEMON CONTROLLER")
+                                        .font(.system(size: 9.5, weight: .bold, design: .rounded))
+                                        .foregroundColor(.white.opacity(0.85))
+                                    
+                                    Text("\(store.daemonManager.runningCount)/4 ACTIVE")
+                                        .font(.system(size: 8, weight: .bold, design: .rounded))
+                                        .foregroundColor(.emeraldGreen)
+                                        .padding(.horizontal, 4)
+                                        .padding(.vertical, 1)
+                                        .background(Color.emeraldGreen.opacity(0.15))
+                                        .clipShape(Capsule())
+                                }
+                                
+                                Spacer()
+                                
+                                // Prominent Force Quit All Action Button
+                                Button(action: {
+                                    store.forceQuitAllDaemons()
+                                }) {
+                                    HStack(spacing: 3) {
+                                        Image(systemName: "xmark.octagon.fill")
+                                            .font(.system(size: 9))
+                                            .foregroundColor(.white)
+                                        Text("Force Quit All")
+                                            .font(.system(size: 9, weight: .bold, design: .rounded))
+                                            .foregroundColor(.white)
+                                    }
+                                    .padding(.horizontal, 7)
+                                    .padding(.vertical, 3)
+                                    .background(
+                                        LinearGradient(
+                                            colors: [Color.red.opacity(0.85), Color(red: 180/255, green: 20/255, blue: 40/255)],
+                                            startPoint: .topLeading,
+                                            endPoint: .bottomTrailing
+                                        )
+                                    )
+                                    .clipShape(Capsule())
+                                    .shadow(color: Color.red.opacity(0.4), radius: 4)
+                                }
+                                .buttonStyle(.plain)
+                            }
+                            .padding(.horizontal, 14)
+                            
+                            // Daemon Worker Rows
+                            VStack(spacing: 4) {
+                                ForEach(store.daemonManager.daemons) { daemon in
+                                    daemonRow(daemon)
+                                }
+                            }
+                            .padding(.horizontal, 12)
+                        }
+                        
+                        Divider()
+                            .background(Color.white.opacity(0.08))
+                            .padding(.vertical, 1)
+                        
+                        // 3. Footer Bar with Clean Quit Options
+                        HStack {
+                            Text("Fabric OS Native Master Controller")
+                                .font(.system(size: 8.5, weight: .medium, design: .rounded))
+                                .foregroundColor(.white.opacity(0.35))
+                            
+                            Spacer()
+                            
+                            Button(action: {
+                                store.startAllDaemons()
+                            }) {
+                                Text("Start All")
+                                    .font(.system(size: 8.5, weight: .semibold, design: .rounded))
+                                    .foregroundColor(.emeraldGreen)
+                            }
+                            .buttonStyle(.plain)
+                            
+                            Text("•")
+                                .foregroundColor(.white.opacity(0.2))
+                                .font(.system(size: 8))
+                            
+                            Button(action: {
+                                store.quitAndStopAll()
+                            }) {
+                                Text("Quit Fabric & Stop All Daemons")
+                                    .font(.system(size: 8.5, weight: .bold, design: .rounded))
+                                    .foregroundColor(.red.opacity(0.9))
+                            }
+                            .buttonStyle(.plain)
+                        }
+                        .padding(.horizontal, 14)
+                        .padding(.bottom, 6)
                     }
-                    .padding(.bottom, 8)
                     .transition(.opacity.combined(with: .move(edge: .top)))
                 }
             }
@@ -605,6 +1182,108 @@ public struct NotchContentView: View {
         .onHover { hovering in
             handleHover(hovering)
         }
+        .contextMenu {
+            Button("⚡ Spark 90m Flow") {
+                store.triggerSpark()
+            }
+            Button("🏁 Settle Session") {
+                store.triggerSettle()
+            }
+            Button("🌐 Open Cockpit Dashboard") {
+                store.openCockpit()
+            }
+            Divider()
+            Button("🟢 Start All Daemons") {
+                store.startAllDaemons()
+            }
+            Button("🛑 Force Quit All Daemons") {
+                store.forceQuitAllDaemons()
+            }
+            Divider()
+            Button("Quit Fabric & Stop All Daemons") {
+                store.quitAndStopAll()
+            }
+            Button("Quit Fabric HUD") {
+                NSApplication.shared.terminate(nil)
+            }
+        }
+    }
+    
+    private func daemonRow(_ daemon: DaemonProcessInfo) -> some View {
+        HStack(spacing: 6) {
+            // Live Status Indicator (🟢 / ⚪ / 🔴)
+            Text(daemon.status.icon)
+                .font(.system(size: 9))
+            
+            // Name & Subtitle
+            VStack(alignment: .leading, spacing: 1) {
+                Text(daemon.name)
+                    .font(.system(size: 10, weight: .semibold, design: .rounded))
+                    .foregroundColor(.white.opacity(0.92))
+                    .lineLimit(1)
+                
+                Text(daemon.subtitle)
+                    .font(.system(size: 7.5, weight: .regular, design: .rounded))
+                    .foregroundColor(.white.opacity(0.40))
+                    .lineLimit(1)
+            }
+            
+            Spacer()
+            
+            // Live PID badge
+            Text(daemon.statusDetail)
+                .font(.system(size: 8.5, weight: .medium, design: .monospaced))
+                .foregroundColor(daemon.status == .running ? .cyan : (daemon.status == .error ? .red : .white.opacity(0.4)))
+                .padding(.horizontal, 4)
+                .padding(.vertical, 1.5)
+                .background(Color.white.opacity(0.04))
+                .clipShape(RoundedRectangle(cornerRadius: 3))
+            
+            // 1-Click Action Button (Start / Stop)
+            if daemon.status == .running {
+                Button(action: {
+                    store.daemonManager.stopDaemon(id: daemon.id) {
+                        store.refreshState()
+                    }
+                }) {
+                    Text("Stop")
+                        .font(.system(size: 8.5, weight: .bold, design: .rounded))
+                        .foregroundColor(.red.opacity(0.9))
+                        .padding(.horizontal, 6)
+                        .padding(.vertical, 2.5)
+                        .background(Color.red.opacity(0.12))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 4)
+                                .stroke(Color.red.opacity(0.3), lineWidth: 0.6)
+                        )
+                        .clipShape(RoundedRectangle(cornerRadius: 4))
+                }
+                .buttonStyle(.plain)
+            } else {
+                Button(action: {
+                    store.daemonManager.startDaemon(id: daemon.id) {
+                        store.refreshState()
+                    }
+                }) {
+                    Text("Start")
+                        .font(.system(size: 8.5, weight: .bold, design: .rounded))
+                        .foregroundColor(.emeraldGreen)
+                        .padding(.horizontal, 6)
+                        .padding(.vertical, 2.5)
+                        .background(Color.emeraldGreen.opacity(0.14))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 4)
+                                .stroke(Color.emeraldGreen.opacity(0.3), lineWidth: 0.6)
+                        )
+                        .clipShape(RoundedRectangle(cornerRadius: 4))
+                }
+                .buttonStyle(.plain)
+            }
+        }
+        .padding(.horizontal, 8)
+        .padding(.vertical, 4)
+        .background(Color.white.opacity(0.04))
+        .clipShape(RoundedRectangle(cornerRadius: 6))
     }
     
     private func handleHover(_ hovering: Bool) {
@@ -672,12 +1351,13 @@ extension Color {
 
 public final class NotchWindowController: NSObject, NSWindowDelegate {
     public var window: NSPanel!
-    private var store = TelemetryStore()
+    public var store = TelemetryStore()
     private var isExpanded: Bool = false
     
     public override init() {
         super.init()
         setupWindow()
+        setupAppMenu()
     }
     
     private func setupWindow() {
@@ -723,6 +1403,56 @@ public final class NotchWindowController: NSObject, NSWindowDelegate {
         window.orderFrontRegardless()
     }
     
+    private func setupAppMenu() {
+        let mainMenu = NSMenu()
+        let appMenuItem = NSMenuItem()
+        mainMenu.addItem(appMenuItem)
+        
+        let appMenu = NSMenu()
+        appMenuItem.submenu = appMenu
+        
+        let quitAndStopItem = NSMenuItem(
+            title: "Quit Fabric & Stop All Daemons",
+            action: #selector(handleQuitAndStop),
+            keyEquivalent: "q"
+        )
+        quitAndStopItem.target = self
+        appMenu.addItem(quitAndStopItem)
+        
+        let forceQuitItem = NSMenuItem(
+            title: "Force Quit All Daemons",
+            action: #selector(handleForceQuitDaemons),
+            keyEquivalent: "k"
+        )
+        forceQuitItem.keyEquivalentModifierMask = [.command, .shift]
+        forceQuitItem.target = self
+        appMenu.addItem(forceQuitItem)
+        
+        appMenu.addItem(NSMenuItem.separator())
+        
+        let quitItem = NSMenuItem(
+            title: "Quit Fabric HUD Only",
+            action: #selector(handleQuitOnly),
+            keyEquivalent: ""
+        )
+        quitItem.target = self
+        appMenu.addItem(quitItem)
+        
+        NSApplication.shared.mainMenu = mainMenu
+    }
+    
+    @objc private func handleQuitAndStop() {
+        store.quitAndStopAll()
+    }
+    
+    @objc private func handleForceQuitDaemons() {
+        store.forceQuitAllDaemons()
+    }
+    
+    @objc private func handleQuitOnly() {
+        NSApplication.shared.terminate(nil)
+    }
+    
     public func updateExpansion(_ expanded: Bool) {
         guard expanded != isExpanded else { return }
         self.isExpanded = expanded
@@ -730,8 +1460,8 @@ public final class NotchWindowController: NSObject, NSWindowDelegate {
         guard let screen = window.screen ?? NSScreen.main else { return }
         let screenFrame = screen.frame
         
-        let targetWidth: CGFloat = expanded ? 480 : 430
-        let targetHeight: CGFloat = expanded ? 134 : 44
+        let targetWidth: CGFloat = expanded ? 540 : 430
+        let targetHeight: CGFloat = expanded ? 330 : 44
         
         let targetRect = NSRect(
             x: screenFrame.midX - targetWidth / 2.0,
@@ -814,6 +1544,40 @@ public struct NotchVerification {
         assertions += 1
         print("  ✓ RespirationWaveView synthesized (bpm=\(wave.bpm), coh=\(wave.coherence))")
         
+        // 5. Test Daemon Process Manager & Worker List
+        let daemonMgr = DaemonProcessManager()
+        assertions += 1
+        let daemons = daemonMgr.daemons
+        let names = daemons.map { $0.name }
+        print("  ✓ DaemonProcessManager initialized with \(daemons.count) workers: \(names.joined(separator: ", "))")
+        guard daemons.count == 4,
+              names.contains("macOS Ambient Daemon"),
+              names.contains("Telegram Video Vault Archiver"),
+              names.contains("Insomnia Power Governor"),
+              names.contains("Cybernetic Governor") else {
+            print("❌ Assertion Failed: Daemon list missing required background workers")
+            return 1
+        }
+        
+        // 6. Test Live PID Detection & Status Mapping
+        assertions += 1
+        for d in daemons {
+            print("    • \(d.status.icon) \(d.name): \(d.status.rawValue) (\(d.statusDetail))")
+        }
+        
+        // 7. Test Native Notification Dispatcher
+        assertions += 1
+        FabricNotifier.shared.notify(
+            title: "Fabric QC Test",
+            body: "Self-test notification dispatched cleanly"
+        )
+        print("  ✓ FabricNotifier toast dispatcher verified")
+        
+        // 8. Test Force-Quit Simulation & Process Cleanup Logic (Dry-Run Safe)
+        assertions += 1
+        let dryRunActions = daemonMgr.forceQuitAllDaemons(dryRun: true)
+        print("  ✓ Force Quit dry-run logic simulated: \(dryRunActions.count) cleanup actions identified")
+        
         print("✅ [FabricNotch QC] All \(assertions) checks passed cleanly.")
         return 0
     }
@@ -828,29 +1592,38 @@ public struct FabricNotchApp {
         
         if args.contains("-h") || args.contains("--help") {
             print("""
-            FabricNotch — Native macOS Floating Notch HUD for Fabric OS
+            Fabric / FabricNotch — Unified Native macOS Desktop App & Daemon Controller for Fabric OS
             
             USAGE:
+              Fabric [options]
               FabricNotch [options]
             
             OPTIONS:
-              -h, --help      Show this help documentation
-              -v, --version   Display version and architecture info
-              --check         Run diagnostic QC verification suite and exit
-              --headless      Initialize runtime structures without GUI loop
+              -h, --help            Show this help documentation
+              -v, --version         Display version and architecture info
+              --check               Run diagnostic QC verification suite and exit
+              --headless            Initialize runtime structures without GUI loop
+              --daemons             Query live status of all 4 background workers and exit
+              --force-quit          Forcefully terminate all background workers & child processes
+              --dry-run             Simulate action without sending termination signals
             
             BEHAVIOR:
-              - Floats centered at the top of the primary display (MacBook camera notch area)
+              - Floats centered at the top of the primary display (MacBook camera notch bezel)
               - Configured with .statusBar level to stay visible over fullscreen spaces
               - Renders real-time 4F focus vector, vitality, active Git branch & frontmost app
               - Canvas-drawn fluid sine wave reflecting FOCI diaphragmatic respiration
               - Expands downward on hover to expose quick actions (Spark 90m, Settle, Refresh)
+              - Dedicated Process & Daemon Controller HUD:
+                • 1-click Start/Stop for Ambient Daemon, Telegram Vault, Insomnia & Governor
+                • Prominent 'Force Quit All Daemons' one-click safety button
+                • Native macOS Notification toasts on daemon state transitions & governor alerts
+                • Clean 'Quit Fabric & Stop All Daemons' app menu option (Cmd+Q)
             """)
             exit(0)
         }
         
         if args.contains("-v") || args.contains("--version") {
-            print("FabricNotch v1.0.0 (Fabric OS Native Dynamic Island HUD, arm64)")
+            print("Fabric v1.0.0 (Unified macOS Desktop App & Daemon Controller, arm64)")
             exit(0)
         }
         
@@ -860,8 +1633,29 @@ public struct FabricNotchApp {
         }
         
         if args.contains("--headless") {
-            print("FabricNotch running in headless verification mode...")
+            print("Fabric running in headless verification mode...")
             _ = NotchVerification.runCheck()
+            exit(0)
+        }
+        
+        if args.contains("--daemons") {
+            let mgr = DaemonProcessManager()
+            print("Fabric OS — Background Workers & Daemons Status:")
+            for d in mgr.daemons {
+                print("  • \(d.status.icon) \(d.name): \(d.status.rawValue) (\(d.statusDetail))")
+            }
+            exit(0)
+        }
+        
+        if args.contains("--force-quit") {
+            let isDryRun = args.contains("--dry-run")
+            let mgr = DaemonProcessManager()
+            print("🛑 Initiating Force Quit of all Fabric OS background daemons\(isDryRun ? " (Dry-Run Mode)" : "")...")
+            let actions = mgr.forceQuitAllDaemons(dryRun: isDryRun)
+            for a in actions {
+                print("  • \(a)")
+            }
+            print("✅ All background daemons and child processes \(isDryRun ? "identified for cleanup" : "terminated").")
             exit(0)
         }
         

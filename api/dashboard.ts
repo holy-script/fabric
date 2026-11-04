@@ -670,7 +670,15 @@ export default async function handler(
           <p id="dashVoiceStatus" class="text-[11px] text-zinc-400">Select Council Persona and speak or spar.</p>
         </div>
       </div>
-      <div class="flex items-center gap-1.5">
+      <div class="flex items-center gap-1.5 flex-wrap">
+        <div class="flex items-center gap-1" id="dashVoicePersonaPills">
+          <button type="button" class="persona-pill px-2 py-0.5 rounded text-[10px] font-mono bg-purple-600 text-white border border-purple-400 transition" data-persona="socratic" onclick="setDashboardVoicePersona('socratic')">🏛️ Socratic</button>
+          <button type="button" class="persona-pill px-2 py-0.5 rounded text-[10px] font-mono bg-zinc-800 text-zinc-300 hover:bg-purple-900/40 hover:text-purple-300 border border-zinc-700 transition" data-persona="stoic" onclick="setDashboardVoicePersona('stoic')">⚖️ Stoic</button>
+          <button type="button" class="persona-pill px-2 py-0.5 rounded text-[10px] font-mono bg-zinc-800 text-zinc-300 hover:bg-purple-900/40 hover:text-purple-300 border border-zinc-700 transition" data-persona="architect" onclick="setDashboardVoicePersona('architect')">📐 Architect</button>
+          <button type="button" class="persona-pill px-2 py-0.5 rounded text-[10px] font-mono bg-zinc-800 text-zinc-300 hover:bg-purple-900/40 hover:text-purple-300 border border-zinc-700 transition" data-persona="quant" onclick="setDashboardVoicePersona('quant')">📈 Quant</button>
+          <button type="button" class="persona-pill px-2 py-0.5 rounded text-[10px] font-mono bg-zinc-800 text-zinc-300 hover:bg-purple-900/40 hover:text-purple-300 border border-zinc-700 transition" data-persona="biomechanic" onclick="setDashboardVoicePersona('biomechanic')">🦾 Biomechanic</button>
+          <button type="button" class="persona-pill px-2 py-0.5 rounded text-[10px] font-mono bg-zinc-800 text-zinc-300 hover:bg-purple-900/40 hover:text-purple-300 border border-zinc-700 transition" data-persona="sceptic" onclick="setDashboardVoicePersona('sceptic')">⚔️ Sceptic</button>
+        </div>
         <select id="dashVoicePersonaSelect" onchange="setDashboardVoicePersona(this.value)" class="bg-zinc-800 border border-zinc-700 text-zinc-300 text-[11px] rounded-lg px-2 py-1 outline-none">
           <option value="socratic">🏛️ Socratic</option>
           <option value="stoic">⚖️ Stoic</option>
@@ -2390,8 +2398,19 @@ export default async function handler(
 
     function setDashboardVoicePersona(p) {
       dashVoicePersona = p;
+      const select = document.getElementById('dashVoicePersonaSelect');
+      if (select && select.value !== p) select.value = p;
       const status = document.getElementById('dashVoiceStatus');
       if (status) status.textContent = 'Voice Persona switched to ' + p.toUpperCase();
+      document.querySelectorAll('#dashVoicePersonaPills .persona-pill').forEach(function (btn) {
+        if (btn.getAttribute('data-persona') === p) {
+          btn.classList.add('bg-purple-600', 'text-white', 'border-purple-400');
+          btn.classList.remove('bg-zinc-800', 'text-zinc-300', 'border-zinc-700');
+        } else {
+          btn.classList.remove('bg-purple-600', 'text-white', 'border-purple-400');
+          btn.classList.add('bg-zinc-800', 'text-zinc-300', 'border-zinc-700');
+        }
+      });
     }
 
     function initDashboardVoiceSession() {
@@ -2608,86 +2627,86 @@ export default async function handler(
       Computer_Networks: [
         {
           title: "Transmission Delay",
-          formula: "d_{\\text{trans}} = \\frac{L}{R}",
+          formula: "d_{\\\\text{trans}} = \\\\frac{L}{R}",
           desc: "L is packet length in bits, R is link transmission rate in bps (e.g. 1 Gbps = 10^9 bps)."
         },
         {
           title: "Propagation Delay",
-          formula: "d_{\\text{prop}} = \\frac{d}{s}",
+          formula: "d_{\\\\text{prop}} = \\\\frac{d}{s}",
           desc: "d is physical distance in meters, s is propagation speed (approx 2 × 10^8 m/s in fiber/copper)."
         },
         {
           title: "Total Nodal Delay",
-          formula: "d_{\\text{nodal}} = d_{\\text{proc}} + d_{\\text{queue}} + d_{\\text{trans}} + d_{\\text{prop}}",
+          formula: "d_{\\\\text{nodal}} = d_{\\\\text{proc}} + d_{\\\\text{queue}} + d_{\\\\text{trans}} + d_{\\\\text{prop}}",
           desc: "Nodal processing + queuing delay + link transmission delay + physical propagation delay."
         },
         {
           title: "Bandwidth-Delay Product (BDP)",
-          formula: "\\text{BDP} = R \\times \\text{RTT}",
+          formula: "\\\\text{BDP} = R \\\\times \\\\text{RTT}",
           desc: "Maximum number of in-flight unacknowledged bits that can fill the transmission pipe."
         },
         {
           title: "Protocol Channel Utilization",
-          formula: "U_{\\text{sender}} = \\min\\left(1, \\frac{W \\cdot (L/R)}{\\text{RTT} + L/R}\\right)",
+          formula: "U_{\\\\text{sender}} = \\\\min\\\\left(1, \\\\frac{W \\\\cdot (L/R)}{\\\\text{RTT} + L/R}\\\\right)",
           desc: "Stop-and-Wait uses W = 1. Pipelined protocols (Go-Back-N, Selective Repeat) use window size W."
         },
         {
           title: "Little's Formula",
-          formula: "N = \\lambda \\times W",
+          formula: "N = \\\\lambda \\\\times W",
           desc: "Average number of packets in system N = packet arrival rate lambda × average waiting time W."
         }
       ],
       Computer_Systems_Design: [
         {
           title: "Radix-r to Decimal Expansion",
-          formula: "(d_n \\dots d_1 d_0)_r = \\sum_{i=0}^n d_i \\cdot r^i",
+          formula: "(d_n \\\\dots d_1 d_0)_r = \\\\sum_{i=0}^n d_i \\\\cdot r^i",
           desc: "Each digit d_i must strictly satisfy 0 <= d_i < r (Strict radix digit bound invariant)."
         },
         {
           title: "Radix Equivalence Equation",
-          formula: "(143)_a = (212)_b \\implies a^2 + 4a + 3 = 2b^2 + b + 2",
+          formula: "(143)_a = (212)_b \\\\implies a^2 + 4a + 3 = 2b^2 + b + 2",
           desc: "Solve integer roots with constraint: a > max digits (e.g. a > 4) and b > 2."
         },
         {
           title: "Two's Complement & Unsigned Bounds",
-          formula: "\\text{Range: } [-2^{N-1}, 2^{N-1} - 1] \\quad \\text{vs} \\quad [0, 2^N - 1]",
+          formula: "\\\\text{Range: } [-2^{N-1}, 2^{N-1} - 1] \\\\quad \\\\text{vs} \\\\quad [0, 2^N - 1]",
           desc: "Sign extension preserves value: replicate the MSB to the left for signed integers."
         },
         {
           title: "Universal 2:1 Multiplexer Logic",
-          formula: "Y = S \\cdot I_1 + \\bar{S} \\cdot I_0",
+          formula: "Y = S \\\\cdot I_1 + \\\\bar{S} \\\\cdot I_0",
           desc: "Can implement any 2-variable function by connecting inputs to 0, 1, or literals."
         },
         {
           title: "Universal NAND Gate Counts",
-          formula: "\\text{NOT}=1, \\; \\text{AND}=2, \\; \\text{OR}=3, \\; \\text{NOR}=4, \\; \\text{XOR}=4",
+          formula: "\\\\text{NOT}=1, \\\\; \\\\text{AND}=2, \\\\; \\\\text{OR}=3, \\\\; \\\\text{NOR}=4, \\\\; \\\\text{XOR}=4",
           desc: "Exact minimum number of 2-input NAND gates required to synthesize fundamental logic gates."
         }
       ],
       BDBN: [
         {
           title: "Network Density (Undirected vs Directed)",
-          formula: "D_{\\text{undir}} = \\frac{2E}{N(N-1)}, \\quad D_{\\text{dir}} = \\frac{E}{N(N-1)}",
+          formula: "D_{\\\\text{undir}} = \\\\frac{2E}{N(N-1)}, \\\\quad D_{\\\\text{dir}} = \\\\frac{E}{N(N-1)}",
           desc: "Ratio of actual edges E to total possible edges. Bounded in [0, 1]."
         },
         {
           title: "Average Node Degree",
-          formula: "\\langle k \\rangle = \\frac{2E}{N}",
+          formula: "\\\\langle k \\\\rangle = \\\\frac{2E}{N}",
           desc: "Handshaking lemma: sum of degrees equals 2 * total edges E."
         },
         {
           title: "Clustering Coefficient",
-          formula: "C_i = \\frac{2 e_i}{k_i(k_i - 1)}",
+          formula: "C_i = \\\\frac{2 e_i}{k_i(k_i - 1)}",
           desc: "e_i is the number of triangles/edges between neighbors of node i. Degree k_i >= 2."
         },
         {
           title: "Betweenness Centrality",
-          formula: "C_B(v) = \\sum_{s \\ne v \\ne t} \\frac{\\sigma_{st}(v)}{\\sigma_{st}}",
+          formula: "C_B(v) = \\\\sum_{s \\\\ne v \\\\ne t} \\\\frac{\\\\sigma_{st}(v)}{\\\\sigma_{st}}",
           desc: "Fraction of shortest paths between all pairs (s, t) that pass through vertex v."
         },
         {
           title: "Scale-Free Power Law Degree Distribution",
-          formula: "P(k) \\sim k^{-\\gamma} \\quad (2 < \\gamma < 3)",
+          formula: "P(k) \\\\sim k^{-\\\\gamma} \\\\quad (2 < \\\\gamma < 3)",
           desc: "Biological and metabolic networks exhibit scale-free resilience to random failures."
         }
       ]

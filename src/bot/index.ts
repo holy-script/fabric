@@ -46,6 +46,7 @@ import { handleBrowserCommand, handleAiModeDirect } from "./commands/browser.js"
 import { handleTaskCommand } from "./commands/task.js";
 import { handleSongCommand, handleMixCommand, handlePlaylistsCommand } from "./commands/music.js";
 import { handleConsolidate } from "./commands/consolidation.js";
+import { handleSpin } from "./commands/spin.js";
 import { deduplicateUpdates } from "./middleware/dedup.js";
 import { handleNaturalMessage } from "./handlers/message.js";
 import { handleVoiceMessage } from "./handlers/voice.js";
@@ -108,6 +109,7 @@ export function createBot() {
       { command: "mix", description: "Generate dynamic AI flow mix for NewPipe" },
       { command: "playlists", description: "View Fabric Sonic Mind playlists and track counts" },
       { command: "consolidate", description: "Nightly Dream Loop: 4F delta, axioms & morning memo" },
+      { command: "spin", description: "Spin a new Antigravity project workspace" },
       { command: "start", description: "Overview & instructions" },
     ])
     .catch((err) => console.error("Could not set bot commands:", err));
@@ -174,6 +176,7 @@ export function createBot() {
   bot.command("mix", handleMixCommand);
   bot.command(["playlists", "music"], handlePlaylistsCommand);
   bot.command(["consolidate", "dream"], handleConsolidate);
+  bot.command("spin", handleSpin);
   bot.command("ask", handleAsk);
 
   // Voice memo ingestion (multimodal)
