@@ -1,0 +1,19 @@
+{
+  "id": "vs_1793768225912_9fb8ea27",
+  "userId": "operator",
+  "mode": "sparring",
+  "status": "active",
+  "startTime": 1793768225912,
+  "activeSpeaker": "idle",
+  "activePersona": "sceptic",
+  "transcript": [],
+  "metrics": {
+    "sessionStartLatencyMs": 0,
+    "audioChunkLatencyMs": [],
+    "averageChunkLatencyMs": 0,
+    "roundTripTimeMs": 0,
+    "slaThresholdMs": 300,
+    "slaViolations": 0
+  },
+  "metadata": {}
+}

@@ -574,6 +574,42 @@ export async function triggerDnd(
 }
 
 /**
+ * Toggles Android Zen Mode / DND and optionally dims screen to eliminate mobile cognitive friction.
+ */
+export async function toggleZenMode(
+  enable: boolean,
+  deviceId?: string,
+  dimScreen: boolean = true
+): Promise<{ success: boolean; zenMode: number; screenDimmed: boolean; message: string }> {
+  try {
+    const dndResult = await triggerDnd(enable, deviceId);
+    let screenDimmed = false;
+    if (enable && dimScreen) {
+      try {
+        const targetId = await resolveDeviceId(deviceId);
+        await execAdb(["shell", "settings put system screen_brightness 10 2>/dev/null || true"], targetId);
+        screenDimmed = true;
+      } catch {
+        screenDimmed = false;
+      }
+    }
+    return {
+      success: dndResult.success,
+      zenMode: dndResult.zenMode,
+      screenDimmed,
+      message: dndResult.message,
+    };
+  } catch (err: any) {
+    return {
+      success: false,
+      zenMode: 0,
+      screenDimmed: false,
+      message: `Failed to toggle Zen mode: ${err?.message || err}`,
+    };
+  }
+}
+
+/**
  * Queries and combines complete device stats summary:
  * Battery, Screen Interactive state, Uptime, Memory, Network, and Focus DND.
  */

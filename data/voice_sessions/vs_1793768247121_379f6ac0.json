@@ -1,0 +1,19 @@
+{
+  "id": "vs_1793768247121_379f6ac0",
+  "userId": "operator",
+  "mode": "socratic",
+  "status": "active",
+  "startTime": 1793768247121,
+  "activeSpeaker": "idle",
+  "activePersona": "socratic",
+  "transcript": [],
+  "metrics": {
+    "sessionStartLatencyMs": 0,
+    "audioChunkLatencyMs": [],
+    "averageChunkLatencyMs": 0,
+    "roundTripTimeMs": 0,
+    "slaThresholdMs": 300,
+    "slaViolations": 0
+  },
+  "metadata": {}
+}

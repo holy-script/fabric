@@ -16,6 +16,10 @@ import {
   logToBlackboard,
   DEFAULT_AMBIENT_STATE_PATH,
 } from "../src/services/ambient.js";
+import {
+  evaluateGovernorInterventions,
+  type GovernorEvaluationResult,
+} from "../src/services/governor.js";
 
 export interface DaemonOptions {
   intervalMs?: number;
@@ -332,7 +336,27 @@ export class FabricAmbientDaemon {
       this.statePath
     );
 
-    // 6. Push Heartbeat to Fabric OS (/api/quick?action=ambient)
+    // 6. Closed-Loop Cybernetic Governor Evaluation
+    try {
+      const governorResult = await evaluateGovernorInterventions(updated, {
+        statePath: this.statePath,
+        persistToBlackboard: true,
+      });
+
+      if (governorResult.dynamicIslandPayload && governorResult.actuationLevel > 0) {
+        updated.dynamicIsland = governorResult.dynamicIslandPayload;
+      }
+      if (governorResult.blackboardSummary) {
+        updated.blackboard = {
+          ...updated.blackboard,
+          ...governorResult.blackboardSummary,
+        };
+      }
+    } catch {
+      // Governor failure must never crash the ambient daemon
+    }
+
+    // 7. Push Heartbeat to Fabric OS (/api/quick?action=ambient)
     await this.pushHeartbeat(updated);
 
     return updated;

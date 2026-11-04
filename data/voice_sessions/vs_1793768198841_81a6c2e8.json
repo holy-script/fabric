@@ -1,0 +1,32 @@
+{
+  "id": "vs_1793768198841_81a6c2e8",
+  "userId": "operator",
+  "mode": "socratic",
+  "status": "active",
+  "startTime": 1793768198841,
+  "activeSpeaker": "council",
+  "activePersona": "socratic",
+  "transcript": [
+    {
+      "id": "td_1793768199751_r",
+      "sessionId": "vs_1793768198841_81a6c2e8",
+      "speaker": "council",
+      "persona": "socratic",
+      "delta": "What underlying assumption makes this diversion seem urgent, and does it advance your primary 4F vector?",
+      "fullText": "What underlying assumption makes this diversion seem urgent, and does it advance your primary 4F vector?",
+      "isFinal": true,
+      "timestamp": 1793768199751
+    }
+  ],
+  "metrics": {
+    "sessionStartLatencyMs": 0,
+    "audioChunkLatencyMs": [],
+    "averageChunkLatencyMs": 0,
+    "roundTripTimeMs": 874,
+    "slaThresholdMs": 300,
+    "slaViolations": 1,
+    "llmFirstTokenMs": 0,
+    "ttsFirstAudioMs": 874
+  },
+  "metadata": {}
+}

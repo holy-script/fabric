@@ -415,6 +415,7 @@ User Goal:
       "calculation",
       "export",
       "notify",
+      "swarm",
     ]);
 
     const planId = `plan_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
@@ -439,6 +440,10 @@ User Goal:
         actionType,
         payload: typeof rawStep.payload === "object" && rawStep.payload !== null ? rawStep.payload : {},
         status: "pending",
+        isSwarm: Boolean(rawStep.isSwarm || rawStep.actionType === "swarm"),
+        swarmRole: rawStep.swarmRole,
+        swarmRoles: Array.isArray(rawStep.swarmRoles) ? rawStep.swarmRoles : undefined,
+        swarmConfig: typeof rawStep.swarmConfig === "object" ? rawStep.swarmConfig : undefined,
         costEstimate: {
           focusHours: typeof rawStep.costEstimate?.focusHours === "number" ? rawStep.costEstimate.focusHours : 0.25,
           tokens: typeof rawStep.costEstimate?.tokens === "number" ? rawStep.costEstimate.tokens : 1000,

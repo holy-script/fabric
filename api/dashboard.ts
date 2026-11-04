@@ -621,6 +621,10 @@ export default async function handler(
           <span>📜</span>
           <span class="hidden sm:inline">Dossier</span>
         </a>
+        <button id="dashboardVoiceBtn" onclick="toggleDashboardVoice()" class="px-2.5 py-1.5 rounded-lg bg-purple-950/40 hover:bg-purple-900/60 text-purple-300 border border-purple-500/40 text-xs font-mono font-medium flex items-center gap-1.5 transition active:scale-95" title="Toggle Real-Time Socratic Voice Channel">
+          <span id="dashVoiceOrb" class="inline-block w-2.5 h-2.5 rounded-full bg-purple-400"></span>
+          <span>🎙️ Voice</span>
+        </button>
         <button onclick="refreshDashboard()" class="p-2 rounded-lg bg-zinc-800/80 hover:bg-zinc-700 text-zinc-300 border border-zinc-700/60 transition active:scale-95" title="Refresh Telemetry">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
@@ -649,6 +653,58 @@ export default async function handler(
       </div>
     </div>
   </header>
+
+  <!-- REAL-TIME SOCRATIC VOICE FLOATING DOCK -->
+  <section id="dashboardVoicePanel" class="glass-card glow-purple rounded-2xl p-4 flex flex-col gap-3 hidden border border-purple-500/30">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <div class="relative w-7 h-7 rounded-full bg-purple-500/20 border border-purple-500/40 flex items-center justify-center">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-20"></span>
+          <span class="text-xs">🎙️</span>
+        </div>
+        <div>
+          <h3 class="text-xs font-bold text-white flex items-center gap-1.5">
+            Polymath Voice Channel
+            <span class="text-[9px] font-mono uppercase px-1.5 py-0.2 rounded bg-purple-500/20 text-purple-300 border border-purple-500/30">&lt;300ms SLA</span>
+          </h3>
+          <p id="dashVoiceStatus" class="text-[11px] text-zinc-400">Select Council Persona and speak or spar.</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-1.5">
+        <select id="dashVoicePersonaSelect" onchange="setDashboardVoicePersona(this.value)" class="bg-zinc-800 border border-zinc-700 text-zinc-300 text-[11px] rounded-lg px-2 py-1 outline-none">
+          <option value="socratic">🏛️ Socratic</option>
+          <option value="stoic">⚖️ Stoic</option>
+          <option value="architect">📐 Architect</option>
+          <option value="quant">📈 Quant</option>
+          <option value="biomechanic">🦾 Biomechanic</option>
+          <option value="sceptic">⚔️ Sceptic</option>
+        </select>
+        <button onclick="toggleDashboardVoice()" class="text-zinc-400 hover:text-zinc-200 text-xs px-2 py-1 rounded bg-zinc-800 border border-zinc-700">✕</button>
+      </div>
+    </div>
+    
+    <!-- Waveform Canvas -->
+    <div class="rounded-xl bg-zinc-950/80 border border-zinc-800/80 p-2 flex flex-col gap-1.5">
+      <canvas id="dashVoiceCanvas" width="500" height="32" class="w-full h-8 rounded"></canvas>
+      <div class="flex items-center justify-between text-[10px] font-mono text-zinc-400">
+        <span id="dashVoiceLatency">Latency: &lt;180ms</span>
+        <span id="dashVoiceSpeaker">Speaker: Idle</span>
+      </div>
+    </div>
+
+    <!-- Live Transcript Box & Input Sparring -->
+    <div class="flex flex-col gap-2">
+      <div id="dashVoiceTranscript" class="text-xs text-zinc-300 font-mono bg-zinc-900/60 p-2.5 rounded-xl border border-zinc-800/80 min-h-[44px] flex items-center">
+        "Ask a dilemma, report focus strain, or challenge an architecture premise."
+      </div>
+      <div class="flex items-center gap-1.5">
+        <input id="dashVoiceInput" type="text" placeholder="Type prompt or tap Spar to engage..." onkeydown="if(event.key==='Enter')sparFromDashboard()" class="flex-1 bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-1.5 text-xs text-zinc-200 placeholder-zinc-500 outline-none focus:border-purple-500/50">
+        <button id="dashVoiceMicBtn" onclick="sparFromDashboard()" class="px-3 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-semibold text-xs transition active:scale-95 flex items-center gap-1">
+          <span>⚡</span> Spar
+        </button>
+      </div>
+    </div>
+  </section>
 
   <!-- TAB NAVIGATION SWITCHER (5 TABS) -->
   <nav class="flex items-center gap-1.5 p-1.5 rounded-2xl bg-zinc-900/90 border border-zinc-800 shadow-lg text-xs font-bold overflow-x-auto no-scrollbar">
@@ -2294,6 +2350,155 @@ export default async function handler(
         console.warn("Telegram openLink failed, falling back to window.open", e);
       }
       window.open(url, '_blank', 'noopener,noreferrer');
+    }
+
+    // ========================================================
+    // DASHBOARD REAL-TIME SOCRATIC VOICE ENGINE
+    // ========================================================
+    let dashVoiceActive = false;
+    let dashVoiceSessionId = null;
+    let dashVoiceAnimId = null;
+    let dashVoicePhase = 0;
+    let dashVoiceEnergy = 0.3;
+    let dashVoicePersona = 'socratic';
+
+    function toggleDashboardVoice() {
+      triggerHaptic('medium');
+      const panel = document.getElementById('dashboardVoicePanel');
+      const orb = document.getElementById('dashVoiceOrb');
+      dashVoiceActive = !dashVoiceActive;
+
+      if (dashVoiceActive) {
+        panel?.classList.remove('hidden');
+        orb?.classList.add('animate-ping');
+        startDashVoiceWaveform();
+        initDashboardVoiceSession();
+      } else {
+        panel?.classList.add('hidden');
+        orb?.classList.remove('animate-ping');
+        cancelAnimationFrame(dashVoiceAnimId);
+        if (dashVoiceSessionId) {
+          fetch('/api/voice', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'finish', sessionId: dashVoiceSessionId })
+          }).catch(function () {});
+          dashVoiceSessionId = null;
+        }
+      }
+    }
+
+    function setDashboardVoicePersona(p) {
+      dashVoicePersona = p;
+      const status = document.getElementById('dashVoiceStatus');
+      if (status) status.textContent = 'Voice Persona switched to ' + p.toUpperCase();
+    }
+
+    function initDashboardVoiceSession() {
+      const status = document.getElementById('dashVoiceStatus');
+      if (status) status.textContent = 'Connecting Socratic voice bridge (<300ms SLA)...';
+      fetch('/api/voice', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'start', mode: dashVoicePersona === 'socratic' ? 'socratic' : 'polymath_council', persona: dashVoicePersona })
+      })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (d && d.sessionId) {
+          dashVoiceSessionId = d.sessionId;
+          if (status) status.textContent = 'Voice Bridge Active (' + (d.tokenInfo ? '<300ms SLA' : 'Autonomous') + ')';
+        }
+      })
+      .catch(function () {
+        if (status) status.textContent = 'Voice Bridge Ready (Offline Fallback)';
+      });
+    }
+
+    function startDashVoiceWaveform() {
+      const canvas = document.getElementById('dashVoiceCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+
+      function loop() {
+        if (!dashVoiceActive) return;
+        const w = canvas.width;
+        const h = canvas.height;
+        ctx.clearRect(0, 0, w, h);
+        dashVoicePhase += 0.08;
+        const midY = h / 2;
+
+        ctx.beginPath();
+        ctx.lineWidth = 2;
+        const grad = ctx.createLinearGradient(0, 0, w, 0);
+        grad.addColorStop(0, '#a855f7');
+        grad.addColorStop(0.5, '#06b6d4');
+        grad.addColorStop(1, '#a855f7');
+        ctx.strokeStyle = grad;
+
+        const baseAmp = (h / 3) * (0.3 + dashVoiceEnergy * 0.7);
+
+        for (let x = 0; x < w; x++) {
+          const normX = x / w;
+          const envelope = Math.sin(normX * Math.PI);
+          const y = midY + Math.sin(normX * 10 * Math.PI + dashVoicePhase) * baseAmp * envelope
+                        + Math.sin(normX * 18 * Math.PI - dashVoicePhase * 1.4) * (baseAmp * 0.35) * envelope;
+          if (x === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+        dashVoiceAnimId = requestAnimationFrame(loop);
+      }
+      cancelAnimationFrame(dashVoiceAnimId);
+      loop();
+    }
+
+    function sparFromDashboard(promptText) {
+      triggerHaptic('light');
+      const inputEl = document.getElementById('dashVoiceInput');
+      const text = promptText || (inputEl ? inputEl.value : '') || 'Spar on my current deep work state.';
+      if (inputEl) inputEl.value = '';
+
+      const transcriptEl = document.getElementById('dashVoiceTranscript');
+      const latencyEl = document.getElementById('dashVoiceLatency');
+      const speakerEl = document.getElementById('dashVoiceSpeaker');
+
+      if (transcriptEl) transcriptEl.textContent = 'Thinking...';
+      if (speakerEl) speakerEl.textContent = 'Speaker: Council';
+      dashVoiceEnergy = 0.9;
+
+      const t0 = Date.now();
+      fetch('/api/voice', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'spar',
+          sessionId: dashVoiceSessionId,
+          input: text,
+          mode: dashVoicePersona === 'socratic' ? 'socratic' : 'polymath_council'
+        })
+      })
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        dashVoiceEnergy = 0.3;
+        const elapsed = Date.now() - t0;
+        if (latencyEl) latencyEl.textContent = 'Latency: ' + elapsed + 'ms (SLA: <300ms)';
+        if (data && data.replyDelta) {
+          if (transcriptEl) transcriptEl.textContent = '“' + data.replyDelta.fullText + '”';
+          if (speakerEl) speakerEl.textContent = 'Speaker: ' + (data.replyDelta.persona || 'Council');
+        }
+        if (data && data.replyAudio && data.replyAudio.data) {
+          try {
+            const fmt = data.replyAudio.format === 'wav' ? 'audio/wav' : 'audio/mp3';
+            const audio = new Audio('data:' + fmt + ';base64,' + data.replyAudio.data);
+            audio.play().catch(function () {});
+          } catch (e) {}
+        }
+      })
+      .catch(function () {
+        dashVoiceEnergy = 0.2;
+        if (transcriptEl) transcriptEl.textContent = '“What invariant must hold for this decision to compound?”';
+      });
     }
 
     // ========================================================

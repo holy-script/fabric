@@ -151,3 +151,33 @@ curl -s -X POST http://localhost:3000/api/quick \
     }
   }" > /dev/null
 ```
+
+---
+
+## 💻 6. Native macOS Floating Notch Panel (`FabricNotch`)
+
+Fabric OS includes a native Swift AppKit + SwiftUI HUD that floats directly around the MacBook camera notch:
+
+- **Source:** [`scripts/shortcuts/FabricNotch.swift`](file:///Users/holyscript/Desktop/projects/fabric/scripts/shortcuts/FabricNotch.swift)
+- **Compiler:** [`scripts/shortcuts/build_notch.sh`](file:///Users/holyscript/Desktop/projects/fabric/scripts/shortcuts/build_notch.sh)
+- **Binary:** `dist/FabricNotch`
+
+### Architecture & Capabilities
+- **Floating HUD:** Borderless panel configured with `.statusBar` level and `.canJoinAllSpaces` / `.fullScreenAuxiliary`, maintaining persistent visibility across all macOS spaces and full-screen apps without a browser window.
+- **Dark OLED Glassmorphism:** Continuous corner radius with deep dark blur and edge glow.
+- **Biometric Wave:** Fluid sine wave animated in real-time via `TimelineView` reflecting FOCI diaphragmatic respiration rate and coherence.
+- **Hover Expansion:** Expands downward smoothly on hover to reveal the 4F Vector breakdown and one-click quick actions (`⚡ Spark 90m`, `🏁 Settle`, `🔄 Refresh`, `🌐 Cockpit`).
+- **Antifragile Telemetry:** Polls `.ambient_state.json` with seamless fallback to AppKit system sensing if offline.
+
+### Compilation & Launch
+```bash
+# 1. Compile native binary
+./scripts/shortcuts/build_notch.sh
+
+# 2. Run diagnostic QC check
+./dist/FabricNotch --check
+
+# 3. Launch Notch Panel
+./dist/FabricNotch
+```
+

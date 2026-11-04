@@ -1,8 +1,8 @@
 # Fabric OS — Agent Handoff & Architecture Dossier
 
 > **For AI Coding Agents & Autonomous Subagents**  
-> *Last Updated: November 3, 2026*  
-> *Test Status: 120 pass, 0 fail (16 test files, 3,598 assertions)*  
+> *Last Updated: November 4, 2026*  
+> *Test Status: 171 pass, 0 fail (20 test files, 3,912 assertions)*  
 > *Git Branch: `main`*  
 > *Production Deployment: https://fabric-one-sage.vercel.app*
 
@@ -196,20 +196,25 @@ graph TD
    - Extracted 179 past exam questions across Computer Networks, Computer Systems Design, and BDBN using native Apple Vision OCR (`scripts/ocr_image.swift`).
    - Built 3 master study notebooks for NotebookLM.
    - Upgraded Dashboard Cockpit with full 5-tab switcher, KaTeX formula cheat sheets, and visual HTN Task DAG viewer.
-9. **Epoch 9: Sonic Mind & FabricPipe (NewPipe Bi-Directional Cloud Engine) (Current)**
+9. **Epoch 9: Sonic Mind & FabricPipe (NewPipe Bi-Directional Cloud Engine)**
    - Architected semantic music memory vault storing personal resonance, emotional memories, 4F focus vectors, and energy ratings for every song.
    - Built bi-directional cloud synchronization engine (`api/music/sync.ts` & `src/music/store.ts`) for custom NewPipe Android builds.
    - Designed goal-oriented dynamic mix generator (`src/music/mixer.ts`) with cognitive flow arc sequencing and spaced repetition for forgotten gems.
-   - Cloned, mapped, and verified Gradle 9.8.2 / Java 17 toolchain for `fabric-newpipe` (`/Users/holyscript/Desktop/projects/fabric-newpipe`).
+   - Cloned, mapped, and verified Gradle 9.8.2 / Java 17 toolchain for `fabric-newpipe` (`/Users/holyscript/Desktop/projects/fabric-newpipe`), compiling native debug APK (38 MB).
    - Integrated Telegram bot commands (`/song`, `/mix`, `/playlists`) and Tab 6 (`🎵 Sonic Mind`) in Cockpit Dashboard.
-   - Expanded test suite to **120 pass, 0 fail (16 test files, 3,598 assertions)**.
+10. **Epoch 10: Sovereign Swarm, Native Notch & Voice Mesh (Current)**
+    - **Native macOS Floating Notch Panel (`FabricNotch.swift`)**: Built standalone native AppKit + SwiftUI borderless glassmorphism panel anchored directly at the MacBook camera notch, hovering permanently across fullscreen apps and Mission Control spaces with dual-harmonic FOCI respiration wave and 1-tap quick action dock (`dist/FabricNotch`, 472 KB).
+    - **HTN Multi-Agent Swarm Orchestration**: Upgraded `src/tasks/executor.ts` to support 4 specialized swarm roles (`recon`, `synthesis`, `critic`, `publisher`), dynamic `${blackboard.recon_findings}` token interpolation, and a dialectical critic evaluation gate (`confidence > 0.8`) with automatic refinement retry loops.
+    - **Closed-Loop 4F Cybernetic Governor (`src/services/governor.ts`)**: Implemented non-linear Aristotelian loss reduction $\Delta \mathcal{L}$, 4 homeostatic boundary checks (Excessive Focus $>+3$, Depleted Vitality $<-2$, Sedentary $>75\text{m}$, Feedback Dispersion), and a 3-tier progressive actuation cascade (Dynamic Island badge $\to$ macOS Notification + Raycast HUD $\to$ Android ADB Zen lock & screen dimming).
+    - **Sub-300ms Real-Time Voice Channel (`src/voice/` & `/api/voice`)**: Engineered bidirectional streaming audio pipeline with multi-persona Edge-TTS neural speech synthesis, Gemini Live multimodal audio frames, low-latency sparring engine, and live audio visualizer orbs in Dynamic Island and Cockpit Dashboard.
+    - Expanded test suite to **171 pass, 0 fail across 20 test files (3,912 assertions)**.
 
 ---
 
 ## 🛠️ 7. Key CLI Commands & Verification Protocols
 
 ```bash
-# 1. Run full test suite (113 tests, 0 failures)
+# 1. Run full test suite (171 tests, 0 failures)
 bun test
 
 # 2. Type-check entire codebase (strict TypeScript)
@@ -218,10 +223,11 @@ npx tsc --noEmit
 # 3. Build dist/ for production
 bun run build
 
-# 4. Start local development server
-bun run dev
+# 4. Compile & run native macOS Floating Notch Panel
+./scripts/shortcuts/build_notch.sh
+./dist/FabricNotch
 
-# 5. Run macOS Ambient Daemon in background
+# 5. Run macOS Ambient Daemon with Cybernetic Governor in background
 bun run scripts/fabric-ambient-daemon.ts
 
 # 6. Test native Apple Vision OCR on any image
@@ -235,16 +241,12 @@ python3 scripts/build_iitm_prep.py
 
 ## 🎯 8. Prioritized Next Steps & Active Backlog
 
-1. **Autonomous Multi-Agent Swarm Handoffs in HTN Executor**:
-   - Upgrade single-pass handlers in `src/tasks/executor.ts` to dispatch specialized subagents (Recon, Synthesis, Critic, Publisher) across the shared blackboard for complex objectives.
-2. **Real-Time Voice Conversational Loop**:
-   - Connect `msedge-tts` and Gemini Multimodal Live API into a sub-300ms audio conversation channel embedded directly in the Dynamic Island HUD.
-3. **Closed-Loop 4F Cybernetic Governor**:
-   - Automatically throttle heavy builder work and enforce kinetic/respiratory breaks via ADB/Raycast notifications when vitality drops below $-2$.
-4. **Native macOS Floating Notch Window**:
-   - Wrap the `/island` interface in a lightweight SwiftUI floating panel (`scripts/shortcuts/FabricNotch.swift`) that hovers permanently over full-screen apps without needing a browser window.
-5. **Computer Use Actuation (Beyond Puppeteer)**:
+1. **Computer Use Actuation (Beyond Puppeteer)**:
    - Integrate macOS Accessibility API / Screen-AI to allow Fabric to navigate desktop apps (VSCode, Finder, Telegram Desktop) autonomously.
+2. **Local Multi-Modal Vision Sentry**:
+   - Process webcam snapshots with CoreML / Vision to detect posture, ergonomics, and eye-strain in real-time.
+3. **P2P Decentralized Sync (Libp2p / WebRTC Mesh)**:
+   - Synchronize Fabric nodes directly between Mac, Android phone, and cloud instances without central servers.
 
 ---
 

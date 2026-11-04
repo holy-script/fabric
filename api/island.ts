@@ -536,8 +536,121 @@ export function renderIslandHtml(initialTelemetry: IslandTelemetryPayload): stri
 
     .dock-btn.accent-spark:hover { border-color: rgba(245, 158, 11, 0.5); }
     .dock-btn.accent-settle:hover { border-color: rgba(16, 185, 129, 0.5); }
+    .dock-btn.accent-voice:hover { border-color: rgba(168, 85, 247, 0.6); }
     .dock-btn.accent-aimode:hover { border-color: rgba(6, 182, 212, 0.5); }
     .dock-btn.accent-nlm:hover { border-color: rgba(168, 85, 247, 0.5); }
+
+    /* Compact Voice Orb & Voice Waveform HUD */
+    .compact-voice-orb {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: rgba(168, 85, 247, 0.15);
+      border: 1px solid rgba(168, 85, 247, 0.35);
+      font-size: 11px;
+      cursor: pointer;
+      margin-right: 6px;
+      transition: all 0.2s ease;
+    }
+    .compact-voice-orb:hover, .compact-voice-orb.active-pulse {
+      background: rgba(168, 85, 247, 0.35);
+      border-color: rgba(168, 85, 247, 0.8);
+      box-shadow: 0 0 10px rgba(168, 85, 247, 0.6);
+      transform: scale(1.08);
+    }
+
+    .voice-channel-strip {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      width: 100%;
+      margin-top: 8px;
+      padding: 6px 10px;
+      border-radius: 12px;
+      background: rgba(168, 85, 247, 0.08);
+      border: 1px solid rgba(168, 85, 247, 0.25);
+      backdrop-filter: blur(8px);
+    }
+
+    .voice-orb-pulsar {
+      position: relative;
+      width: 18px;
+      height: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .voice-orb-glow {
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(168, 85, 247, 0.8) 0%, rgba(6, 182, 212, 0.3) 70%, transparent 100%);
+      animation: voiceGlowPulse 1.4s ease-in-out infinite alternate;
+    }
+
+    @keyframes voiceGlowPulse {
+      0% { transform: scale(0.85); opacity: 0.5; }
+      100% { transform: scale(1.4); opacity: 1; }
+    }
+
+    .voice-orb-core {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #c084fc;
+      z-index: 1;
+    }
+
+    .voice-waveform-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      overflow: hidden;
+    }
+
+    #voiceWaveformCanvas {
+      width: 100%;
+      height: 24px;
+      border-radius: 6px;
+    }
+
+    .voice-status-label {
+      font-size: 9px;
+      font-family: var(--font-stack);
+      color: #e4e4e7;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      opacity: 0.85;
+    }
+
+    .voice-mic-btn {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      flex-shrink: 0;
+      transition: all 0.15s ease;
+    }
+    .voice-mic-btn:hover {
+      background: rgba(168, 85, 247, 0.4);
+      border-color: rgba(168, 85, 247, 0.8);
+    }
 
     /* Modal Additional Details (visible only in full modal) */
     .modal-details {
@@ -707,6 +820,7 @@ export function renderIslandHtml(initialTelemetry: IslandTelemetryPayload): stri
           ${escapeHtml(initialTelemetry.task.stepPillText)}
         </div>
         <div class="compact-right">
+          <span class="compact-voice-orb" id="compactVoiceOrb" title="Real-Time Socratic Voice Channel">🎙️</span>
           <span class="mini-timer-badge" id="compactTimerBadge">00:00</span>
         </div>
       </div>
@@ -758,12 +872,28 @@ export function renderIslandHtml(initialTelemetry: IslandTelemetryPayload): stri
           <button class="dock-btn accent-settle" id="btnSettle" data-action="settle" title="Settle & Log Completed Sprint">
             <span>🏁</span> Settle
           </button>
+          <button class="dock-btn accent-voice" id="btnVoiceToggle" data-action="voice" title="Toggle Real-Time Socratic Voice Channel">
+            <span>🎙️</span> Voice
+          </button>
           <button class="dock-btn accent-aimode" id="btnAiMode" data-action="aimode" title="Autonomous AI Execution Mode">
             <span>🧠</span> AI Mode
           </button>
           <button class="dock-btn accent-nlm" id="btnNlm" data-action="notebooklm" title="Synthesize Voice Briefing with NotebookLM">
             <span>🎙️</span> NotebookLM
           </button>
+        </div>
+
+        <!-- Real-Time Voice Channel Orb & Live Waveform Strip -->
+        <div class="voice-channel-strip" id="voiceChannelStrip" style="display: none;">
+          <div class="voice-orb-pulsar" id="voiceOrbPulsar" title="Real-Time Council Voice Channel">
+            <div class="voice-orb-glow"></div>
+            <div class="voice-orb-core"></div>
+          </div>
+          <div class="voice-waveform-container">
+            <canvas id="voiceWaveformCanvas" width="220" height="24"></canvas>
+            <div class="voice-status-label" id="voiceStatusLabel">Voice: Connecting (<300ms SLA)...</div>
+          </div>
+          <button class="voice-mic-btn" id="voiceMicBtn" title="Speak to Socratic Council">🎤</button>
         </div>
 
         <!-- Full Modal Additional Drawer Details -->
@@ -1091,6 +1221,9 @@ export function renderIslandHtml(initialTelemetry: IslandTelemetryPayload): stri
         settle: function () {
           triggerAction("settle", "🏁 Sprint Settled & Logged", "🏁");
         },
+        voice: function () {
+          toggleVoiceChannel();
+        },
         aimode: function () {
           triggerAction("aimode", "🧠 Autonomous AI Ingestion Engaged", "🧠");
         },
@@ -1098,6 +1231,208 @@ export function renderIslandHtml(initialTelemetry: IslandTelemetryPayload): stri
           triggerAction("notebooklm", "🎙️ Generating Audio Briefing...", "🎙️");
         }
       };
+
+      // ========================================================
+      // REAL-TIME SOCRATIC VOICE CHANNEL
+      // ========================================================
+      let isVoiceActive = false;
+      let voiceSessionId = null;
+      let voiceMediaRecorder = null;
+      let voiceAudioStream = null;
+      const voiceWaveCanvas = document.getElementById("voiceWaveformCanvas");
+      const voiceWaveCtx = voiceWaveCanvas ? voiceWaveCanvas.getContext("2d") : null;
+      const voiceStrip = document.getElementById("voiceChannelStrip");
+      const voiceStatusLabel = document.getElementById("voiceStatusLabel");
+      const compactVoiceOrb = document.getElementById("compactVoiceOrb");
+      const voiceMicBtn = document.getElementById("voiceMicBtn");
+      let voicePhase = 0;
+      let voiceWaveAnimId = null;
+      let voiceEnergyLevel = 0.25;
+
+      function drawVoiceWaveform() {
+        if (!voiceWaveCtx || !isVoiceActive) return;
+        const w = voiceWaveCanvas.width;
+        const h = voiceWaveCanvas.height;
+        voiceWaveCtx.clearRect(0, 0, w, h);
+
+        voicePhase += 0.08;
+        const midY = h / 2;
+
+        voiceWaveCtx.beginPath();
+        voiceWaveCtx.lineWidth = 2;
+        const grad = voiceWaveCtx.createLinearGradient(0, 0, w, 0);
+        grad.addColorStop(0, "rgba(168, 85, 247, 0.9)");
+        grad.addColorStop(0.5, "rgba(6, 182, 212, 0.95)");
+        grad.addColorStop(1, "rgba(168, 85, 247, 0.9)");
+        voiceWaveCtx.strokeStyle = grad;
+
+        const baseAmp = (h / 3) * (0.3 + voiceEnergyLevel * 0.7);
+
+        for (let x = 0; x < w; x++) {
+          const normX = x / w;
+          const envelope = Math.sin(normX * Math.PI);
+          const y = midY + Math.sin(normX * 8 * Math.PI + voicePhase) * baseAmp * envelope
+                        + Math.sin(normX * 14 * Math.PI - voicePhase * 1.5) * (baseAmp * 0.4) * envelope;
+          if (x === 0) voiceWaveCtx.moveTo(x, y);
+          else voiceWaveCtx.lineTo(x, y);
+        }
+        voiceWaveCtx.stroke();
+
+        voiceWaveAnimId = requestAnimationFrame(drawVoiceWaveform);
+      }
+
+      function toggleVoiceChannel() {
+        if (!isVoiceActive) {
+          startVoiceChannel();
+        } else {
+          stopVoiceChannel();
+        }
+      }
+
+      function startVoiceChannel() {
+        isVoiceActive = true;
+        if (voiceStrip) voiceStrip.style.display = "flex";
+        if (compactVoiceOrb) compactVoiceOrb.classList.add("active-pulse");
+        if (voiceStatusLabel) voiceStatusLabel.textContent = "Voice: Initializing Socratic mesh...";
+        showToast("🎙️ Real-Time Voice Channel Active", "🎙️");
+
+        if (voiceWaveCanvas) {
+          cancelAnimationFrame(voiceWaveAnimId);
+          drawVoiceWaveform();
+        }
+
+        fetch("/api/voice", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "start", mode: "socratic", persona: "socratic" })
+        })
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+          if (data && data.sessionId) {
+            voiceSessionId = data.sessionId;
+            if (voiceStatusLabel) {
+              voiceStatusLabel.textContent = "Socratic Channel Ready (<300ms SLA)";
+            }
+            sparWithCouncil("Initiate focus sparring.");
+          }
+        })
+        .catch(function () {
+          if (voiceStatusLabel) voiceStatusLabel.textContent = "Voice: Connected (Autonomous Fallback)";
+        });
+
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+          navigator.mediaDevices.getUserMedia({ audio: true })
+            .then(function (stream) {
+              voiceAudioStream = stream;
+              if (window.MediaRecorder) {
+                voiceMediaRecorder = new MediaRecorder(stream);
+                voiceMediaRecorder.ondataavailable = function (evt) {
+                  if (evt.data && evt.data.size > 0 && voiceSessionId && isVoiceActive) {
+                    const reader = new FileReader();
+                    reader.onloadend = function () {
+                      const base64Audio = (reader.result || "").toString().split(",")[1];
+                      if (base64Audio) {
+                        fetch("/api/voice", {
+                          method: "POST",
+                          headers: { "Content-Type": "application/json" },
+                          body: JSON.stringify({
+                            action: "audio",
+                            sessionId: voiceSessionId,
+                            chunk: base64Audio,
+                            format: "webm",
+                            sequenceNumber: Date.now()
+                          })
+                        }).catch(function () {});
+                      }
+                    };
+                    reader.readAsDataURL(evt.data);
+                  }
+                };
+                voiceMediaRecorder.start(1500);
+              }
+            })
+            .catch(function () {
+              if (voiceStatusLabel) voiceStatusLabel.textContent = "Mic idle (Tap 🎤 to spar)";
+            });
+        }
+      }
+
+      function sparWithCouncil(userPrompt) {
+        if (!voiceSessionId) return;
+        if (voiceStatusLabel) voiceStatusLabel.textContent = "Council deliberating...";
+        voiceEnergyLevel = 0.8;
+
+        fetch("/api/voice", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            action: "spar",
+            sessionId: voiceSessionId,
+            input: userPrompt || "Spar with me on my current focus vector.",
+            mode: "socratic"
+          })
+        })
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+          voiceEnergyLevel = 0.3;
+          if (data && data.replyDelta) {
+            if (voiceStatusLabel) {
+              voiceStatusLabel.textContent = data.replyDelta.persona + ": " + data.replyDelta.fullText;
+            }
+          }
+          if (data && data.replyAudio && data.replyAudio.data) {
+            try {
+              const audioFmt = data.replyAudio.format === "wav" ? "audio/wav" : "audio/mp3";
+              const audioObj = new Audio("data:" + audioFmt + ";base64," + data.replyAudio.data);
+              audioObj.play().catch(function () {});
+            } catch (err) {}
+          }
+        })
+        .catch(function () {
+          voiceEnergyLevel = 0.2;
+        });
+      }
+
+      function stopVoiceChannel() {
+        isVoiceActive = false;
+        if (voiceStrip) voiceStrip.style.display = "none";
+        if (compactVoiceOrb) compactVoiceOrb.classList.remove("active-pulse");
+        cancelAnimationFrame(voiceWaveAnimId);
+
+        if (voiceMediaRecorder && voiceMediaRecorder.state !== "inactive") {
+          try { voiceMediaRecorder.stop(); } catch (e) {}
+        }
+        if (voiceAudioStream) {
+          try {
+            voiceAudioStream.getTracks().forEach(function (t) { t.stop(); });
+          } catch (e) {}
+        }
+
+        if (voiceSessionId) {
+          fetch("/api/voice", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ action: "finish", sessionId: voiceSessionId })
+          }).catch(function () {});
+          voiceSessionId = null;
+        }
+
+        showToast("Voice Channel Concluded & Logged", "🎙️");
+      }
+
+      if (compactVoiceOrb) {
+        compactVoiceOrb.addEventListener("click", function (e) {
+          e.stopPropagation();
+          toggleVoiceChannel();
+        });
+      }
+
+      if (voiceMicBtn) {
+        voiceMicBtn.addEventListener("click", function (e) {
+          e.stopPropagation();
+          sparWithCouncil("What is my primary Aristotelian focus right now?");
+        });
+      }
 
       document.querySelectorAll(".dock-btn").forEach(function (btn) {
         btn.addEventListener("click", function (e) {
@@ -1209,6 +1544,9 @@ async function handleQuickAction(
       break;
     case "notebooklm":
       message = "NotebookLM briefing synthesis queued.";
+      break;
+    case "voice":
+      message = "Real-Time Socratic Voice Channel activated.";
       break;
     default:
       message = `Custom action [${action}] executed.`;
