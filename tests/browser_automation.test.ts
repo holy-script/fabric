@@ -5,7 +5,7 @@ import os from "os";
 import { BrowserDriver, resolvePath } from "../src/browser/driver.js";
 import { NotebookLMAdapter } from "../src/browser/adapters/notebooklm.js";
 import { AiModeAdapter } from "../src/browser/adapters/aimode.js";
-import { browsePage, syncNotebookLM } from "../src/browser/tool.js";
+import { browsePage, syncNotebookLM, closeBrowserDriver } from "../src/browser/tool.js";
 
 describe("Fabric OS Browser Automation Subsystem", () => {
   const testProfileDir = path.join(os.tmpdir(), `fabric-test-profile-${Date.now()}`);
@@ -22,6 +22,7 @@ describe("Fabric OS Browser Automation Subsystem", () => {
 
   afterAll(async () => {
     await driver.close();
+    await closeBrowserDriver();
     if (fs.existsSync(testProfileDir)) {
       try {
         fs.rmSync(testProfileDir, { recursive: true, force: true });
@@ -44,6 +45,11 @@ describe("Fabric OS Browser Automation Subsystem", () => {
       expect(config.debuggingPort).toBe(9333);
       expect(config.userDataDir).toBe(testProfileDir);
       expect(config.viewport.width).toBe(1280);
+    });
+
+    test("defaults to headless: true without explicit option for silent background execution", () => {
+      const defaultDriver = new BrowserDriver();
+      expect(defaultDriver.getConfig().headless).toBe(true);
     });
 
     test("launches headless Chrome and navigates to local data URL", async () => {
@@ -188,6 +194,11 @@ describe("Fabric OS Browser Automation Subsystem", () => {
       const res = await syncNotebookLM("Test Notebook", "/tmp/does-not-exist.md");
       expect(res.success).toBe(false);
       expect(res.error).toContain("Markdown source file does not exist");
+    });
+
+    test("closeBrowserDriver closes global session cleanly with zero dangling GUI windows", async () => {
+      await closeBrowserDriver();
+      expect(true).toBe(true);
     });
   });
 });

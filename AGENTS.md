@@ -2,7 +2,7 @@
 
 > **For AI Coding Agents & Autonomous Subagents**  
 > *Last Updated: November 4, 2026*  
-> *Test Status: 171 pass, 0 fail (20 test files, 3,912 assertions)*  
+> *Test Status: 250 pass, 0 fail (23 test files, 4,317 assertions)*  
 > *Git Branch: `main`*  
 > *Production Deployment: https://fabric-one-sage.vercel.app*
 
@@ -202,19 +202,24 @@ graph TD
    - Designed goal-oriented dynamic mix generator (`src/music/mixer.ts`) with cognitive flow arc sequencing and spaced repetition for forgotten gems.
    - Cloned, mapped, and verified Gradle 9.8.2 / Java 17 toolchain for `fabric-newpipe` (`/Users/holyscript/Desktop/projects/fabric-newpipe`), compiling native debug APK (38 MB).
    - Integrated Telegram bot commands (`/song`, `/mix`, `/playlists`) and Tab 6 (`🎵 Sonic Mind`) in Cockpit Dashboard.
-10. **Epoch 10: Sovereign Swarm, Native Notch & Voice Mesh (Current)**
+10. **Epoch 10: Sovereign Swarm, Native Notch & Voice Mesh**
     - **Native macOS Floating Notch Panel (`FabricNotch.swift`)**: Built standalone native AppKit + SwiftUI borderless glassmorphism panel anchored directly at the MacBook camera notch, hovering permanently across fullscreen apps and Mission Control spaces with dual-harmonic FOCI respiration wave and 1-tap quick action dock (`dist/FabricNotch`, 472 KB).
     - **HTN Multi-Agent Swarm Orchestration**: Upgraded `src/tasks/executor.ts` to support 4 specialized swarm roles (`recon`, `synthesis`, `critic`, `publisher`), dynamic `${blackboard.recon_findings}` token interpolation, and a dialectical critic evaluation gate (`confidence > 0.8`) with automatic refinement retry loops.
     - **Closed-Loop 4F Cybernetic Governor (`src/services/governor.ts`)**: Implemented non-linear Aristotelian loss reduction $\Delta \mathcal{L}$, 4 homeostatic boundary checks (Excessive Focus $>+3$, Depleted Vitality $<-2$, Sedentary $>75\text{m}$, Feedback Dispersion), and a 3-tier progressive actuation cascade (Dynamic Island badge $\to$ macOS Notification + Raycast HUD $\to$ Android ADB Zen lock & screen dimming).
     - **Sub-300ms Real-Time Voice Channel (`src/voice/` & `/api/voice`)**: Engineered bidirectional streaming audio pipeline with multi-persona Edge-TTS neural speech synthesis, Gemini Live multimodal audio frames, low-latency sparring engine, and live audio visualizer orbs in Dynamic Island and Cockpit Dashboard.
-    - Expanded test suite to **171 pass, 0 fail across 20 test files (3,912 assertions)**.
+11. **Epoch 11: The Ambient Nervous System & Dream Consolidation (Current)**
+    - **SMS Umbilical Gateway (`src/services/sms/` & `/api/sms/webhook`)**: Turned Android device into a programmable two-way SMS server via httpSMS REST API and ADB SMS fallback. Added natural language intent routing for offline commands (`spark`, `settle`, `status`, `note`, `mix`) and Governor emergency vitality SMS alerts.
+    - **Nightly Dream Consolidation Loop (`src/ai/consolidation.ts` & `/api/consolidation`)**: Automated nightly synthesis aggregating daily git commits, focus sprints, and FOCI breath coherence into new knowledge graph synapses, computing Aristotelian 4F Delta & loss reduction $\Delta \mathcal{L}$, inducing new heuristics, and compiling dual-format Morning Briefings for Telegram and SMS.
+    - **Insomnia Closed-Lid Power Governor (`scripts/fabric-insomnia.ts` & `fabric-insomnia.sh`)**: Engineered native `caffeinate` daemon allowing long-running background tasks (video vault archiver, ambient watcher, HTN swarm) to run with the MacBook lid closed, with automated battery (<20%) and thermal throttling safety release.
+    - **Silent Headless Browser Guarantee**: Enforced strict headless execution across all browser automation tools with automated cleanup, eliminating any disruptive visible Chrome GUI popups.
+    - Expanded test suite to **250 pass, 0 fail across 23 test files (4,317 assertions)**.
 
 ---
 
 ## 🛠️ 7. Key CLI Commands & Verification Protocols
 
 ```bash
-# 1. Run full test suite (171 tests, 0 failures)
+# 1. Run full test suite (250 tests, 0 failures)
 bun test
 
 # 2. Type-check entire codebase (strict TypeScript)
@@ -223,15 +228,16 @@ npx tsc --noEmit
 # 3. Build dist/ for production
 bun run build
 
-# 4. Compile & run native macOS Floating Notch Panel
+# 4. Compile & package native macOS Floating Notch Panel (.app)
 ./scripts/shortcuts/build_notch.sh
-./dist/FabricNotch
+open dist/FabricNotch.app
 
 # 5. Run macOS Ambient Daemon with Cybernetic Governor in background
 bun run scripts/fabric-ambient-daemon.ts
 
-# 6. Test native Apple Vision OCR on any image
-./scripts/ocr_image.swift path/to/image.png
+# 6. Run Insomnia Closed-Lid Power Governor
+./scripts/shortcuts/fabric-insomnia.sh --start
+```
 
 # 7. Re-extract & compile IITM Quiz 1 questions
 python3 scripts/build_iitm_prep.py

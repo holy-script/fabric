@@ -1026,8 +1026,12 @@ export function renderIslandHtml(initialTelemetry: IslandTelemetryPayload): stri
           compactDot.style.background = colorSpec.hex;
           compactDot.style.boxShadow = "0 0 8px " + colorSpec.hex;
         }
-        if (compactCenterText && data.task) {
-          compactCenterText.textContent = data.task.stepPillText || "Step 2/4: AI Mode Ingestion";
+        if (compactCenterText) {
+          if (data.ambient && data.ambient.blackboard && data.ambient.blackboard.insomnia && data.ambient.blackboard.insomnia.isActive) {
+            compactCenterText.textContent = "🌙 Insomnia: " + (data.ambient.blackboard.insomnia.reason || "Lid-Closed Safe");
+          } else if (data.task) {
+            compactCenterText.textContent = data.task.stepPillText || "Step 2/4: AI Mode Ingestion";
+          }
         }
 
         // 2. Expanded top row

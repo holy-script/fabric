@@ -181,3 +181,37 @@ Fabric OS includes a native Swift AppKit + SwiftUI HUD that floats directly arou
 ./dist/FabricNotch
 ```
 
+---
+
+## 🌙 7. Fabric Insomnia & Closed-Lid Power Governor (`fabric-insomnia.sh`)
+
+Safely run overnight background AI agents (Tor video archiver, HTN swarms, ambient watchers) with MacBook lid closed:
+
+- **Source Daemon:** [`scripts/fabric-insomnia.ts`](file:///Users/holyscript/Desktop/projects/fabric/scripts/fabric-insomnia.ts)
+- **Shell / Raycast Launcher:** [`scripts/shortcuts/fabric-insomnia.sh`](file:///Users/holyscript/Desktop/projects/fabric/scripts/shortcuts/fabric-insomnia.sh)
+- **Unit Test Suite:** [`tests/insomnia.test.ts`](file:///Users/holyscript/Desktop/projects/fabric/tests/insomnia.test.ts)
+
+### Commands & Options
+```bash
+# Toggle sleep lock ON / OFF
+./scripts/shortcuts/fabric-insomnia.sh --toggle
+
+# Check hardware battery and thermal safety governor
+./scripts/shortcuts/fabric-insomnia.sh --check
+
+# View live insomnia status & power telemetry
+./scripts/shortcuts/fabric-insomnia.sh --status
+
+# Start background insomnia daemon with specific reason
+./scripts/shortcuts/fabric-insomnia.sh --start --reason "Overnight HTN Swarm Execution"
+
+# Stop insomnia daemon and release sleep lock
+./scripts/shortcuts/fabric-insomnia.sh --stop
+```
+
+### Safety Features
+- **Strict Battery Guard:** Auto-releases sleep lock if DC battery drops below 20%.
+- **Thermal Governor:** Auto-releases sleep lock if thermal throttling is detected (`pmset -g therm`).
+- **Live Blackboard Integration:** Updates `.ambient_state.json` with active status, activating the `🌙 INSOMNIA` badge on Dynamic Island and `FabricNotch`.
+
+

@@ -44,11 +44,8 @@ import { handleNotebookLMCommand } from "./commands/notebooklm.js";
 import { handlePrep } from "./commands/prep.js";
 import { handleBrowserCommand, handleAiModeDirect } from "./commands/browser.js";
 import { handleTaskCommand } from "./commands/task.js";
-import {
-  handleSongCommand,
-  handleMixCommand,
-  handlePlaylistsCommand,
-} from "./commands/music.js";
+import { handleSongCommand, handleMixCommand, handlePlaylistsCommand } from "./commands/music.js";
+import { handleConsolidate } from "./commands/consolidation.js";
 import { deduplicateUpdates } from "./middleware/dedup.js";
 import { handleNaturalMessage } from "./handlers/message.js";
 import { handleVoiceMessage } from "./handlers/voice.js";
@@ -110,6 +107,7 @@ export function createBot() {
       { command: "song", description: "Capture YouTube track with personal context into Sonic Mind" },
       { command: "mix", description: "Generate dynamic AI flow mix for NewPipe" },
       { command: "playlists", description: "View Fabric Sonic Mind playlists and track counts" },
+      { command: "consolidate", description: "Nightly Dream Loop: 4F delta, axioms & morning memo" },
       { command: "start", description: "Overview & instructions" },
     ])
     .catch((err) => console.error("Could not set bot commands:", err));
@@ -175,6 +173,7 @@ export function createBot() {
   bot.command("song", handleSongCommand);
   bot.command("mix", handleMixCommand);
   bot.command(["playlists", "music"], handlePlaylistsCommand);
+  bot.command(["consolidate", "dream"], handleConsolidate);
   bot.command("ask", handleAsk);
 
   // Voice memo ingestion (multimodal)

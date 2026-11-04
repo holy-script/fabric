@@ -86,8 +86,8 @@ export class BrowserDriver {
   constructor(options: BrowserDriverConfig = {}) {
     const defaultHeadless =
       process.env.FABRIC_BROWSER_HEADLESS !== undefined
-        ? process.env.FABRIC_BROWSER_HEADLESS === "true"
-        : false;
+        ? process.env.FABRIC_BROWSER_HEADLESS !== "false"
+        : true;
 
     this.config = {
       executablePath: options.executablePath || getDefaultChromePath(),

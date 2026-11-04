@@ -249,7 +249,8 @@ export function generateDynamicIslandPayload(
   frontmost: FrontmostAppInfo,
   git: GitContext,
   focus: FocusTranceInfo,
-  recentErrors: WorkspaceErrorEntry[] = []
+  recentErrors: WorkspaceErrorEntry[] = [],
+  blackboard?: Record<string, any>
 ): DynamicIslandPayload {
   // 1. Check for recent fatal errors (within 5 minutes)
   const now = Date.now();
@@ -299,7 +300,21 @@ export function generateDynamicIslandPayload(
     };
   }
 
-  // 4. Deep Flow (30-60m)
+  // 4. Insomnia Active: Uninterrupted overnight agent execution
+  if (blackboard?.insomnia?.isActive) {
+    const batt = blackboard.insomnia.batteryPercent !== undefined ? ` • ${blackboard.insomnia.batteryPercent}%` : "";
+    const pwr = blackboard.insomnia.isPluggedIn ? "🔌 AC" : "🔋 Batt";
+    return {
+      status: "normal",
+      headline: `🌙 Insomnia Active: ${blackboard.insomnia.reason || "Overnight Agent"}`,
+      subtext: `${pwr}${batt} • Lid-closed execution enabled`,
+      badge: "🌙 INSOMNIA",
+      icon: "🌙",
+      actionPrompt: "Overnight background tasks protected from sleep",
+    };
+  }
+
+  // 5. Deep Flow (30-60m)
   if (focus.tranceState === "deep_flow") {
     return {
       status: "flow",
@@ -408,7 +423,7 @@ export async function getCurrentAmbientContext(options?: {
 
     const dynamicIsland =
       data.dynamicIsland ||
-      generateDynamicIslandPayload(frontmost, git, focus, recentErrors);
+      generateDynamicIslandPayload(frontmost, git, focus, recentErrors, data.blackboard);
 
     return {
       timestamp: data.timestamp || new Date().toISOString(),
@@ -469,7 +484,8 @@ export async function updateAmbientContext(
       updatedFrontmost,
       updatedGit,
       updatedFocus,
-      updatedErrors
+      updatedErrors,
+      updatedBlackboard
     );
 
   const merged: AmbientContext = {

@@ -17,6 +17,7 @@ import { handleBalance } from "../commands/balance.js";
 import { handleSettle } from "../commands/settle.js";
 import { handlePlugins } from "../commands/plugins.js";
 import { handleBriefing } from "../commands/briefing.js";
+import { handleConsolidate } from "../commands/consolidation.js";
 import { executeSimulation } from "../commands/simulate.js";
 import { handleSentinel } from "../commands/sentinel.js";
 import { handleDsa } from "../commands/dsa.js";
@@ -219,6 +220,8 @@ export async function handleCallbackQuery(ctx: Context) {
     await handleReflexion(ctx);
   } else if (data === "action:briefing") {
     await handleBriefing(ctx);
+  } else if (data === "action:consolidate" || data === "action:consolidate_rerun") {
+    await handleConsolidate(ctx);
   } else if (data === "action:settle") {
     await handleSettle(ctx);
   } else if (data === "action:plugins") {

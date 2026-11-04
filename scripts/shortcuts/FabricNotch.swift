@@ -496,6 +496,20 @@ public struct NotchContentView: View {
                     
                     // Right: App & Git Branch
                     HStack(spacing: 5) {
+                        if let badge = store.ambient?.dynamicIsland?.badge, badge.contains("INSOMNIA") || badge.contains("🌙") {
+                            HStack(spacing: 2) {
+                                Text("🌙")
+                                    .font(.system(size: 9))
+                                Text("INSOMNIA")
+                                    .font(.system(size: 8, weight: .bold, design: .rounded))
+                                    .foregroundColor(.indigo)
+                            }
+                            .padding(.horizontal, 4)
+                            .padding(.vertical, 1.5)
+                            .background(Color.indigo.opacity(0.18))
+                            .clipShape(Capsule())
+                        }
+                        
                         Text(appName)
                             .font(.system(size: 11, weight: .medium, design: .rounded))
                             .foregroundColor(.white.opacity(0.9))

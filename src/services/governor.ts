@@ -136,6 +136,7 @@ export interface GovernorActuator {
   sendRaycastToast?: (text: string, title?: string) => Promise<boolean>;
   triggerAndroidZenMode?: (enable: boolean) => Promise<boolean>;
   updateDynamicIsland?: (payload: DynamicIslandPayload) => Promise<boolean>;
+  sendSmsAlert?: (message: string, to?: string) => Promise<boolean>;
 }
 
 export interface GovernorEvaluationOptions {
@@ -632,12 +633,14 @@ export async function executeActuationCascade(
   level2_notification: boolean;
   level2_raycast_hud: boolean;
   level3_zen_mode: boolean;
+  level3_sms_alert?: boolean;
 }> {
   const result = {
     level1_island_pulse: false,
     level2_notification: false,
     level2_raycast_hud: false,
     level3_zen_mode: false,
+    level3_sms_alert: false,
   };
 
   if (breaches.length === 0 || level <= 0) return result;
@@ -692,7 +695,7 @@ export async function executeActuationCascade(
     }
   }
 
-  // --- LEVEL 3: Android ADB Zen Mode (silence mobile distractions & dim screen) ---
+  // --- LEVEL 3: Android ADB Zen Mode (silence mobile distractions & dim screen) & Emergency SMS ---
   if (level >= 3) {
     try {
       if (actuator.triggerAndroidZenMode) {
@@ -703,6 +706,16 @@ export async function executeActuationCascade(
       }
     } catch {
       result.level3_zen_mode = false;
+    }
+
+    // Emergency SMS Alert dispatch for critical vitality or high-severity breaches
+    if (actuator.sendSmsAlert && (primaryBreach.severity === "critical" || primaryBreach.ruleId === "depleted_vitality")) {
+      try {
+        const alertText = `🚨 Fabric Governor [${primaryBreach.severity.toUpperCase()}]: ${primaryBreach.title}\n${primaryBreach.actionRequired}`;
+        result.level3_sms_alert = await actuator.sendSmsAlert(alertText);
+      } catch {
+        result.level3_sms_alert = false;
+      }
     }
   }
 

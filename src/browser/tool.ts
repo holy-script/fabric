@@ -98,6 +98,14 @@ export async function browsePage(
 }
 
 /**
+ * Cleanly closes the active global browser driver instance.
+ */
+export async function closeBrowserDriver(): Promise<void> {
+  const driver = getBrowserDriver();
+  await driver.close();
+}
+
+/**
  * Executes a search query in Google AI Mode, extracts the generative response,
  * structured citations, and share URL.
  */
