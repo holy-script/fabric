@@ -90,33 +90,54 @@ graph TD
 ```
 /Users/holyscript/Desktop/projects/fabric/
 ├── api/                                # Vercel Serverless Function Handlers
-│   ├── dashboard.ts                    # Master Cockpit HUD (5 Tabs, KaTeX, Graph, HTN DAG)
+│   ├── dashboard.ts                    # Master Cockpit HUD (6 Tabs, KaTeX, Graph, HTN DAG, Voice Dock)
 │   ├── island.ts                       # Dynamic Island OLED HUD (SSE telemetry, FOCI wave)
 │   ├── quick.ts                        # Ultra-low latency smart surface dispatcher (/api/quick)
+│   ├── antigravity.ts                  # Google Antigravity project spinner & status gateway (/api/antigravity)
+│   ├── subsystems.ts                   # Subsystem state registry & lifecycle governor (/api/subsystems)
+│   ├── consolidation.ts                # Nightly dream consolidation & morning briefing (/api/consolidation)
+│   ├── voice.ts                        # Sub-300ms Socratic Polymath real-time voice channel (/api/voice)
 │   ├── docs.ts                         # Live architecture & explainability reader (/docs)
 │   ├── a2a.ts                          # Agent-to-Agent communication endpoint
+│   ├── music/
+│   │   └── sync.ts                     # Bi-directional NewPipe & Sonic Mind cloud sync gateway
+│   ├── sms/
+│   │   └── webhook.ts                  # Two-way SMS umbilical gateway (httpSMS + ADB fallback)
 │   └── webhooks/                       # Telegram & external ingress
 ├── src/
 │   ├── ai/
 │   │   ├── reflexion.ts                # Episodic Reflexion, Axiom Induction & Heuristic Linker
 │   │   ├── sentinel.ts                 # Cognitive Sentinel periodic health auditor
-│   │   └── council.ts                  # Socratic Polymath Council synthesis
+│   │   ├── council.ts                  # Socratic Polymath Council synthesis
+│   │   └── consolidation.ts            # Nightly dream consolidation & graph auto-synapse compiler
 │   ├── tasks/                          # Hierarchical Task Network (HTN) Engine
 │   │   ├── types.ts                    # HTN TaskPlan, Step, Dependency DAG, State types
 │   │   ├── planner.ts                  # Goal compiler with Kahn's cycle-detection DAG algorithm
-│   │   ├── executor.ts                 # Parallel wavefront executor & token resolution (${blackboard})
+│   │   ├── executor.ts                 # Parallel wavefront swarm executor (recon, synthesis, critic, publisher)
 │   │   └── store.ts                    # Dual Local File & Firestore persistence
 │   ├── browser/                        # Headless Browser Automation Subsystem
-│   │   ├── driver.ts                   # Puppeteer-core connected to macOS Chrome profile
+│   │   ├── driver.ts                   # Puppeteer-core connected to macOS Chrome profile (strict headless)
 │   │   ├── adapters/
 │   │   │   ├── notebooklm.ts           # Automated NotebookLM notebook creator & podcast trigger
 │   │   │   └── aimode.ts               # Google AI Mode query engine with live citations
-│   │   └── tool.ts                     # High-level browsePage, runAiMode, syncNotebookLM
+│   │   └── tool.ts                     # High-level browsePage, runAiMode, syncNotebookLM, closeBrowserDriver
 │   ├── services/
+│   │   ├── antigravity.ts              # Google Antigravity binary discovery (agy v1.4.12) & project spinner
+│   │   ├── registry.ts                 # Subsystem State Registry & Lifecycle Governor for 7 services
+│   │   ├── governor.ts                 # Closed-loop 4F Cybernetic Governor with progressive actuation
 │   │   ├── ambient.ts                  # macOS Reality Sensing service (osascript, ioreg, git)
 │   │   ├── wearables.ts                # FOCI BLE respiration & recovery composite index
 │   │   ├── telemetry-adb.ts            # Android battery & ADB DND toggle
-│   │   └── island-stream.ts            # Dynamic Island real-time SSE streaming provider
+│   │   ├── island-stream.ts            # Dynamic Island real-time SSE streaming provider
+│   │   └── sms/                        # Android SMS Umbilical Gateway (httpSMS REST + ADB fallback)
+│   │       ├── client.ts               # httpSMS REST client with health and delivery tracking
+│   │       ├── adb.ts                  # Direct Android ADB SMS fallback transmitter
+│   │       ├── router.ts               # Offline natural language command router (spark, settle, note, mix)
+│   │       └── store.ts                # Local disk blackboard for SMS notes & message history
+│   ├── voice/                          # Sub-300ms Real-Time Voice Channel Subsystem
+│   │   ├── channel.ts                  # Real-time sparring session orchestrator with SLA timing
+│   │   ├── tts.ts                      # Edge-TTS multi-persona neural speech synthesizer
+│   │   └── council.ts                  # Socratic, Stoic, Architect, Quant, Biomechanic, Sceptic personas
 │   ├── graph/
 │   │   ├── query.ts                    # Knowledge graph search, path-finding & bundled fallback
 │   │   ├── builder.ts                  # Incremental graph compiler & synapse link generator
@@ -128,6 +149,7 @@ graph TD
 │   │   └── extractor.ts                # YouTube metadata extractor (yt-dlp)
 │   ├── bot/
 │   │   ├── commands/
+│   │   │   ├── spin.ts                 # Telegram /spin command to scaffold and run Antigravity projects
 │   │   │   ├── music.ts                # Telegram /song, /mix, /playlists handlers
 │   │   │   ├── prep.ts                 # IITM Quiz 1 sparring, score tracking & NotebookLM sync
 │   │   │   ├── task.ts                 # Natural language HTN goal compilation via Telegram
@@ -139,21 +161,31 @@ graph TD
 │   │   └── types.ts                    # UserState, Trade, GoldenMeans schemas
 ├── data/
 │   ├── graph_summary.json              # 97 nodes, 213 edges, 20 clusters (bundled in Vercel)
+│   ├── subsystem_registry.json         # Live persisted states of all 7 Fabric OS subsystems
 │   ├── iitm_prep/                      # IITM BS Degree Quiz 1 Coursework Foundry
 │   │   ├── quiz1_question_bank.json    # 179 parsed past exam questions with verified solutions
 │   │   ├── computer_networks_quiz1_master.md              # Weeks 1-4 Master Notebook (29 KB)
 │   │   ├── computer_systems_design_quiz1_master.md        # Weeks 1-4 Master Notebook (36 KB)
 │   │   └── big_data_biological_networks_quiz1_master.md   # Weeks 1-4 Master Notebook (87 KB)
+├── dist/                               # Compiled Application Artifacts
+│   ├── Fabric.app                      # Unified Native macOS Desktop App & Daemon Controller
+│   ├── FabricNotch.app                 # Native macOS Floating Notch HUD (.statusBar level)
+│   ├── Fabric                          # CLI executable with --daemons, --force-quit, --dry-run
+│   └── FabricNotch                     # Direct native notch executable (748 KB)
 ├── scripts/
 │   ├── fabric-ambient-daemon.ts        # Background macOS context watcher (front app, idle, git)
-│   ├── archive-telegram-vault.ts       # Background Tor SOCKS5 video archiver (task-2475)
+│   ├── archive-telegram-vault.ts       # Background Tor SOCKS5 video archiver (3,550 videos vaulted)
+│   ├── fabric-insomnia.ts              # Insomnia closed-lid power governor with battery/thermal guards
 │   ├── ocr_image.swift                 # Native Apple Vision OCR script for math equations
 │   ├── build_iitm_prep.py              # End-to-end PYQ PDF parser & question synthesizer
 │   └── shortcuts/                      # External surface launchers
+│       ├── FabricNotch.swift           # Native AppKit + SwiftUI Notch HUD & Process Controller
+│       ├── build_notch.sh              # Standalone compiler & bundler for Fabric.app and FabricNotch.app
+│       ├── fabric-insomnia.sh          # Raycast script command for closed-lid execution
 │       ├── fabric-menubar.5s.sh        # SwiftBar / xbar macOS menu bar extension
 │       ├── fabric-spark.sh / settle.sh # Raycast script commands
 │       └── README.md                   # Apple Shortcuts & Raycast configuration guide
-└── tests/                              # 15 test suites, 113 passing tests (bun test)
+└── tests/                              # 26 test suites, 316 passing tests (bun test, 4,733 assertions)
 ```
 
 ---
@@ -248,9 +280,8 @@ bun run scripts/fabric-ambient-daemon.ts
 
 # 8. Run Insomnia Closed-Lid Power Governor
 ./scripts/shortcuts/fabric-insomnia.sh --start
-```
 
-# 7. Re-extract & compile IITM Quiz 1 questions
+# 9. Re-extract & compile IITM Quiz 1 questions
 python3 scripts/build_iitm_prep.py
 ```
 
@@ -258,14 +289,86 @@ python3 scripts/build_iitm_prep.py
 
 ## 🎯 8. Prioritized Next Steps & Active Backlog
 
+```mermaid
+graph TD
+    subgraph NearTerm["Phase 1: Near-Term Enhancements"]
+        N1["Computer Use Actuation (macOS Accessibility API / Screen-AI)"]
+        N2["Local Multi-Modal Vision Sentry (CoreML Webcam Posture/Ergonomics)"]
+        N3["IITM BS Interactive Timed Mock Exam Simulator"]
+    end
+
+    subgraph MidTerm["Phase 2: Decentralization & Production Release"]
+        M1["P2P Decentralized Mesh Sync (Libp2p / WebRTC between Mac & Android)"]
+        M2["FabricPipe Android Release CI/CD (GitHub Actions Signed APK builds)"]
+        M3["Hardware BLE Expansion (Oura Ring Gen 3 & Apple Watch HealthKit)"]
+    end
+
+    NearTerm --> MidTerm
+```
+
+### Detailed Backlog Specifications:
+
 1. **Computer Use Actuation (Beyond Puppeteer)**:
-   - Integrate macOS Accessibility API / Screen-AI to allow Fabric to navigate desktop apps (VSCode, Finder, Telegram Desktop) autonomously.
+   - **Target**: Allow Fabric OS to actuate native macOS applications (VSCode, Finder, Telegram Desktop, Terminal) without brittle UI clicking.
+   - **Mechanism**: Integrate macOS Accessibility API (`AXUIElement`) via native Swift bridge or Screen-AI vision actions.
+   - **Safety Boundary**: Sandboxed execution requiring explicit confirmation before executing destructive file system operations or sending external communications.
+
 2. **Local Multi-Modal Vision Sentry**:
-   - Process webcam snapshots with CoreML / Vision to detect posture, ergonomics, and eye-strain in real-time.
-3. **P2P Decentralized Sync (Libp2p / WebRTC Mesh)**:
-   - Synchronize Fabric nodes directly between Mac, Android phone, and cloud instances without central servers.
+   - **Target**: Real-time bio-mechanical ergonomic monitoring with zero cloud image leakage.
+   - **Mechanism**: Lightweight local CoreML / Vision pipeline capturing low-framerate webcam snapshots (1 frame every 30s) to detect forward head posture, slouching, eye-strain blink frequency, and ambient luminescent glare.
+   - **Actuation**: Feeds directly into `FocusContext.standingDetected` and triggers Cybernetic Governor somatic recovery breaks when sedentary score exceeds 60 minutes.
+
+3. **IITM BS Interactive Timed Mock Exam Simulator**:
+   - **Target**: Gamified, exam-condition simulator for Quiz 1 across Computer Networks, CSD, and BDBN.
+   - **Mechanism**: Web cockpit module and Telegram `/exam` command serving 20 randomized questions with a 45-minute countdown timer, negative marking simulation (-0.25 on MCQ/MSQ), and instant post-exam analytics highlighting knowledge gaps.
+
+4. **P2P Decentralized Mesh Sync (Libp2p / WebRTC)**:
+   - **Target**: Eliminate centralized server single points of failure (Firestore / Vercel) for high-privacy operators.
+   - **Mechanism**: Local peer-to-peer gossip protocol synchronizing knowledge graph mutations, music playlists, and 4F telemetry directly over local Wi-Fi or encrypted WebRTC tunnels between MacBook, Android phone, and headless servers.
+
+5. **FabricPipe Android Release CI/CD**:
+   - **Target**: Automated compilation and direct OTA updates of custom NewPipe builds (`fabric-newpipe`).
+   - **Mechanism**: GitHub Actions workflow running Gradle 9.8.2 / Java 17 to compile signed release APKs and automatically upload them to the Telegram Video Vault (`-1004325133626`) with 1-tap download links.
 
 ---
 
-*Authored for the Fabric OS Autonomous Agent Mesh. To resume work in a new session, paste the Master Prompt below.*
+## 🔮 9. Master Resume Prompt for New Chat Sessions
+
+*When starting a new conversation, paste the following prompt to provide the agent with full context:*
+
+```markdown
+You are Antigravity, resuming pair-programming on Fabric OS (/Users/holyscript/Desktop/projects/fabric).
+
+### Project & Architectural Context:
+- **Project**: Fabric OS — Aristotelian Human-Agent Symbiotic Meta-Operating System.
+- **Philosophical Core**: 4F Vector (Focus, Facts, Funds, Feedback) and Aristotle's 10 Golden Means (loss function L(S)).
+- **Current State**: Epoch 12 deployed on branch `main` at `31e4949`.
+- **Test Status**: 316 passing tests, 0 failures across 26 test files (4,733 assertions) verified with `bun test`.
+- **Production URL**: https://fabric-one-sage.vercel.app (Cockpit: /dashboard, HUD: /island, Docs: /docs).
+
+### Key Architectural Subsystems:
+1. **Unified macOS Application**: `dist/Fabric.app` & `dist/FabricNotch.app` (`scripts/shortcuts/FabricNotch.swift`) with camera notch bezel HUD, live worker cards, and 1-click "Force Quit All Daemons".
+2. **Antigravity Harness**: `src/services/antigravity.ts` discovering `/Users/holyscript/.gemini/bin/agy` (v1.4.12) to scaffold git repos and dispatch prompts via `/api/antigravity` and Telegram `/spin`.
+3. **Subsystem State Registry**: `src/services/registry.ts` managing states (ACTIVE, IDLE, DISABLED, ERROR, UNCONFIGURED) for all 7 background workers via `/api/subsystems` and `data/subsystem_registry.json`.
+4. **Closed-Loop Cybernetic Governor**: `src/services/governor.ts` running homeostasis checks (Excessive Focus >+3, Depleted Vitality <-2, Sedentary >75m) with 3-tier actuation (Dynamic Island badge -> macOS Notification -> Android Zen lock).
+5. **Real-Time Voice Channel**: `src/voice/` and `/api/voice` sub-300ms Socratic sparring engine with Edge-TTS neural audio and interactive persona pills.
+6. **Headless Browser Automation**: `src/browser/` with strict headless guarantee (`headless: true`) preventing disruptive GUI popups during NotebookLM and AI Mode tasks.
+7. **Automated UI/UX Flow Suite**: `tests/ui_ux_flow.test.ts` running Puppeteer headless tests asserting zero uncaught errors, zero console leakage, and zero layout overflow.
+8. **Sonic Mind & FabricPipe**: `src/music/` semantic music vault with NewPipe bi-directional cloud sync (`/api/music/sync`) and dynamic AI DJ.
+9. **Coursework Foundry**: `data/iitm_prep/` with 179 past exam PYQs across CN, CSD, BDBN with Apple Vision OCR and verified math solutions.
+10. **Video Vault Archiver**: 3,550 videos archived in private Telegram channel `-1004325133626` via Tor SOCKS5 proxy.
+
+### Invariant Rules:
+- All tests must pass: `bun test` must maintain 100% pass rate.
+- Browser automation must always be headless (`headless: true`).
+- Codebase must pass strict TypeScript type-checking (`npx tsc --noEmit`).
+- Use `file://` scheme for file links in all responses.
+
+Please read `AGENTS.md` and ask how you can assist with the next active backlog priority!
+```
+
+---
+
+*Authored for the Fabric OS Autonomous Agent Mesh.*  
+*Maintained at: `/Users/holyscript/Desktop/projects/fabric/AGENTS.md`*
 

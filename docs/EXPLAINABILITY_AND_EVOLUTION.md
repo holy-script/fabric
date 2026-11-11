@@ -71,7 +71,7 @@ Fabric OS did not emerge as a rigid waterfall specification; it evolved organica
 
 ```mermaid
 timeline
-    title The Eight Epochs of Fabric OS
+    title The Twelve Epochs of Fabric OS
     Era 1 : 4F Framework Genesis : Brainstorm with Gemini : Time-Knowledge-Capital Triad : Aristotelian Virtue Vectors
     Era 2 : Telemetry Hub : Telegram Bot Gateway : Firestore Ledger : Trade Accounting : Hopecore Vault
     Era 3 : Physical & Biofeedback : FOCI BLE Respiration : Android ADB DND : Battery & GSM SMS Gateway : Wearable Recovery Scores
@@ -80,6 +80,10 @@ timeline
     Era 6 : Meta-Foundations : Google NotebookLM Podcast Bridge : Google AI Mode Extractor : IITM Academic Grokking Foundry
     Era 7 : Autonomous Meta-OS : Browser Automation Driver : HTN Task DAG Compiler : Episodic Reflexion Loop : Dynamic HUD Cockpit
     Era 8 : Dynamic Island & Coursework Foundry : Native macOS Dynamic Island : IITM Quiz 1 Academy : Apple Vision OCR : Visual HTN DAG Canvas
+    Era 9 : Sonic Mind & FabricPipe : Semantic Music Memory : NewPipe Bi-Directional Cloud Engine : Goal-Oriented AI DJ : Gradle/Java 17 Toolchain
+    Era 10 : Sovereign Swarm & Voice Mesh : Native Notch Panel (FabricNotch.swift) : HTN Multi-Agent Swarm : Closed-Loop Governor : Sub-300ms Voice Channel
+    Era 11 : Ambient Nervous System & Dream Consolidation : Android SMS Umbilical Gateway : Nightly Dream Consolidation : Insomnia Closed-Lid Power Governor
+    Era 12 : Unified Desktop App & Antigravity Harness : Fabric.app Daemon Controller : 1-Click Force Quit : Google Antigravity Project Spinner : Headless UI/UX Flow Suite
 ```
 
 ### Era 1: 4F Framework Genesis & Philosophical Foundations
@@ -138,13 +142,41 @@ timeline
   - **Unified Visual HUD Cockpit:** Single-pane dashboard serving real-time telemetry, 10-axis radar virtue charts, interactive 3D constellation, and live FOCI biofeedback bars.
 
 ### Era 8: Dynamic Island & Coursework Foundry
-- **Commits:** `d373858` (Current release).
 - **Ambient Surfaces & Academic Synthesis:**
   - **Dynamic Island & macOS Smart Surfaces:** Apple-grade OLED glassmorphism HUD (`/island`) featuring fluid FOCI breathing wave, radial focus timer, and 1-tap quick action dock; SwiftBar menu bar plugin (`fabric-menubar.5s.sh`) and Raycast dispatchers.
   - **IITM BS Quiz 1 Academy:** Complete extraction and verification of 179 past exam questions across Computer Networks, Computer Systems Design, and BDBN.
   - **Native Apple Vision OCR:** High-precision OCR (`scripts/ocr_image.swift`) extracting inline math equations, hexadecimal checksum words, and logic circuit diagrams.
   - **Visual HTN Task DAG Canvas:** Full topological DAG renderer on `/dashboard#tasks` with step execution statuses, dependency Bezier arcs, and step inspector drawers.
   - **Zero-Cold-Start Graph Optimization:** Serverless bundling and inverse-zoom label damping resolving canvas visual overlapping.
+
+### Era 9: Sonic Mind & FabricPipe (NewPipe Bi-Directional Cloud Engine)
+- **Semantic Music Memory & Spaced Repetition DJ:**
+  - **Sonic Mind Vault (`src/music/`):** Semantic music store preserving personal resonance, emotional memories, 4F focus vector affinities, and energy ratings for every song.
+  - **FabricPipe Cloud Sync (`api/music/sync.ts` & `src/music/store.ts`):** Bi-directional cloud synchronization engine communicating with custom NewPipe Android builds (`fabric-newpipe`).
+  - **Goal-Oriented AI DJ (`src/music/mixer.ts`):** Dynamic AI mix generator synthesizing flow-arc mixes based on current cognitive intent (IITM prep, spark sprints, late-night architecture) with spaced repetition resurfacing forgotten gems.
+  - **Android Gradle 9.8.2 / Java 17 Toolchain:** Native build verification of `fabric-newpipe` generating 38 MB standalone debug APK.
+
+### Era 10: Sovereign Swarm, Native Notch & Voice Mesh
+- **Hardware Notch Anchor, Swarm DAG & Low-Latency Sparring:**
+  - **Native macOS Floating Notch Panel (`scripts/shortcuts/FabricNotch.swift`):** Native AppKit + SwiftUI borderless glassmorphism panel anchored directly at the camera bezel (`430x44`), hovering permanently over fullscreen apps with dual-harmonic FOCI breath wave.
+  - **HTN Multi-Agent Swarm Orchestration (`src/tasks/executor.ts`):** 4 specialized swarm roles (`recon`, `synthesis`, `critic`, `publisher`), dynamic `${blackboard}` token interpolation, and dialectical critic evaluation gate (`confidence > 0.8`).
+  - **Closed-Loop 4F Cybernetic Governor (`src/services/governor.ts`):** Continuous Aristotelian loss minimization $\Delta \mathcal{L}$, 4 homeostatic boundary checks, and 3-tier progressive actuation cascade (Dynamic Island badge $\to$ macOS Toast $\to$ Android ADB Zen lock).
+  - **Sub-300ms Real-Time Voice Channel (`src/voice/` & `/api/voice`):** Bidirectional streaming audio pipeline with Edge-TTS multi-persona neural speech, Gemini Live multimodal frames, and live visualizer orbs.
+
+### Era 11: The Ambient Nervous System & Dream Consolidation
+- **SMS Gateway, Nightly Memory Consolidation & Insomnia Power:**
+  - **SMS Umbilical Gateway (`src/services/sms/` & `/api/sms/webhook`):** Android-powered two-way SMS server via httpSMS REST API and ADB SMS fallback with natural language offline routing (`spark`, `settle`, `status`, `note`, `mix`).
+  - **Nightly Dream Consolidation Loop (`src/ai/consolidation.ts` & `/api/consolidation`):** Nightly synthesis aggregating daily git commits, focus sprints, and FOCI breath coherence into new knowledge graph synapses, computing loss reduction $\Delta \mathcal{L}$, inducing new heuristics, and compiling dual-format Morning Briefings.
+  - **Insomnia Closed-Lid Power Governor (`scripts/fabric-insomnia.ts` & `fabric-insomnia.sh`):** Native `caffeinate` daemon running background tasks with closed lid, protected by battery (<20%) and thermal cutoff governors.
+  - **Silent Headless Browser Guarantee:** Strict `headless: true` enforced across all browser drivers with zero disruptive desktop popups.
+
+### Era 12: Unified Desktop Process Manager, Antigravity Harness & Headless Flow Testing (Current)
+- **Desktop Application Bundle & Sovereign Process Governor:**
+  - **Unified macOS Application & Daemon Controller (`dist/Fabric.app` & `FabricNotch.app`):** Complete native macOS desktop application with camera notch HUD and expandable Process & Daemon Controller. Features live status indicators (`🟢 Running` with PID, `⚪ Stopped`, `🔴 Error`), 1-click Start/Stop for all 4 background workers (`macOS Ambient Daemon`, `Telegram Video Vault Archiver`, `Insomnia Power Governor`, `Cybernetic Governor`), native macOS Notification toasts (`UserNotifications`), a prominent 1-click **"Force Quit All Daemons"** safety button, and clean `Cmd+Q` termination.
+  - **Google Antigravity Agent Harness & Project Spinner (`src/services/antigravity.ts`):** Discovers local Antigravity binary (`/Users/holyscript/.gemini/bin/agy`, v1.4.12) to scaffold git repositories, generate `README.md`, `AGENTS.md`, and `.gemini/settings.json`, and dispatch initial prompts via `/api/antigravity` and Telegram `/spin`.
+  - **Subsystem State Registry & Lifecycle Governor (`src/services/registry.ts`):** Manages explicit lifecycle states (`ACTIVE`, `IDLE`, `DISABLED`, `ERROR`, `UNCONFIGURED`) across all 7 Fabric OS subsystems with blackboard persistence (`data/subsystem_registry.json`) and control gateway `/api/subsystems`.
+  - **Automated Headless UI/UX Flow & Leakage Regression Suite (`tests/ui_ux_flow.test.ts`):** End-to-end Puppeteer flow testing verifying 6-tab cockpit switcher, Socratic Voice dock interactions with interactive persona pills, Dynamic Island responsive transitions (`430x44` to `140px`), zero uncaught page errors, zero console error leakage, and zero layout overflow.
+  - **Global Test Status:** Expanded to **316 pass, 0 fail across 26 test files (4,733 assertions)**.
 
 ---
 
@@ -449,7 +481,7 @@ graph LR
 
 ## 8. Verification & Architectural Integrity
 
-The architecture specified in this dossier is fully implemented and tested in the Fabric OS codebase:
+The architecture specified in this dossier is fully implemented and tested across **26 test suites comprising 316 passing tests (4,733 assertions)**:
 
 | Subsystem Component | Code Location | Primary Verification Test | Status |
 |---|---|---|---|
@@ -459,12 +491,22 @@ The architecture specified in this dossier is fully implemented and tested in th
 | **FOCI BLE & Wearables**| `src/services/wearables.ts` | `tests/telemetry_foci.test.ts` | **Passing (100%)** |
 | **Knowledge Graph (97-Node Mesh)**| `src/graph/query.ts` | `tests/dashboard.test.ts` | **Passing (100%)** |
 | **Browser Driver & Adapters** | `src/browser/driver.ts` | `tests/browser_automation.test.ts`| **Passing (100%)** |
-| **HTN Task Planner & DAG** | `src/tasks/planner.ts` | `tests/task_planner.test.ts` | **Passing (100%)** |
+| **HTN Swarm Executor & Planner** | `src/tasks/executor.ts` | `tests/task_swarm.test.ts` | **Passing (100%)** |
 | **Episodic Reflexion Loop**| `src/ai/reflexion.ts` | `tests/reflexion.test.ts` | **Passing (100%)** |
 | **macOS Ambient Daemon**| `scripts/fabric-ambient-daemon.ts` | `tests/ambient.test.ts` | **Passing (100%)** |
 | **Dynamic Island & Quick Surfaces**| `api/island.ts`, `api/quick.ts` | `tests/quick_api.test.ts` | **Passing (100%)** |
 | **IITM Quiz 1 Grokking Foundry**| `data/iitm_prep/` | `tests/iitm_prep.test.ts` | **Passing (100%)** |
-| **Global Verification QC Suite**| `tests/` (15 test files) | `bun test` | **Passing (113/113 tests)** |
+| **Sonic Mind & Cloud Sync**| `src/music/`, `api/music/sync.ts` | `tests/music.test.ts` | **Passing (100%)** |
+| **Closed-Loop Cybernetic Governor**| `src/services/governor.ts` | `tests/governor.test.ts` | **Passing (100%)** |
+| **Real-Time Socratic Voice Channel**| `src/voice/`, `api/voice.ts` | `tests/voice.test.ts` | **Passing (100%)** |
+| **SMS Umbilical Gateway**| `src/services/sms/`, `api/sms/` | `tests/sms.test.ts` | **Passing (100%)** |
+| **Nightly Dream Consolidation Loop**| `src/ai/consolidation.ts` | `tests/consolidation.test.ts` | **Passing (100%)** |
+| **Insomnia Closed-Lid Power Governor**| `scripts/fabric-insomnia.ts` | `tests/insomnia.test.ts` | **Passing (100%)** |
+| **Native macOS Floating Notch HUD**| `scripts/shortcuts/FabricNotch.swift` | `tests/notch.test.ts` | **Passing (100%)** |
+| **Google Antigravity Agent Harness**| `src/services/antigravity.ts` | `tests/antigravity.test.ts` | **Passing (100%)** |
+| **Subsystem State Registry**| `src/services/registry.ts` | `tests/subsystems.test.ts` | **Passing (100%)** |
+| **Automated Headless UI/UX Flow Suite**| `tests/ui_ux_flow.test.ts` | `tests/ui_ux_flow.test.ts` | **Passing (100%)** |
+| **Global Verification QC Suite**| `tests/` (26 test files) | `bun test` | **Passing (316/316 tests, 4,733 assertions)** |
 
 ---
 

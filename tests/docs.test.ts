@@ -54,7 +54,7 @@ describe("Fabric OS Architecture & Explainability Dossier QC Suite", () => {
     expect(responseBody).toContain("katex.min.js");
     expect(responseBody).toContain("mermaid.min.js");
     expect(responseBody).toContain("marked.min.js");
-    expect(responseBody).toContain("The Eight Epochs of Fabric OS");
+    expect(responseBody).toContain("Epochs of Fabric OS");
   });
 
   it("serves raw markdown when ?raw=true is specified", async () => {

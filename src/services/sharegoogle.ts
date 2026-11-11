@@ -34,7 +34,7 @@ export async function extractGoogleAiModeShare(url: string): Promise<DecodedAiMo
     });
 
     const html = await res.text();
-    const queryMatch = html.match(/href="\/search\?q=([^"&]+)/);
+    const queryMatch = html.match(/href="\/search\?q=([^"&]+)/) || html.match(/(?:[?&]|&amp;)q=([^"&<\s]+)/);
 
     if (!queryMatch) {
       return null;

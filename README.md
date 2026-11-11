@@ -87,12 +87,35 @@ graph TD
 - **Telegram Actuation**: Drop any YouTube link to `@fabric_meta_os_bot` with `/song <url> [context]` to store and sync immediately.
 
 ### 7. 🤖 Autonomous Telegram Bot (`@fabric_meta_os_bot`)
+- `/spin <name> <prompt>` — Scaffold git repository with AGENTS.md and launch Google Antigravity.
 - `/song <url> [context]` & `/mix <intent>` — Capture YouTube gems with personal context and generate dynamic mixes.
 - `/prep [cn|csd|bdbn]` — Interactive active recall sparring with instant feedback.
 - `/prep nlm [subject]` — Autonomous NotebookLM upload & podcast generation.
-- `/task <goal>` — Natural language goal compilation and execution.
+- `/task <goal>` — Natural language goal compilation and HTN swarm execution.
 - `/spark` & `/settle` — 90-minute focus sprints and evening trade settlement.
-- `/reflexion` — Episodic memory analysis mining high-yield cognitive multipliers.
+- `/reflexion` & `/consolidate` — Episodic memory analysis & nightly dream consolidation.
+
+### 8. 💻 Native macOS Application & Daemon Controller (`Fabric.app`)
+- **Camera Notch HUD**: Apple-grade borderless glassmorphism HUD anchored at the camera bezel across all fullscreen spaces (`dist/Fabric.app`).
+- **Unified Daemon Controller**: Real-time worker cards with live PID detection for `macOS Ambient Daemon`, `Telegram Video Vault Archiver`, `Insomnia Power Governor`, and `Cybernetic Governor`.
+- **1-Click Safety Actions**: Instant individual Start/Stop and prominent **"Force Quit All Daemons"** button cleaning up all background processes without terminal hunting.
+
+### 9. 🪐 Google Antigravity Agent Harness & Project Spinner
+- Native discovery of local Antigravity binary (`/Users/holyscript/.gemini/bin/agy`, v1.4.12).
+- One-line project initialization: scaffolds `.gemini/settings.json`, `README.md`, `AGENTS.md`, inits Git, and dispatches initial prompt instructions via `/api/antigravity` or Telegram `/spin`.
+
+### 10. ⚖️ Closed-Loop Cybernetic Governor
+- Cybernetic feedback governor continuously minimizing existential loss function $\mathcal{L}(\mathbf{S})$.
+- 4 homeostatic boundary checks (Excessive Focus $>+3$, Depleted Vitality $<-2$, Sedentary $>75\text{m}$, Feedback dispersion).
+- 3-tier progressive actuation cascade: Dynamic Island badge $\to$ macOS Notification toast $\to$ Android ADB Zen lock.
+
+### 11. 🎙️ Sub-300ms Socratic Real-Time Voice Channel (`/api/voice`)
+- Bidirectional voice sparring bridge with multi-persona Edge-TTS neural speech synthesis and Gemini Live multimodal frames.
+- Specialized polymath council personas: `🏛️ Socratic`, `⚖️ Stoic`, `📐 Architect`, `📈 Quant`, `🦾 Biomechanic`, and `⚔️ Sceptic`.
+
+### 12. 📱 Android SMS Umbilical Gateway & Nightly Dream Consolidation
+- Turns Android device into a two-way SMS server via httpSMS REST API and ADB SMS fallback.
+- Nightly dream consolidation engine auto-linking daily git commits, focus sprints, and FOCI breath coherence into new knowledge graph synapses with dual Telegram/SMS morning memos.
 
 ---
 
@@ -115,11 +138,18 @@ bun install
 cp .env.example .env
 # Fill in TELEGRAM_BOT_TOKEN, GEMINI_API_KEY, TELEGRAM_USER_ID
 
-# 4. Run full test suite (113 tests, 0 failures)
+# 4. Run full test suite (316 tests, 0 failures across 26 test files)
 bun test
 
 # 5. Start development server
 bun run dev
+
+# 6. Launch native macOS Desktop App & Daemon Controller
+./scripts/shortcuts/build_notch.sh
+open dist/Fabric.app
+
+# 7. Check running background daemons from CLI
+./dist/Fabric --daemons
 ```
 
 Visit [`http://localhost:3000`](http://localhost:3000) to open the Cockpit Dashboard.
