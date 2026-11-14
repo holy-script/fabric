@@ -56,6 +56,7 @@ export interface KnowledgeItem {
   userReflections?: UserReflection[];
   notionUrl?: string;
   notionPageId?: string;
+  status?: string;
 }
 
 export interface ActiveSession {

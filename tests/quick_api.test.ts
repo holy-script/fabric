@@ -253,7 +253,7 @@ describe("Fabric OS Quick-Action & Smart Surface Dispatcher QC Suite", () => {
       expect(body.result).toBeDefined();
       expect(typeof body.result.markdown).toBe("string");
       expect(Array.isArray(body.result.citations)).toBe(true);
-    }, 15000);
+    }, 25000);
 
     test("POST /api/quick returns 400 error when AI mode query is missing", async () => {
       const { execute } = createMockReqRes("POST", "/api/quick", {

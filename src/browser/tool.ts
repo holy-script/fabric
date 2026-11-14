@@ -9,6 +9,12 @@ import fs from "fs";
 import { BrowserDriver, getBrowserDriver } from "./driver.js";
 import { NotebookLMAdapter, getNotebookLMAdapter, type AudioOverviewStatus } from "./adapters/notebooklm.js";
 import { AiModeAdapter, getAiModeAdapter, type AiModeResult, type AiModeOptions } from "./adapters/aimode.js";
+import {
+  GeminiDeepResearchAdapter,
+  getDeepResearchAdapter,
+  type DeepResearchOptions,
+  type DeepResearchProgress,
+} from "./adapters/deep-research.js";
 
 export interface BrowsePageOptions {
   screenshot?: boolean;
@@ -186,3 +192,19 @@ export async function syncNotebookLM(
     };
   }
 }
+
+/**
+ * Triggers Gemini Deep Research using the local browser context and Google AI Pro session.
+ * Generates comprehensive multi-source synthesis, saves markdown report, and optional Google Doc PDF.
+ */
+export async function runDeepResearch(
+  prompt: string,
+  options: DeepResearchOptions = {}
+): Promise<DeepResearchProgress> {
+  const adapter = getDeepResearchAdapter();
+  return await adapter.executeDeepResearch(prompt, options);
+}
+
+export { getDeepResearchAdapter };
+export type { DeepResearchOptions, DeepResearchProgress };
+

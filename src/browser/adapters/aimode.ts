@@ -7,6 +7,7 @@
 
 import type { Page } from "puppeteer-core";
 import { BrowserDriver, getBrowserDriver } from "../driver.js";
+import { searchGraph } from "../../graph/query.js";
 
 export interface AiModeCitation {
   title: string;
@@ -22,6 +23,17 @@ export interface AiModeResult {
   shareUrl?: string;
   rawText: string;
   timestamp: string;
+}
+
+export interface GroundedAiModeResult extends AiModeResult {
+  internalVaultNodes: Array<{
+    id: string;
+    title: string;
+    takeaway?: string;
+    quadrant?: string;
+    tags?: string[];
+  }>;
+  groundedSynthesis: string;
 }
 
 export interface AiModeOptions {
@@ -396,6 +408,58 @@ export class AiModeAdapter {
     }
 
     return fallbackUrl;
+  }
+
+  /**
+   * Cross-references the operator's query with internal Fabric OS Knowledge Graph nodes
+   * and grounds the Google AI Mode search results with internal vault takeaways.
+   */
+  public async queryWithKnowledgeGrounding(
+    query: string,
+    options: AiModeOptions = {}
+  ): Promise<GroundedAiModeResult> {
+    // 1. Search internal Knowledge Graph first
+    let vaultNodes: GroundedAiModeResult["internalVaultNodes"] = [];
+    try {
+      const graphResult = await searchGraph(query, 5);
+      if (graphResult && graphResult.nodes) {
+        vaultNodes = graphResult.nodes.map((n) => ({
+          id: n.id,
+          title: n.label || (n as any).title || n.id,
+          takeaway: n.properties?.takeaway || n.properties?.description || (n as any).actionableTakeaway,
+          quadrant: (n as any).quadrant || n.properties?.quadrant,
+          tags: (n as any).tags || (n.properties?.tags as string[]),
+        }));
+      }
+    } catch (err) {
+      // Graceful fallback if graph lookup fails
+    }
+
+    // 2. Execute Google AI Mode search
+    const aiModeResult = await this.executeQuery(query, options);
+
+    // 3. Synthesize internal vault heuristics with live AI Overview citations
+    const vaultSection =
+      vaultNodes.length > 0
+        ? `\n\n### 🏛️ Fabric Knowledge Vault Grounding\n` +
+          vaultNodes
+            .map(
+              (vn, i) =>
+                `${i + 1}. **${vn.title}** ${vn.quadrant ? `(${vn.quadrant})` : ""}\n   ${
+                  vn.takeaway ? `> 💡 ${vn.takeaway}` : ""
+                }`
+            )
+            .join("\n")
+        : "";
+
+    const groundedSynthesis = `${aiModeResult.markdown}${vaultSection}`;
+
+    return {
+      ...aiModeResult,
+      markdown: groundedSynthesis,
+      internalVaultNodes: vaultNodes,
+      groundedSynthesis,
+    };
   }
 }
 

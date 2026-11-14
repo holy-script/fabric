@@ -23,6 +23,9 @@ import { getLatestBiometrics } from "../services/wearables.js";
 import { getAllDomains } from "../domains/manager.js";
 import { conveneCouncil, formatCouncilCard } from "../ai/council.js";
 import { searchWeb, type WebSearchResult } from "../services/websearch.js";
+import { defaultCalendarService, type CalendarEventCategory } from "../services/calendar.js";
+import { defaultCalendarNotionBridge } from "../services/calendar-notion-sync.js";
+import { getDeepResearchAdapter, runDeepResearch } from "../browser/tool.js";
 
 const DEFAULT_USER_ID = process.env.TELEGRAM_USER_ID || "1131646846";
 const VAULT_TRACKER_FILE = path.resolve(process.cwd(), ".telegram_vault_tracker.json");
@@ -202,6 +205,133 @@ const TOOLS: Tool[] = [
         limit: {
           type: "number",
           description: "Max results to return (default: 5)",
+        },
+      },
+      required: ["query"],
+    },
+  },
+  {
+    name: "fabric_calendar_block",
+    description:
+      "Schedule a focused time block on the operator's calendar (Google Calendar & macOS Calendar) with optional automatic Notion sync. Use for focus sprints, study sessions, trade settlements, and deliberate sparring.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        title: {
+          type: "string",
+          description: "Title of the calendar block (e.g. 'Deep Focus: Distributed Systems')",
+        },
+        durationMinutes: {
+          type: "number",
+          description: "Duration in minutes (e.g. 30, 45, 90)",
+        },
+        startTime: {
+          type: "string",
+          description: "Optional ISO start time (defaults to immediately)",
+        },
+        category: {
+          type: "string",
+          enum: ["focus", "trade", "study", "break", "sparring", "review"],
+          description: "Category of the time block",
+        },
+        description: {
+          type: "string",
+          description: "Detailed session goals, checklist, or context",
+        },
+        syncToNotion: {
+          type: "boolean",
+          description: "Whether to immediately sync this block to Notion (default: false)",
+        },
+      },
+      required: ["title", "durationMinutes"],
+    },
+  },
+  {
+    name: "fabric_calendar_track",
+    description:
+      "Track and record completed work or focus sessions in Fabric OS and publish an activity log entry into the Notion database.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        title: {
+          type: "string",
+          description: "Name of the completed activity or sprint",
+        },
+        durationMinutes: {
+          type: "number",
+          description: "Minutes spent on the activity",
+        },
+        category: {
+          type: "string",
+          enum: ["focus", "trade", "study", "break", "sparring", "review"],
+          description: "Activity category",
+        },
+        takeaway: {
+          type: "string",
+          description: "Key takeaway, breakthrough, or lesson learned",
+        },
+        notes: {
+          type: "string",
+          description: "Detailed notes or 4F outcome",
+        },
+        syncToNotion: {
+          type: "boolean",
+          description: "Whether to sync to Notion immediately (default: true)",
+        },
+      },
+      required: ["title", "durationMinutes"],
+    },
+  },
+  {
+    name: "fabric_calendar_list",
+    description:
+      "List upcoming scheduled time blocks and recent tracked focus sessions in Fabric OS.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        limit: {
+          type: "number",
+          description: "Maximum number of events to return (default: 10)",
+        },
+        category: {
+          type: "string",
+          enum: ["focus", "trade", "study", "break", "sparring", "review"],
+          description: "Filter by category",
+        },
+      },
+    },
+  },
+  {
+    name: "fabric_sync_calendar_notion",
+    description:
+      "Synchronize all pending calendar blocks and time tracking sessions directly into the operator's Notion database.",
+    inputSchema: {
+      type: "object",
+      properties: {},
+    },
+  },
+  {
+    name: "fabric_deep_research",
+    description:
+      "Execute in-depth autonomous web research via Gemini Deep Research in your local signed-in Google AI Pro browser. Explores dozens of sources, executes iterative query plans, and synthesizes reports with zero API fees.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        query: {
+          type: "string",
+          description: "The research question, architectural dilemma, or topic to investigate deeply",
+        },
+        exportToDocs: {
+          type: "boolean",
+          description: "Whether to export the report to Google Docs (default: false)",
+        },
+        downloadPdf: {
+          type: "boolean",
+          description: "Whether to download the report as a formatted PDF (default: false)",
+        },
+        async: {
+          type: "boolean",
+          description: "If true, starts research in background and returns taskId immediately (default: false)",
         },
       },
       required: ["query"],
@@ -486,6 +616,189 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
         return {
           content: [{ type: "text", text: `### 🌐 Web Search Results for "${q}":\n\n${formatted}` }],
+        };
+      }
+
+      case "fabric_calendar_block": {
+        const title = String(args.title || "Focus Block");
+        const durationMinutes = Number(args.durationMinutes) || 30;
+        const startTime = args.startTime ? String(args.startTime) : undefined;
+        const category = (args.category as CalendarEventCategory) || "focus";
+        const description = args.description ? String(args.description) : undefined;
+        const syncToNotion = Boolean(args.syncToNotion);
+
+        const event = await defaultCalendarService.blockTime({
+          title,
+          durationMinutes,
+          startTime,
+          category,
+          description,
+        });
+
+        let notionText = "";
+        if (syncToNotion) {
+          try {
+            const nRes = await defaultCalendarNotionBridge.syncEventToNotion(event);
+            notionText = `\n- **Notion Page:** [View in Notion](${nRes.url})`;
+          } catch (e: any) {
+            notionText = `\n- ⚠️ **Notion Sync:** ${e.message}`;
+          }
+        }
+
+        return {
+          content: [
+            {
+              type: "text",
+              text: `📅 **Time Block Scheduled**\n- **Title:** ${event.title}\n- **Window:** ${event.startTime} -> ${event.endTime}\n- **Duration:** ${durationMinutes}m\n- **Source:** ${event.source}${notionText}`,
+            },
+          ],
+        };
+      }
+
+      case "fabric_calendar_track": {
+        const title = String(args.title || "Completed Sprint");
+        const durationMinutes = Number(args.durationMinutes) || 30;
+        const category = (args.category as CalendarEventCategory) || "focus";
+        const takeaway = args.takeaway ? String(args.takeaway) : undefined;
+        const notes = args.notes ? String(args.notes) : undefined;
+        const syncToNotion = args.syncToNotion !== false;
+
+        const event = await defaultCalendarService.trackTime({
+          title,
+          durationMinutes,
+          category,
+          takeaway,
+          notes,
+        });
+
+        let notionText = "";
+        if (syncToNotion) {
+          try {
+            const nRes = await defaultCalendarNotionBridge.syncEventToNotion(event);
+            notionText = `\n- **Notion Page:** [Logged in Notion](${nRes.url})`;
+          } catch (e: any) {
+            notionText = `\n- ⚠️ **Notion Sync:** ${e.message}`;
+          }
+        }
+
+        return {
+          content: [
+            {
+              type: "text",
+              text: `⏱️ **Time Tracked & Logged**\n- **Activity:** ${event.title}\n- **Duration:** ${durationMinutes}m\n- **Category:** ${event.category}${notionText}`,
+            },
+          ],
+        };
+      }
+
+      case "fabric_calendar_list": {
+        const limit = typeof args.limit === "number" ? args.limit : 10;
+        const category = args.category ? (args.category as CalendarEventCategory) : undefined;
+        const events = defaultCalendarService.listEvents({ limit, category });
+
+        if (events.length === 0) {
+          return {
+            content: [{ type: "text", text: "No calendar events or tracked sessions recorded yet." }],
+          };
+        }
+
+        const formatted = events
+          .map(
+            (e, i) =>
+              `${i + 1}. **${e.title}** (${e.category})\n   • Window: ${e.startTime} - ${e.endTime}\n   • Source: ${e.source} | Status: ${e.syncStatus}${
+                e.notionPageId ? ` | Notion ID: ${e.notionPageId}` : ""
+              }`
+          )
+          .join("\n\n");
+
+        return {
+          content: [
+            {
+              type: "text",
+              text: `📅 **Fabric OS Calendar & Tracked Sessions (${events.length})**:\n\n${formatted}`,
+            },
+          ],
+        };
+      }
+
+      case "fabric_sync_calendar_notion": {
+        const res = await defaultCalendarNotionBridge.syncPendingEvents();
+        return {
+          content: [
+            {
+              type: "text",
+              text: `🔄 **Calendar to Notion Sync Complete**\n- **Synced:** ${res.syncedCount}\n- **Failed:** ${res.failedCount}\n\n${res.events
+                .map((ev) => `• ${ev.title}: ${ev.notionUrl || ev.error || "Done"}`)
+                .join("\n")}`,
+            },
+          ],
+        };
+      }
+
+      case "fabric_deep_research": {
+        const query = String(args.query || "");
+        if (!query) {
+          throw new Error("Missing required 'query' parameter");
+        }
+        const exportToDocs = Boolean(args.exportToDocs);
+        const downloadPdf = Boolean(args.downloadPdf);
+        const isAsync = Boolean(args.async);
+
+        const adapter = getDeepResearchAdapter();
+
+        if (isAsync) {
+          const initRes = await adapter.startResearch(query, { exportToDocs, downloadPdf });
+          return {
+            content: [
+              {
+                type: "text",
+                text: `🔬 **Gemini Deep Research Task Initiated**\n- **Task ID:** \`${initRes.taskId}\`\n- **Status:** ${initRes.status}\n- **Query:** ${initRes.query}\n- **Step:** ${initRes.stepDescription}\n- **Output Dir:** \`${initRes.outputDir}\`\n\n*The task is running in your signed-in Google AI Pro browser context. Check status with \`fabric_deep_research\` or monitor the local folder.*`,
+              },
+            ],
+          };
+        }
+
+        const res = await adapter.executeDeepResearch(query, { exportToDocs, downloadPdf });
+
+        if (res.status === "unauthenticated") {
+          return {
+            content: [
+              {
+                type: "text",
+                text: `⚠️ **Google Authentication Required**\n${res.error}\n\nPlease run \`./scripts/launch-research-browser.sh\` to log in once with your Google AI Pro account.`,
+              },
+            ],
+            isError: true,
+          };
+        }
+
+        if (res.status === "failed") {
+          return {
+            content: [
+              {
+                type: "text",
+                text: `❌ **Deep Research Failed**: ${res.error || "Unknown error"}`,
+              },
+            ],
+            isError: true,
+          };
+        }
+
+        let docDetails = "";
+        if (res.googleDocUrl) {
+          docDetails += `\n- **Google Doc:** [Open Document](${res.googleDocUrl})`;
+        }
+        if (res.pdfPath) {
+          docDetails += `\n- **Downloaded PDF:** \`${res.pdfPath}\``;
+        }
+
+        return {
+          content: [
+            {
+              type: "text",
+              text: `🔬 **Gemini Deep Research Completed** (${res.elapsedSeconds}s)\n- **Task ID:** \`${res.taskId}\`\n- **Sources Investigated:** ${res.sourcesCount || "Multiple"}\n- **Report Saved:** \`${res.outputDir}/report.md\`${docDetails}\n\n### Report Summary\n${(res.reportMarkdown || "").slice(0, 1500)}...`,
+            },
+          ],
         };
       }
 

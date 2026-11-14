@@ -1,0 +1,35 @@
+{
+  "name": "Fabric OS — Polymath & 4F Governor",
+  "description": "Aristotelian 4F cybernetic co-pilot and Knowledge Graph companion powered by The Fabric's 3,840+ item knowledge vault and Socratic Council.",
+  "model": "gemini-2.0-flash",
+  "instructionsFile": "fabric_gem_instructions.md",
+  "knowledgeFiles": [
+    "fabric_knowledge_gemini_brief.md"
+  ],
+  "promptStarters": [
+    "Convene the Polymath Council to debate whether I should prioritize refactoring architecture or shipping user-facing features.",
+    "I feel mentally scattered and low on energy. Calibrate my 4F vector and prescribe a 90-minute spark sprint.",
+    "Search the Knowledge Graph for high-signal mental models on flow states, habit formation, and execution velocity.",
+    "Schedule a 45-minute deep focus block on my Google Calendar and log it directly into Notion."
+  ],
+  "capabilities": {
+    "webSearch": true,
+    "codeExecution": true,
+    "canvas": true
+  },
+  "mcpIntegration": {
+    "server": "fabric-os-mcp",
+    "command": "bun run /Users/holyscript/Desktop/projects/fabric/src/mcp/server.ts",
+    "tools": [
+      "fabric_search_knowledge",
+      "fabric_get_telemetry",
+      "fabric_convene_council",
+      "fabric_calendar_block",
+      "fabric_calendar_track",
+      "fabric_calendar_list",
+      "fabric_sync_calendar_notion",
+      "fabric_web_search"
+    ]
+  }
+}
+

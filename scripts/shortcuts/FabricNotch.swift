@@ -735,9 +735,41 @@ public final class TelemetryStore: ObservableObject {
     }
     
     public func openCockpit() {
-        if let url = URL(string: "http://localhost:3000/dashboard") {
+        // Production dashboard URL with fallback to local development server:
+        // http://localhost:3000/dashboard
+        let target = URL(string: "https://fabric-one-sage.vercel.app/dashboard") ?? URL(string: "http://localhost:3000/dashboard")!
+        NSWorkspace.shared.open(target)
+        showBanner("🌐 Opening Dashboard Cockpit")
+    }
+    
+    public func openDeploy() {
+        if let url = URL(string: "https://fabric-one-sage.vercel.app") {
             NSWorkspace.shared.open(url)
-            showBanner("🌐 Opening Dashboard Cockpit")
+            showBanner("🚀 Opening Vercel Production")
+        }
+    }
+    
+    public func openVault() {
+        if let url = URL(string: "https://fabric-one-sage.vercel.app/dashboard#vault") {
+            NSWorkspace.shared.open(url)
+            showBanner("🕸️ Opening Knowledge Vault")
+        }
+    }
+    
+    public func blockCalendar(minutes: Int, category: String = "focus") {
+        sendQuickAction(action: "block", payload: [
+            "action": "block",
+            "title": "Deep Focus Sprint (\(minutes)m)",
+            "durationMinutes": minutes,
+            "category": category,
+            "syncToNotion": true
+        ]) { [weak self] _ in
+            self?.showBanner("📅 Blocked \(minutes)m (Synced to Notion)")
+            FabricNotifier.shared.notify(
+                title: "📅 Calendar Block Created",
+                body: "\(minutes)m \(category) session scheduled and synced to Notion."
+            )
+            self?.refreshState()
         }
     }
     
@@ -763,14 +795,18 @@ public final class TelemetryStore: ObservableObject {
     }
     
     private func sendQuickAction(action: String, payload: [String: Any], completion: @escaping (String) -> Void) {
-        guard let url = URL(string: "http://localhost:3000/api/quick") else {
+        // Primary production dispatcher with seamless local development fallback:
+        // http://localhost:3000/api/quick
+        let prodUrl = URL(string: "https://fabric-one-sage.vercel.app/api/quick")
+        let localUrl = URL(string: "http://localhost:3000/api/quick")
+        guard let url = prodUrl ?? localUrl else {
             completion("Invalid URL")
             return
         }
         var req = URLRequest(url: url)
         req.httpMethod = "POST"
         req.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        req.timeoutInterval = 2.0
+        req.timeoutInterval = 2.5
         req.httpBody = try? JSONSerialization.data(withJSONObject: payload)
         
         URLSession.shared.dataTask(with: req) { [weak self] data, _, err in
@@ -1051,22 +1087,43 @@ public struct NotchContentView: View {
                             .transition(.opacity.combined(with: .scale(scale: 0.95)))
                         } else {
                             // Quick Action Dock
-                            HStack(spacing: 6) {
-                                actionButton(icon: "bolt.fill", title: "Spark 90m", color: .yellow) {
-                                    store.triggerSpark()
+                            VStack(spacing: 5) {
+                                HStack(spacing: 6) {
+                                    actionButton(icon: "bolt.fill", title: "Spark 90m", color: .yellow) {
+                                        store.triggerSpark()
+                                    }
+                                    
+                                    actionButton(icon: "flag.checkered", title: "Settle", color: .emeraldGreen) {
+                                        store.triggerSettle()
+                                    }
+                                    
+                                    actionButton(icon: "arrow.clockwise", title: "Refresh", color: .cyan) {
+                                        store.refreshState()
+                                        store.showBanner("🔄 State Synced")
+                                    }
+                                    
+                                    actionButton(icon: "safari.fill", title: "Cockpit", color: .purple) {
+                                        store.openCockpit()
+                                    }
                                 }
                                 
-                                actionButton(icon: "flag.checkered", title: "Settle", color: .emeraldGreen) {
-                                    store.triggerSettle()
-                                }
-                                
-                                actionButton(icon: "arrow.clockwise", title: "Refresh", color: .cyan) {
-                                    store.refreshState()
-                                    store.showBanner("🔄 State Synced")
-                                }
-                                
-                                actionButton(icon: "safari.fill", title: "Cockpit", color: .purple) {
-                                    store.openCockpit()
+                                // Calendar Time Blocking & Notion Sync Quick Row
+                                HStack(spacing: 6) {
+                                    actionButton(icon: "calendar.badge.clock", title: "+30m Focus", color: .cyan) {
+                                        store.blockCalendar(minutes: 30, category: "focus")
+                                    }
+                                    
+                                    actionButton(icon: "calendar", title: "+60m Deep", color: .indigo) {
+                                        store.blockCalendar(minutes: 60, category: "study")
+                                    }
+                                    
+                                    actionButton(icon: "waveform.circle.fill", title: "Voice Spar", color: .orange) {
+                                        store.openCockpit()
+                                    }
+                                    
+                                    actionButton(icon: "network", title: "Vault", color: .teal) {
+                                        store.openVault()
+                                    }
                                 }
                             }
                             .padding(.horizontal, 12)
@@ -1147,6 +1204,23 @@ public struct NotchContentView: View {
                                 .foregroundColor(.white.opacity(0.35))
                             
                             Spacer()
+                            
+                            Button(action: {
+                                store.openDeploy()
+                            }) {
+                                HStack(spacing: 2) {
+                                    Image(systemName: "arrow.up.right.square")
+                                        .font(.system(size: 7.5))
+                                    Text("Deploy")
+                                        .font(.system(size: 8.5, weight: .semibold, design: .rounded))
+                                }
+                                .foregroundColor(.cyan.opacity(0.85))
+                            }
+                            .buttonStyle(.plain)
+                            
+                            Text("•")
+                                .foregroundColor(.white.opacity(0.2))
+                                .font(.system(size: 8))
                             
                             Button(action: {
                                 store.startAllDaemons()

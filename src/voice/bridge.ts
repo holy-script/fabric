@@ -146,7 +146,7 @@ export class VoiceBridge {
     return {
       token: apiKey || process.env.GEMINI_API_KEY || "fabric-live-token",
       sessionId: session.id,
-      endpoint: "wss://generativelanguage.googleapis.com/ws/google.ai.generativelanguage.v1alpha.GenerativeService.BidiGenerateContent",
+      endpoint: "wss://generativelanguage.googleapis.com/ws/google.ai.generativelanguage.v1beta.GenerativeService.BidiGenerateContent",
       mode: session.mode,
       persona: session.activePersona,
       sampleRate: 24000,
